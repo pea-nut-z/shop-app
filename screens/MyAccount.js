@@ -8,9 +8,9 @@ import {
   SafeAreaView,
   StyleSheet,
 } from 'react-native';
-import {icons, SIZES, FONTS, COLORS} from '../constants';
+import {icons, SIZES, FONTS, COLORS, recordList} from '../constants';
 import {Header, HeaderButton, CircleButton, BarButton} from '../components';
-import {accountCircleButtonList} from '../buttonLists';
+// import {recordList} from '../constants/buttonLists';
 
 export default function MyAccount() {
   return (
@@ -24,7 +24,7 @@ export default function MyAccount() {
           <BarButton />
         </View>
         <View style={styles.circleButtons}>
-          {accountCircleButtonList.map((list) => {
+          {recordList.map((list) => {
             return (
               <CircleButton
                 key={list.name}

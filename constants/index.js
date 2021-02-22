@@ -1,4 +1,5 @@
 import icons from './icons';
+import {categoryList, recordList} from './buttonLists';
 
 // import images from "./images";
 import {COLORS, SIZES, FONTS} from './theme';
@@ -10,5 +11,7 @@ export {
   COLORS,
   SIZES,
   FONTS,
+  categoryList,
+  recordList,
   // GOOGLE_API_KEY
 };

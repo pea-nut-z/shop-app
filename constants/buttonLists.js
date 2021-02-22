@@ -1,6 +1,6 @@
-import {icons} from './constants';
+import {icons} from '.';
 
-export const accountCircleButtonList = [
+export const recordList = [
   {
     icon: icons.listings,
     name: 'Listings',
@@ -15,7 +15,7 @@ export const accountCircleButtonList = [
   },
 ];
 
-export const categoryButtonList = [
+export const categoryList = [
   {
     name: 'Electronics',
     icon: icons.electronics,

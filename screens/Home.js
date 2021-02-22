@@ -15,8 +15,9 @@ import {
   SIZES,
   FONTS,
 } from '../constants';
+import {Header, HeaderButton, SellButton} from '../components';
 
-export default function Home() {
+export default function Home({navigation}) {
   function renderHeader() {
     return (
       <View style={{flexDirection: 'row', height: 50}}>
@@ -142,21 +143,11 @@ export default function Home() {
     );
   }
 
-  function renderSellButton() {
-    return (
-      <View>
-        <TouchableOpacity style={styles.sellButton}>
-          <Text style={styles.sellButtonText}>+ Sell</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  }
-
   return (
     <SafeAreaView style={styles.container}>
       {renderHeader()}
       {renderItemsForSale()}
-      {renderSellButton()}
+      <SellButton navigation={navigation} />
     </SafeAreaView>
   );
 }
@@ -172,16 +163,4 @@ const styles = StyleSheet.create({
       height: 3,
     },
   },
-  sellButton: {
-    position: 'absolute',
-    bottom: SIZES.height * 0.08,
-    right: SIZES.width * 0.04,
-    height: 50,
-    width: 100,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: COLORS.primary,
-    borderRadius: 25,
-  },
-  sellButtonText: {color: COLORS.white, ...FONTS.body1},
 });

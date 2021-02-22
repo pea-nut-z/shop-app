@@ -10,10 +10,10 @@ import {
 } from 'react-native';
 import {icons, SIZES, FONTS, COLORS} from '../constants';
 import {Header, HeaderButton, CircleButton, BarButton} from '../components';
-import {categoryButtonList} from '../buttonLists';
+import {categoryList} from '../constants/buttonLists';
 
 export default function Categories() {
-  const [categories, setCategories] = React.useState(categoryButtonList);
+  const [categories, setCategories] = React.useState(categoryList);
   const [selectedCategory, setSelectedCategory] = React.useState(null);
   const [list, setList] = React.useState();
 
@@ -54,7 +54,7 @@ export default function Categories() {
       <View>
         <Text style={styles.subHeader}>For Sale</Text>
         <FlatList
-          data={categoryButtonList}
+          data={categoryList}
           showsVerticalScrollIndicator={false}
           keyExtractor={(item) => `${item.name}`}
           renderItem={renderItem}

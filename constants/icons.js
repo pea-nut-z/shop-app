@@ -22,6 +22,7 @@ export const settings = require('../assets/icons/settings.png');
 export const listings = require('../assets/icons/listings.png');
 export const bag = require('../assets/icons/bag.png');
 export const heart = require('../assets/icons/heart.png');
+export const check = require('../assets/icons/check-mark.png');
 
 export default {
   home,
@@ -48,4 +49,5 @@ export default {
   listings,
   bag,
   heart,
+  check,
 };
