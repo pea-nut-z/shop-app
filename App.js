@@ -1,6 +1,7 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
+// import {PaperProvider} from 'react-native-paper';
 
 import {Home, Sell, Categories, Chats, MyAccount} from './screens/';
 import Tabs from './navigation/tabs';
@@ -10,6 +11,7 @@ const Stack = createStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
+      {/* <PaperProvider> */}
       <Stack.Navigator
         screenOptions={{
           headerShown: false,
@@ -23,6 +25,7 @@ export default function App() {
         <Stack.Screen name="Chats" component={Chats} />
         <Stack.Screen name="MyAccount" component={MyAccount} />
       </Stack.Navigator>
+      {/* </PaperProvider> */}
     </NavigationContainer>
   );
 }

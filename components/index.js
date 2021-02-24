@@ -1,8 +1,8 @@
 import Header from './Header';
+import Subheader from './Subheader';
 import HeaderButton from './HeaderButton';
 import SellButton from './SellButton';
 import CircleButton from './CircleButton';
 import BarButton from './BarButton';
-import TextBox from './TextBox';
 
-export {Header, HeaderButton, SellButton, CircleButton, BarButton, TextBox};
+export {Header, Subheader, HeaderButton, SellButton, CircleButton, BarButton};

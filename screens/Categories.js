@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useLayoutEffect} from 'react';
 import {
   View,
   Text,
@@ -9,13 +9,27 @@ import {
   StyleSheet,
 } from 'react-native';
 import {icons, SIZES, FONTS, COLORS} from '../constants';
-import {Header, HeaderButton, CircleButton, BarButton} from '../components';
+import {
+  Header,
+  Subheader,
+  HeaderButton,
+  CircleButton,
+  BarButton,
+} from '../components';
 import {categoryList} from '../constants/buttonLists';
 
-export default function Categories() {
-  const [categories, setCategories] = React.useState(categoryList);
-  const [selectedCategory, setSelectedCategory] = React.useState(null);
-  const [list, setList] = React.useState();
+export default function Categories({navigation}) {
+  const [categories, setCategories] = useState(categoryList);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [list, setList] = useState();
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <IconButton icon="plus" color={Colors.red500} size={20} />
+      ),
+    });
+  }, [navigation]);
 
   function onSelectCategory(category) {
     // navigate to the filtered list
@@ -52,7 +66,7 @@ export default function Categories() {
     };
     return (
       <View>
-        <Text style={styles.subHeader}>For Sale</Text>
+        <Subheader text={'For Sale'} />
         <FlatList
           data={categoryList}
           showsVerticalScrollIndicator={false}
@@ -68,10 +82,9 @@ export default function Categories() {
   return (
     <SafeAreaView>
       <Header text={'Categories'} />
-      <View style={styles.headerButtons}>
+      {/* <View style={styles.headerButtons}>
         <HeaderButton iconSrc={icons.search} />
-      </View>
-
+      </View> */}
       {renderCategories()}
     </SafeAreaView>
   );
