@@ -1,39 +1,52 @@
 import React from 'react';
 import {
+  SafeAreaView,
+  TouchableOpacity,
   View,
   Text,
   StyleSheet,
-  Button,
-  TouchableOpacity,
-  Image,
 } from 'react-native';
-import {SIZES, FONTS, COLORS, icons} from '../constants';
+import {SIZES, FONTS, COLORS} from '../constants';
+import {BackButton, ImageScrollView, ScrollViewDots} from './index';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-export default function Header({navigation, text}) {
+export default function Header({navigation, images, text}) {
+  function renderBackBtn(navigation) {
+    return (
+      <TouchableOpacity
+        style={styles.backBtn}
+        onPress={() => navigation.goBack()}>
+        <Icon
+          name="arrow-back-outline"
+          size={25}
+          color={images ? COLORS.white : COLORS.black}
+        />
+      </TouchableOpacity>
+    );
+  }
   return (
-    <View style={styles.header}>
-      <View style={{flexDirection: 'row'}}>
+    <SafeAreaView>
+      <View style={images ? styles.headerWithImg : styles.headerWithoutImg}>
         {/* BACK BUTTON */}
-        {navigation && (
-          <TouchableOpacity
-            style={styles.backButtonContainer}
-            onPress={() => navigation.goBack()}>
-            <Icon name="arrow-back-outline" size={25} />
-          </TouchableOpacity>
-        )}
+        {navigation && renderBackBtn(navigation)}
+
         {/* TEXT*/}
-        <Text
-          style={{...styles.text, marginLeft: navigation ? SIZES.padding : 0}}>
-          {text}
-        </Text>
+        {text && (
+          <Text
+            style={{
+              ...styles.text,
+              marginLeft: navigation ? SIZES.padding : 0,
+            }}>
+            {text}
+          </Text>
+        )}
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  header: {
+  headerWithoutImg: {
     paddingVertical: SIZES.padding,
     paddingHorizontal: SIZES.padding * 2,
     borderWidth: 1,
@@ -42,18 +55,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
   },
-  backButtonContainer: {
+  headerWithImg: {
+    paddingVertical: SIZES.padding,
+    paddingHorizontal: SIZES.padding * 2,
+    alignItems: 'center',
+    flexDirection: 'row',
+    backgroundColor: COLORS.transparent,
+  },
+  backBtn: {
     width: 35,
     height: 35,
     justifyContent: 'center',
   },
-  backButton: {
-    resizeMode: 'contain',
-    width: 25,
-    height: 25,
-  },
   text: {
     ...FONTS.h3,
-    marginTop: 10,
   },
 });

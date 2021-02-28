@@ -3,5 +3,6 @@ import Sell from './Sell';
 import Categories from './Categories';
 import Chats from './Chats';
 import MyAccount from './MyAccount';
+import DisplayItem from './DisplayItem';
 
-export {Home, Sell, Categories, Chats, MyAccount};
+export {Home, Sell, DisplayItem, Categories, Chats, MyAccount};

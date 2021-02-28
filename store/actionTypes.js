@@ -1,1 +1,1 @@
-export const LIST_ADDED = 'listAdded';
+export const LIST_ADDED = 'itemAdded';

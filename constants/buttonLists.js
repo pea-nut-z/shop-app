@@ -77,3 +77,10 @@ export const categoryList = [
     icon: icons.wanted,
   },
 ];
+
+export const status = [
+  {
+    label: 'Active',
+    value: 'Active',
+  },
+];

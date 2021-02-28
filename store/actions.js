@@ -1,22 +1,26 @@
-import * as actions from './actionTypes';
+// import * as actions from './actionTypes';
 
-export const listAdded = (
-  images,
-  title,
-  price,
-  free,
-  negotiable,
-  category,
-  description,
-) => ({
-  type: actions.LIST_ADDED,
-  payload: {
-    images,
-    title,
-    price,
-    free,
-    negotiable,
-    category,
-    description,
-  },
-});
+// export const itemAdded = (
+//   sellerId,
+//   itemId,
+//   images,
+//   title,
+//   price,
+//   free,
+//   negotiable,
+//   category,
+//   description,
+// ) => ({
+//   type: actions.LIST_ADDED,
+//   sellerId,
+//   itemId,
+//   payload: {
+//     images,
+//     title,
+//     price,
+//     free,
+//     negotiable,
+//     category,
+//     description,
+//   },
+// });

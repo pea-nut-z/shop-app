@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useLayoutEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   SafeAreaView,
@@ -10,18 +10,20 @@ import {
   Alert,
   FlatList,
   ImageBackground,
-  ScrollView,
 } from 'react-native';
+// import {connect} from 'react-redux';
+
 import {COLORS, SIZES, FONTS, categoryList} from '../constants';
 import {Header} from '../components';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import CurrencyInput from 'react-native-currency-input';
 import Textarea from 'react-native-textarea';
 import DropDownPicker from 'react-native-dropdown-picker';
-import store from '../store/store';
-import {listAdded} from '../store/actions';
-import ImagePicker from 'react-native-image-crop-picker';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import ImagePicker from 'react-native-image-crop-picker';
+import store from '../store/store';
+// import {itemAdded} from '../store/actions';
+import * as actions from '../store/actionTypes';
 
 export default function Sell({navigation}) {
   const [numOfImg, setNumOfImg] = useState(0);
@@ -30,7 +32,7 @@ export default function Sell({navigation}) {
   const [price, setPrice] = useState();
   const [free, setFree] = useState(false);
   const [negotiable, setNegotiable] = useState(true);
-  const [selectedCategory, setSelectedCategory] = useState('Categories');
+  const [category, setCategory] = useState('Categories');
   const [description, setDescription] = useState('');
   const maxNumOfImg = 10;
 
@@ -84,40 +86,55 @@ export default function Sell({navigation}) {
   }
 
   function onDone() {
-    if (!title) {
-      Alert.alert('Enter a title');
-    } else if (selectedCategory === 'Categories') {
-      Alert.alert('Select a category');
-    } else if (!description) {
-      Alert.alert('Enter a description');
-    } else if (description.length < 20) {
-      Alert.alert('Tell us a bit more - minimum 20 characters');
-    } else {
-      store.dispatch(
-        listAdded(
-          images,
-          title,
-          price,
-          free,
-          negotiable,
-          selectedCategory,
-          description,
-        ),
-      );
-      console.log(store.getState());
-    }
+    // if (!title) {
+    //   Alert.alert('Enter a title');
+    // } else if (category === 'Categories') {
+    //   Alert.alert('Select a category');
+    // } else if (!description) {
+    //   Alert.alert('Enter a description');
+    // }
+    // else if (description.length < 20) {
+    //   Alert.alert('Tell us a bit more for description - minimum 20 characters');
+    // }
+    // else {
+    // MOCK USERID
+    const sellerId = 222;
+    let itemId = 5;
+
+    store.dispatch({
+      type: actions.LIST_ADDED,
+      sellerId,
+      itemId: ++itemId,
+      payload: {
+        images,
+        title,
+        price,
+        free,
+        negotiable,
+        category,
+        description,
+      },
+    });
+
+    // const test = store.getState();
+    // const test1 = JSON.stringify(test);
+    // console.log(test1);
+
+    navigation.navigate('DisplayItem', {
+      sellerId,
+      itemId,
+    });
   }
 
   return (
     <>
-      {/* <KeyboardAwareView animated={true} useNative={true}> */}
       <SafeAreaView>
         <Header navigation={navigation} text={'Post For Sale'} />
         {/* DONE BUTTON */}
         <TouchableOpacity onPress={onDone} style={styles.doneBtn}>
           <Text style={{...FONTS.body2}}>Done</Text>
         </TouchableOpacity>
-        {/* PCITURE UPLOAD */}
+        {/* PICTURE UPLOAD */}
         <KeyboardAwareScrollView extraHeight={100} enableOnAndroid>
           <View
             style={{
@@ -204,7 +221,7 @@ export default function Sell({navigation}) {
           <DropDownPicker
             items={dropDownList}
             placeholder="Categories"
-            onChangeItem={(item) => setSelectedCategory(item.value)}
+            onChangeItem={(item) => setCategory(item.value)}
             dropDownMaxHeight={dropDownList.length * SIZES.height}
             style={{
               ...styles.container,
@@ -244,7 +261,7 @@ const styles = StyleSheet.create({
     height: 35,
     justifyContent: 'center',
     position: 'absolute',
-    top: SIZES.height * 0.07,
+    top: SIZES.height * 0.063,
     right: SIZES.padding * 2,
   },
   container: {
@@ -254,7 +271,6 @@ const styles = StyleSheet.create({
     borderColor: COLORS.transparent,
     borderBottomColor: COLORS.secondary,
     ...FONTS.body3,
-    // flex: 1,
   },
   uploadImgContainer: {
     height: SIZES.height * 0.132,
