@@ -145,7 +145,7 @@ export default function Home({navigation}) {
 
   return (
     <SafeAreaView style={styles.container}>
-      {renderHeader()}
+      {/* {renderHeader()} */}
       {renderItemsForSale()}
       <SellButton navigation={navigation} />
     </SafeAreaView>

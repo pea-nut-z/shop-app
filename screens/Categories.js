@@ -16,7 +16,7 @@ import {
   CircleButton,
   BarButton,
 } from '../components';
-import {categoryList} from '../constants/buttonLists';
+import {categoryList} from '../constants';
 
 export default function Categories({navigation}) {
   const [categories, setCategories] = useState(categoryList);

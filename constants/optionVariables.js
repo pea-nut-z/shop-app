@@ -78,9 +78,22 @@ export const categoryList = [
   },
 ];
 
-export const status = [
+export const categoryDropDown = categoryList.map((category) => ({
+  label: category.name,
+  value: category.name,
+}));
+
+export const itemStatusDropDown = [
   {
     label: 'Active',
     value: 'Active',
+  },
+  {
+    label: 'Reserved',
+    value: 'Reserved',
+  },
+  {
+    label: 'Sold',
+    value: 'Sold',
   },
 ];

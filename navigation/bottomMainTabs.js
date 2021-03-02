@@ -81,7 +81,7 @@ const CustomTabBar = (props) => {
   //   )
 };
 
-export default function Tabs() {
+export default function bottomMainTabs() {
   return (
     <Tab.Navigator
       tabBarOptions={{

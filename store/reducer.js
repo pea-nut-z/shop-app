@@ -13,7 +13,7 @@ const listings = {
       1: {
         status: 'active',
         date: 'some dates',
-        Chats: 0,
+        chats: 0,
         favorites: 0,
         views: 0,
         images: [],
@@ -31,44 +31,121 @@ const listings = {
     location: 'Ottawa',
     rating: 19,
     items: {
-      1: {
+      66: {
         status: 'sold',
         date: 'some dates',
-        Chats: 0,
+        chats: 0,
         favorites: 0,
         views: 0,
         images: [
           {
-            id: 0,
-            path:
-              '/Users/paulinez/Library/Developer/CoreSimulator/Devices/810F8FF2-C4F8-4168-9895-B51220F0039E/data/Containers/Data/Application/2F28EA9E-3D22-4D2F-93B8-C5AE2C3DBEFE/tmp/react-native-image-crop-picker/3BE910BC-FE17-424D-A6FF-8972D6240F42.jpg',
+            id: 1,
+            path: 'https://i.ytimg.com/vi/H8X7FHrq278/maxresdefault.jpg',
           },
 
           {
-            id: 0,
+            id: 2,
             path:
-              '/Users/paulinez/Library/Developer/CoreSimulator/Devices/810F8FF2-C4F8-4168-9895-B51220F0039E/data/Containers/Data/Application/2F28EA9E-3D22-4D2F-93B8-C5AE2C3DBEFE/tmp/react-native-image-crop-picker/EDD0F14B-114A-4E3D-89A1-ADE028440355.jpg',
+              'https://static.wikia.nocookie.net/pokemon/images/4/49/Ash_Pikachu.png/revision/latest?cb=20200405125039',
           },
         ],
-        title: 'title',
-        price: 10,
+        title: 'title66',
+        price: 400,
         free: true,
         negotiable: true,
-        category: 'some category',
+        category: "Women's fashion",
         description: 'some description',
       },
-      2: {
+      77: {
         status: 'active',
         date: 'some dates',
-        Chats: 0,
+        chats: 0,
         favorites: 0,
         views: 0,
         images: [],
-        title: 'title',
+        title: 'title77',
         price: 10,
         free: true,
         negotiable: true,
-        category: 'some category',
+        category: 'Sports & leisure',
+        description: 'some description',
+      },
+      88: {
+        status: 'reserved',
+        date: 'some dates',
+        chats: 0,
+        favorites: 0,
+        views: 0,
+        images: [
+          {
+            id: 1,
+            path:
+              'https://cdn.vox-cdn.com/thumbor/YKOpdn84C7mLzUD_QNDI9ICvMcU=/0x0:1024x555/1200x800/filters:focal(431x197:593x359)/cdn.vox-cdn.com/uploads/chorus_image/image/64145891/Switch_SuperMarioMaker2_char_artwork_copy.0.jpg',
+          },
+
+          {
+            id: 2,
+            path:
+              'https://media.wired.com/photos/5926c126af95806129f50868/master/w_2560%2Cc_limit/SuperMarioRunTA.jpg',
+          },
+        ],
+        title: 'title789',
+        price: 40,
+        free: true,
+        negotiable: true,
+        category: 'Sports & leisure',
+        description: 'some description',
+      },
+      99: {
+        status: 'reserved',
+        date: 'some dates',
+        chats: 0,
+        favorites: 0,
+        views: 0,
+        images: [
+          {
+            id: 1,
+            path:
+              'https://cdn.vox-cdn.com/thumbor/YKOpdn84C7mLzUD_QNDI9ICvMcU=/0x0:1024x555/1200x800/filters:focal(431x197:593x359)/cdn.vox-cdn.com/uploads/chorus_image/image/64145891/Switch_SuperMarioMaker2_char_artwork_copy.0.jpg',
+          },
+
+          {
+            id: 2,
+            path:
+              'https://media.wired.com/photos/5926c126af95806129f50868/master/w_2560%2Cc_limit/SuperMarioRunTA.jpg',
+          },
+        ],
+        title: 'title789',
+        price: 40,
+        free: true,
+        negotiable: true,
+        category: 'Sports & leisure',
+        description: 'some description',
+      },
+      55: {
+        status: 'reserved',
+        date: 'some dates',
+        chats: 0,
+        favorites: 0,
+        views: 0,
+        images: [
+          {
+            id: 1,
+            path:
+              'https://cdn.vox-cdn.com/thumbor/YKOpdn84C7mLzUD_QNDI9ICvMcU=/0x0:1024x555/1200x800/filters:focal(431x197:593x359)/cdn.vox-cdn.com/uploads/chorus_image/image/64145891/Switch_SuperMarioMaker2_char_artwork_copy.0.jpg',
+          },
+
+          {
+            id: 2,
+            path:
+              'https://media.wired.com/photos/5926c126af95806129f50868/master/w_2560%2Cc_limit/SuperMarioRunTA.jpg',
+          },
+        ],
+        title: 'title789',
+        price: 40,
+        free: true,
+        negotiable: true,
+        category: 'Sports & leisure',
         description: 'some description',
       },
     },

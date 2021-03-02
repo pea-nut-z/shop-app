@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import {icons, SIZES, FONTS, COLORS, recordList} from '../constants';
 import {Header, HeaderButton, CircleButton, BarButton} from '../components';
-// import {recordList} from '../constants/buttonLists';
+// import {recordList} from '../constants';
 
 export default function MyAccount() {
   return (

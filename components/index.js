@@ -6,6 +6,7 @@ import ImageScrollView from './ImageScrollView';
 import SellButton from './SellButton';
 import Subheader from './Subheader';
 import RatingEmoji from './RatingEmoji';
+import DisplaySellerOtherItems from './DisplaySellerOtherItems';
 
 export {
   BarButton,
@@ -16,4 +17,5 @@ export {
   SellButton,
   Subheader,
   RatingEmoji,
+  DisplaySellerOtherItems,
 };

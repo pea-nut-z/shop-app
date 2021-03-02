@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 // import {connect} from 'react-redux';
 
-import {COLORS, SIZES, FONTS, categoryList} from '../constants';
+import {COLORS, SIZES, FONTS, categoryDropDown} from '../constants';
 import {Header} from '../components';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import CurrencyInput from 'react-native-currency-input';
@@ -35,11 +35,6 @@ export default function Sell({navigation}) {
   const [category, setCategory] = useState('Categories');
   const [description, setDescription] = useState('');
   const maxNumOfImg = 10;
-
-  const dropDownList = categoryList.map((category) => ({
-    label: category.name,
-    value: category.name,
-  }));
 
   useEffect(() => {
     if (price === 0) {
@@ -77,11 +72,11 @@ export default function Sell({navigation}) {
     );
   }
 
-  function deleteImg(item) {
-    const filtered = images.filter((img) => {
-      return img.id !== item.id;
+  function deleteImg(selectedImg) {
+    const newImgs = images.filter((img) => {
+      return img.id !== selectedImg.id;
     });
-    setImages(filtered);
+    setImages(newImgs);
     setNumOfImg(numOfImg - 1);
   }
 
@@ -120,7 +115,7 @@ export default function Sell({navigation}) {
     // const test1 = JSON.stringify(test);
     // console.log(test1);
 
-    navigation.navigate('DisplayItem', {
+    navigation.navigate('itemDetails', {
       sellerId,
       itemId,
     });
@@ -219,10 +214,10 @@ export default function Sell({navigation}) {
           </TouchableOpacity>
           {/* CATEGORIES */}
           <DropDownPicker
-            items={dropDownList}
+            items={categoryDropDown}
             placeholder="Categories"
             onChangeItem={(item) => setCategory(item.value)}
-            dropDownMaxHeight={dropDownList.length * SIZES.height}
+            dropDownMaxHeight={categoryDropDown.length * SIZES.height}
             style={{
               ...styles.container,
               ...styles.dropDown,
