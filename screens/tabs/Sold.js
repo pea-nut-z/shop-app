@@ -12,8 +12,10 @@ import {
 
 export default function Sold() {
   return (
-    <View>
-      <Text>Sold Tab</Text>
-    </View>
+    <SafeAreaView>
+      <View>
+        <Text>Sold Tab</Text>
+      </View>
+    </SafeAreaView>
   );
 }

@@ -11,7 +11,7 @@
 //   category,
 //   description,
 // ) => ({
-//   type: actions.LIST_ADDED,
+//   type: actions.ITEM_ADDED,
 //   sellerId,
 //   itemId,
 //   payload: {

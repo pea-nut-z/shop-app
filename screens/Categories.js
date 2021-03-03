@@ -23,14 +23,6 @@ export default function Categories({navigation}) {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [list, setList] = useState();
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <IconButton icon="plus" color={Colors.red500} size={20} />
-      ),
-    });
-  }, [navigation]);
-
   function onSelectCategory(category) {
     // navigate to the filtered list
 

@@ -16,7 +16,7 @@ const listings = {
         chats: 0,
         favorites: 0,
         views: 0,
-        images: [],
+        images: [11],
         title: 'title',
         price: 1,
         free: true,
@@ -38,18 +38,10 @@ const listings = {
         favorites: 0,
         views: 0,
         images: [
-          {
-            id: 1,
-            path: 'https://i.ytimg.com/vi/H8X7FHrq278/maxresdefault.jpg',
-          },
-
-          {
-            id: 2,
-            path:
-              'https://static.wikia.nocookie.net/pokemon/images/4/49/Ash_Pikachu.png/revision/latest?cb=20200405125039',
-          },
+          'https://i.ytimg.com/vi/H8X7FHrq278/maxresdefault.jpg',
+          'https://static.wikia.nocookie.net/pokemon/images/4/49/Ash_Pikachu.png/revision/latest?cb=20200405125039',
         ],
-        title: 'title66',
+        title: 'title666',
         price: 400,
         free: true,
         negotiable: true,
@@ -62,8 +54,8 @@ const listings = {
         chats: 0,
         favorites: 0,
         views: 0,
-        images: [],
-        title: 'title77',
+        images: [11],
+        title: 'title777',
         price: 10,
         free: true,
         negotiable: true,
@@ -77,19 +69,10 @@ const listings = {
         favorites: 0,
         views: 0,
         images: [
-          {
-            id: 1,
-            path:
-              'https://cdn.vox-cdn.com/thumbor/YKOpdn84C7mLzUD_QNDI9ICvMcU=/0x0:1024x555/1200x800/filters:focal(431x197:593x359)/cdn.vox-cdn.com/uploads/chorus_image/image/64145891/Switch_SuperMarioMaker2_char_artwork_copy.0.jpg',
-          },
-
-          {
-            id: 2,
-            path:
-              'https://media.wired.com/photos/5926c126af95806129f50868/master/w_2560%2Cc_limit/SuperMarioRunTA.jpg',
-          },
+          'https://cdn.vox-cdn.com/thumbor/YKOpdn84C7mLzUD_QNDI9ICvMcU=/0x0:1024x555/1200x800/filters:focal(431x197:593x359)/cdn.vox-cdn.com/uploads/chorus_image/image/64145891/Switch_SuperMarioMaker2_char_artwork_copy.0.jpg',
+          'https://media.wired.com/photos/5926c126af95806129f50868/master/w_2560%2Cc_limit/SuperMarioRunTA.jpg',
         ],
-        title: 'title789',
+        title: 'title888',
         price: 40,
         free: true,
         negotiable: true,
@@ -103,19 +86,10 @@ const listings = {
         favorites: 0,
         views: 0,
         images: [
-          {
-            id: 1,
-            path:
-              'https://cdn.vox-cdn.com/thumbor/YKOpdn84C7mLzUD_QNDI9ICvMcU=/0x0:1024x555/1200x800/filters:focal(431x197:593x359)/cdn.vox-cdn.com/uploads/chorus_image/image/64145891/Switch_SuperMarioMaker2_char_artwork_copy.0.jpg',
-          },
-
-          {
-            id: 2,
-            path:
-              'https://media.wired.com/photos/5926c126af95806129f50868/master/w_2560%2Cc_limit/SuperMarioRunTA.jpg',
-          },
+          'https://cdn.vox-cdn.com/thumbor/YKOpdn84C7mLzUD_QNDI9ICvMcU=/0x0:1024x555/1200x800/filters:focal(431x197:593x359)/cdn.vox-cdn.com/uploads/chorus_image/image/64145891/Switch_SuperMarioMaker2_char_artwork_copy.0.jpg',
+          'https://media.wired.com/photos/5926c126af95806129f50868/master/w_2560%2Cc_limit/SuperMarioRunTA.jpg',
         ],
-        title: 'title789',
+        title: 'title999',
         price: 40,
         free: true,
         negotiable: true,
@@ -129,19 +103,10 @@ const listings = {
         favorites: 0,
         views: 0,
         images: [
-          {
-            id: 1,
-            path:
-              'https://cdn.vox-cdn.com/thumbor/YKOpdn84C7mLzUD_QNDI9ICvMcU=/0x0:1024x555/1200x800/filters:focal(431x197:593x359)/cdn.vox-cdn.com/uploads/chorus_image/image/64145891/Switch_SuperMarioMaker2_char_artwork_copy.0.jpg',
-          },
-
-          {
-            id: 2,
-            path:
-              'https://media.wired.com/photos/5926c126af95806129f50868/master/w_2560%2Cc_limit/SuperMarioRunTA.jpg',
-          },
+          'https://cdn.vox-cdn.com/thumbor/YKOpdn84C7mLzUD_QNDI9ICvMcU=/0x0:1024x555/1200x800/filters:focal(431x197:593x359)/cdn.vox-cdn.com/uploads/chorus_image/image/64145891/Switch_SuperMarioMaker2_char_artwork_copy.0.jpg',
+          'https://media.wired.com/photos/5926c126af95806129f50868/master/w_2560%2Cc_limit/SuperMarioRunTA.jpg',
         ],
-        title: 'title789',
+        title: 'title555',
         price: 40,
         free: true,
         negotiable: true,
@@ -152,9 +117,14 @@ const listings = {
   },
 };
 
-export function listingsReducer(state = listings, action) {
+const listingsIds = {
+  111: [1],
+  222: [55, 66, 77, 88, 99],
+};
+
+function listingsReducer(state = listings, action) {
   switch (action.type) {
-    case actions.LIST_ADDED:
+    case actions.ITEM_ADDED:
       return {
         ...state,
         [action.sellerId]: {
@@ -167,6 +137,19 @@ export function listingsReducer(state = listings, action) {
   }
 }
 
+function listingsIdsReducer(state = listingsIds, action) {
+  switch (action.type) {
+    case actions.ITEM_ADDED:
+      return {
+        ...state,
+        [action.sellerId]: [...state[action.sellerId], action.itemId],
+      };
+    default:
+      return state;
+  }
+}
+
 export default rootReducer = combineReducers({
   listings: listingsReducer,
+  listingsIds: listingsIdsReducer,
 });

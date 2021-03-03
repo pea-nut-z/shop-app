@@ -27,7 +27,7 @@ export default function ImageScrollView({images}) {
               <View style={{height: SIZES.height * 0.5}}>
                 {/* image */}
                 <Image
-                  source={{uri: item.path}}
+                  source={{uri: item}}
                   resizeMode="cover"
                   style={{
                     width: SIZES.width,

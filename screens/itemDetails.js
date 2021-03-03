@@ -19,24 +19,28 @@ import {
   ImageScrollView,
   ScrollViewDots,
   RatingEmoji,
-  DisplaySellerOtherItems,
+  SellerOtherItems,
 } from '../components';
 
 import {FONTS, SIZES, categoryList, itemStatusDropDown} from '../constants';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {timeSince} from '../helper';
+import {timeSince, putItemObjsInArr} from '../helper';
 
 function itemDetails({listings, route, navigation}) {
-  const [itemStatus, setItemStatus] = useState('Active');
   const {sellerId, itemId} = route.params;
 
   // SELLER INFO
   const seller = listings[sellerId];
-  //  ITEM INFO
+  //  ITEMS INFO
   const items = seller['items'];
+  const sellerAllItemsArr = putItemObjsInArr(items, sellerId); // easier for mapping
+
+  // ITEM INFO
   const item = seller['items'][itemId];
   const itemImages = item['images'];
-  const imagesProvided = itemImages.length === 0 ? false : true;
+  const imagesProvided = typeof item['images'][0] === 'number' ? false : true;
+
+  const [itemStatus, setItemStatus] = useState(item.status);
 
   return (
     <View>
@@ -149,17 +153,18 @@ function itemDetails({listings, route, navigation}) {
             <TouchableOpacity
               onPress={() => {
                 navigation.navigate('sellerItemsTabs', {
-                  seller,
-                  items,
+                  // sellerId,
+                  // seller,
+                  items: sellerAllItemsArr,
                 });
               }}>
               <Text>See all</Text>
             </TouchableOpacity>
           </View>
-          <DisplaySellerOtherItems
+          <SellerOtherItems
             sellerId={sellerId}
             itemId={itemId}
-            items={items}
+            items={sellerAllItemsArr}
             navigation={navigation}
           />
           <SafeAreaView />

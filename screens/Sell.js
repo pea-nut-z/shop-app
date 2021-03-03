@@ -13,7 +13,13 @@ import {
 } from 'react-native';
 // import {connect} from 'react-redux';
 
-import {COLORS, SIZES, FONTS, categoryDropDown} from '../constants';
+import {
+  COLORS,
+  SIZES,
+  FONTS,
+  categoryList,
+  categoryDropDown,
+} from '../constants';
 import {Header} from '../components';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import CurrencyInput from 'react-native-currency-input';
@@ -51,7 +57,7 @@ export default function Sell({navigation}) {
       compressImageQuality: 0.7,
     }).then((image) => {
       setNumOfImg(numOfImg + 1);
-      setImages([...images, {id: numOfImg, path: image.path}]);
+      setImages([...images, image.path]);
     });
   }
 
@@ -60,7 +66,7 @@ export default function Sell({navigation}) {
       <View style={styles.imgContainer}>
         <ImageBackground
           source={{
-            uri: item.path,
+            uri: item,
           }}
           style={styles.img}></ImageBackground>
         <TouchableOpacity
@@ -74,7 +80,7 @@ export default function Sell({navigation}) {
 
   function deleteImg(selectedImg) {
     const newImgs = images.filter((img) => {
-      return img.id !== selectedImg.id;
+      return img !== selectedImg;
     });
     setImages(newImgs);
     setNumOfImg(numOfImg - 1);
@@ -96,12 +102,22 @@ export default function Sell({navigation}) {
     const sellerId = 222;
     let itemId = 5;
 
+    let imgPath;
+
+    if (images.length === 0) {
+      categoryList.find((obj) => {
+        if (obj.name === category) imgPath = [obj.icon];
+      });
+    } else {
+      imgPath = images;
+    }
+
     store.dispatch({
-      type: actions.LIST_ADDED,
+      type: actions.ITEM_ADDED,
       sellerId,
       itemId: ++itemId,
       payload: {
-        images,
+        images: imgPath,
         title,
         price,
         free,
@@ -152,7 +168,7 @@ export default function Sell({navigation}) {
               data={images}
               horizontal
               showsHorizontalScrollIndicator={false}
-              keyExtractor={(img) => `${img.id}`}
+              keyExtractor={(img, index) => `img-${index}`}
               renderItem={renderImage}
             />
           </View>

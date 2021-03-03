@@ -2,7 +2,7 @@ import * as actions from './actionTypes';
 
 export const addToListings = (state, action) => {
   switch (action.type) {
-    case actions.LIST_ADDED:
+    case actions.ITEM_ADDED:
       return {
         ...state.items,
         [action.itemId]: {

@@ -41,3 +41,28 @@ export function timeSince(date) {
 
   return interval + ' ' + intervalType + ' ago';
 }
+
+export function putItemObjsInArr(items, sellerId) {
+  const arr = [];
+  for (const key in items) {
+    const itemId = parseInt(key);
+    const item = {...items[key], itemId, sellerId};
+    arr.push(item);
+  }
+  return arr;
+}
+
+export function filterItems(itemId, items, filter) {
+  switch (filter) {
+    case 'fourOtherItems':
+      return items.filter((item) => item.itemId !== itemId).slice(0, 4);
+    case 'all':
+      return items;
+    case 'active':
+      return items.filter((item) => item.status === 'active');
+    case 'sold':
+      return items.filter((item) => item.status === 'sold');
+    default:
+      throw new Error(`Unknown filter: ${filter}`);
+  }
+}

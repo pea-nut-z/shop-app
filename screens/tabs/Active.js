@@ -12,8 +12,10 @@ import {
 
 export default function Active() {
   return (
-    <View>
-      <Text>Active Tab</Text>
-    </View>
+    <SafeAreaView>
+      <View>
+        <Text>Active Tab</Text>
+      </View>
+    </SafeAreaView>
   );
 }
