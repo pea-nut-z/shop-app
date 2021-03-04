@@ -1,6 +1,7 @@
 import Home from './Home';
 import Sell from './Sell';
 import Categories from './Categories';
+import Category from './Category';
 import Chats from './Chats';
 import MyAccount from './MyAccount';
 import itemDetails from './itemDetails';
@@ -13,6 +14,7 @@ export {
   Sell,
   itemDetails,
   Categories,
+  Category,
   Chats,
   MyAccount,
   All,

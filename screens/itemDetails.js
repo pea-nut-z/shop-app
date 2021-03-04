@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import {connect} from 'react-redux';
 import {
   SafeAreaView,
   View,
@@ -22,21 +21,24 @@ import {
   SellerOtherItems,
 } from '../components';
 
-import {FONTS, SIZES, categoryList, itemStatusDropDown} from '../constants';
-import Icon from 'react-native-vector-icons/Ionicons';
-import {timeSince, putItemObjsInArr} from '../helper';
+import {FONTS, SIZES, categoryOptions, itemStatusOptions} from '../constants';
+import {timeSince, getSellerAllItems} from '../helper';
 
-function itemDetails({listings, route, navigation}) {
+import {useDispatch, useSelector} from 'react-redux';
+
+export default function itemDetails({route, navigation}) {
   const {sellerId, itemId} = route.params;
 
   // SELLER INFO
-  const seller = listings[sellerId];
-  //  ITEMS INFO
-  const items = seller['items'];
-  const sellerAllItemsArr = putItemObjsInArr(items, sellerId); // easier for mapping
+  const seller = useSelector((state) => state['users'][sellerId]);
 
-  // ITEM INFO
-  const item = seller['items'][itemId];
+  // SELLER'S LISTINGS
+  const items = useSelector((state) => state['listings'][sellerId]);
+  const sellerAllItemsArr = getSellerAllItems(items, sellerId); // easier for mapping
+  console.log({sellerAllItemsArr});
+
+  // CUREENT ITEM INFO
+  const item = items[itemId];
   const itemImages = item['images'];
   const imagesProvided = typeof item['images'][0] === 'number' ? false : true;
 
@@ -93,7 +95,7 @@ function itemDetails({listings, route, navigation}) {
         <View
           style={{minHeight: SIZES.height * 0.21, backgroundColor: 'green'}}>
           <DropDownPicker
-            items={itemStatusDropDown}
+            items={itemStatusOptions}
             containerStyle={{
               width: 100,
               height: 40,
@@ -101,7 +103,7 @@ function itemDetails({listings, route, navigation}) {
             }}
             placeholder={itemStatus}
             onChangeItem={(item) => setItemStatus(item.value)}
-            dropDownMaxHeight={itemStatusDropDown.length * SIZES.height}
+            dropDownMaxHeight={itemStatusOptions.length * SIZES.height}
             // style={{
             //   height: 4,
             // }}
@@ -149,20 +151,18 @@ function itemDetails({listings, route, navigation}) {
             }}>
             <Text>Other items by {seller.userName}</Text>
 
-            {/* SEE ALL ITEM BUTTON */}
+            {/* SEE ALL ITEMS BUTTON */}
             <TouchableOpacity
               onPress={() => {
                 navigation.navigate('sellerItemsTabs', {
-                  // sellerId,
-                  // seller,
                   items: sellerAllItemsArr,
                 });
               }}>
               <Text>See all</Text>
             </TouchableOpacity>
           </View>
+          {/* FOUR OTHER ITEMS */}
           <SellerOtherItems
-            sellerId={sellerId}
             itemId={itemId}
             items={sellerAllItemsArr}
             navigation={navigation}
@@ -173,11 +173,3 @@ function itemDetails({listings, route, navigation}) {
     </View>
   );
 }
-
-function mapStateToProps(state) {
-  return {
-    listings: state.listings,
-  };
-}
-
-export default connect(mapStateToProps)(itemDetails);

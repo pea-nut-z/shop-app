@@ -14,20 +14,15 @@ import {
 import {
   FONTS,
   SIZES,
-  categoryList,
-  itemStatusDropDown,
+  categoryOptions,
+  itemStatusOptions,
   icons,
   COLORS,
 } from '../constants';
 
 import {filterItems} from '../helper';
 
-export default function SellerOtherItems({
-  sellerId,
-  itemId,
-  items,
-  navigation,
-}) {
+export default function SellerOtherItems({itemId, items, navigation}) {
   const otherItems = filterItems(itemId, items, 'fourOtherItems');
 
   return (
@@ -39,6 +34,7 @@ export default function SellerOtherItems({
         justifyContent: 'center',
       }}>
       {otherItems.map((item) => {
+        const sellerId = item.sellerId;
         const itemId = item.itemId;
         const img = item['images'][0];
         return (

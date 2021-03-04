@@ -1,21 +1,7 @@
 import {icons} from '.';
 
-export const recordList = [
-  {
-    icon: icons.listings,
-    name: 'Listings',
-  },
-  {
-    icon: icons.bag,
-    name: 'Purchases',
-  },
-  {
-    icon: icons.heart,
-    name: 'Favourites',
-  },
-];
-
-export const categoryList = [
+// CATEGORY
+export const categoryOptions = [
   {
     name: 'Electronics',
     icon: icons.electronics,
@@ -78,12 +64,12 @@ export const categoryList = [
   },
 ];
 
-export const categoryDropDown = categoryList.map((category) => ({
+export const categoryDropDown = categoryOptions.map((category) => ({
   label: category.name,
   value: category.name,
 }));
 
-export const itemStatusDropDown = [
+export const itemStatusOptions = [
   {
     label: 'Active',
     value: 'Active',
@@ -95,5 +81,66 @@ export const itemStatusDropDown = [
   {
     label: 'Sold',
     value: 'Sold',
+  },
+];
+
+// MY ACCOUNT
+export const listingOptions = [
+  {
+    name: 'Listings',
+    icon: icons.listings,
+  },
+  {
+    name: 'Purchases',
+    icon: icons.bag,
+  },
+  {
+    name: 'Favourites',
+    icon: icons.heart,
+  },
+];
+export const locationOptions = [
+  {
+    name: 'Neighbourhood setttings',
+    icon: 'location-outline',
+  },
+  {
+    name: 'Verify neighbourhood',
+    icon: 'scan-circle-outline',
+  },
+  {
+    name: 'Search alerts',
+    icon: 'search-circle-outline',
+  },
+];
+
+export const infoOptions = [
+  {
+    name: 'Get help',
+    icon: 'information-circle-outline',
+  },
+  {
+    name: 'Invite friends',
+    icon: 'mail-outline',
+  },
+  {
+    name: 'My rewards',
+    icon: 'gift-outline',
+  },
+  {
+    name: 'Share ShopApp',
+    icon: 'share-social-outline',
+  },
+  {
+    name: "What's new?",
+    icon: 'mic-outline',
+  },
+  {
+    name: 'FAQs',
+    icon: 'help-circle-outline',
+  },
+  {
+    name: 'Settings',
+    icon: 'settings-outline',
   },
 ];

@@ -42,7 +42,7 @@ export function timeSince(date) {
   return interval + ' ' + intervalType + ' ago';
 }
 
-export function putItemObjsInArr(items, sellerId) {
+export function getSellerAllItems(items, sellerId) {
   const arr = [];
   for (const key in items) {
     const itemId = parseInt(key);
@@ -52,16 +52,37 @@ export function putItemObjsInArr(items, sellerId) {
   return arr;
 }
 
-export function filterItems(itemId, items, filter) {
+export function getAllSellersItems(sellers, listings) {
+  const arr = [];
+  for (let sellerId in listings) {
+    sellerId = parseInt(sellerId);
+    for (let itemId in listings[sellerId]) {
+      itemId = parseInt(itemId);
+      const item = {
+        sellerId,
+        itemId,
+        ...sellers[sellerId],
+        ...listings[sellerId][itemId],
+      };
+      arr.push(item);
+    }
+  }
+  return arr;
+}
+
+export function filterItems(itemId, items, filter, selectedCategory) {
   switch (filter) {
     case 'fourOtherItems':
       return items.filter((item) => item.itemId !== itemId).slice(0, 4);
-    case 'all':
-      return items;
     case 'active':
-      return items.filter((item) => item.status === 'active');
+      return items.filter((item) => item.status === 'Active');
     case 'sold':
-      return items.filter((item) => item.status === 'sold');
+      return items.filter((item) => item.status === 'Sold');
+
+    case 'sortByDate':
+      return items.sort((a, b) => a.date < b.date);
+    case 'getCategory':
+      return items.filter((item) => item.category === selectedCategory);
     default:
       throw new Error(`Unknown filter: ${filter}`);
   }

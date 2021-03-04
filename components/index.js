@@ -1,5 +1,5 @@
-import BarButton from './BarButton';
 import CircleButton from './CircleButton';
+import FlatButtons from './FlatButtons';
 import Header from './Header';
 import HeaderButton from './HeaderButton';
 import ImageScrollView from './ImageScrollView';
@@ -7,11 +7,11 @@ import SellButton from './SellButton';
 import Subheader from './Subheader';
 import RatingEmoji from './RatingEmoji';
 import SellerOtherItems from './SellerOtherItems';
-import ListButtons from './ListButtons';
+import ItemButtons from './ItemButtons';
 
 export {
-  BarButton,
   CircleButton,
+  FlatButtons,
   Header,
   HeaderButton,
   ImageScrollView,
@@ -19,5 +19,5 @@ export {
   Subheader,
   RatingEmoji,
   SellerOtherItems,
-  ListButtons,
+  ItemButtons,
 };

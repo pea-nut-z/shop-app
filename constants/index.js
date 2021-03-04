@@ -1,9 +1,11 @@
 import icons from './icons';
 import {
-  recordList,
-  categoryList,
+  listingOptions,
+  locationOptions,
+  infoOptions,
+  categoryOptions,
   categoryDropDown,
-  itemStatusDropDown,
+  itemStatusOptions,
 } from './optionVariables';
 
 // import images from "./images";
@@ -16,9 +18,11 @@ export {
   COLORS,
   SIZES,
   FONTS,
-  categoryList,
-  recordList,
+  categoryOptions,
+  listingOptions,
+  locationOptions,
+  infoOptions,
   categoryDropDown,
-  itemStatusDropDown,
+  itemStatusOptions,
   // GOOGLE_API_KEY
 };

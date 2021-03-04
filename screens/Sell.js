@@ -17,7 +17,7 @@ import {
   COLORS,
   SIZES,
   FONTS,
-  categoryList,
+  categoryOptions,
   categoryDropDown,
 } from '../constants';
 import {Header} from '../components';
@@ -28,7 +28,6 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ImagePicker from 'react-native-image-crop-picker';
 import store from '../store/store';
-// import {itemAdded} from '../store/actions';
 import * as actions from '../store/actionTypes';
 
 export default function Sell({navigation}) {
@@ -105,7 +104,7 @@ export default function Sell({navigation}) {
     let imgPath;
 
     if (images.length === 0) {
-      categoryList.find((obj) => {
+      categoryOptions.find((obj) => {
         if (obj.name === category) imgPath = [obj.icon];
       });
     } else {

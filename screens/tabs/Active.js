@@ -9,13 +9,13 @@ import {
   Image,
   FlatList,
 } from 'react-native';
+import {ItemButtons} from '../../components';
 
-export default function Active() {
+export default function Active({items, navigation}) {
   return (
-    <SafeAreaView>
-      <View>
-        <Text>Active Tab</Text>
-      </View>
-    </SafeAreaView>
+    <View>
+      <Text>Active Tab</Text>
+      <ItemButtons items={items} navigation={navigation} />
+    </View>
   );
 }

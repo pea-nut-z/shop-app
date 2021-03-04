@@ -9,13 +9,13 @@ import {
   Image,
   FlatList,
 } from 'react-native';
-import {ListButtons} from '../../components';
+import {ItemButtons} from '../../components';
 
 export default function All({items, navigation}) {
   return (
     <View>
       <Text>All Tab</Text>
-      <ListButtons items={items} navigation={navigation} />
+      <ItemButtons items={items} navigation={navigation} />
     </View>
   );
 }

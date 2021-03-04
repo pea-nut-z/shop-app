@@ -11,7 +11,7 @@ import {
 import {icons, SIZES, FONTS, COLORS} from '../constants';
 import {timeSince} from '../helper';
 
-export default function ListButtons({items, navigation}) {
+export default function ItemButtons({items, navigation}) {
   const renderItem = ({item}) => {
     const sellerId = item.sellerId;
     const itemId = item.itemId;
@@ -36,7 +36,7 @@ export default function ListButtons({items, navigation}) {
         <View>
           <Text>{item.title}</Text>
           <Text>location?? • {timeSince(item.date)}</Text>
-          <Text>{item.price}</Text>
+          <Text>$ {item.price}</Text>
         </View>
       </TouchableOpacity>
     );
