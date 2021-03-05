@@ -13,7 +13,7 @@ import {
   Chats,
   MyAccount,
 } from './screens/';
-import {bottomMainTabs, sellerItemsTabs} from './navigation';
+import {bottomMainTabs, sellerItemsTabs, userListingsTabs} from './navigation';
 import store from './store/store';
 
 const Stack = createStackNavigator();
@@ -27,16 +27,19 @@ export default function App() {
             headerShown: false,
           }}
           initialRouteName={'Home'}>
-          {/* Home */}
+          {/* HOME */}
           <Stack.Screen name="Home" component={bottomMainTabs} />
           <Stack.Screen name="Sell" component={Sell} />
           <Stack.Screen name="itemDetails" component={itemDetails} />
-          {/* Categories */}
+          <Stack.Screen name="sellerItemsTabs" component={sellerItemsTabs} />
+          {/* CATEGORIES */}
           <Stack.Screen name="Categories" component={Categories} />
           <Stack.Screen name="Category" component={Category} />
+          {/* CHATS */}
           <Stack.Screen name="Chats" component={Chats} />
+          {/* MY ACCOUNT */}
           <Stack.Screen name="MyAccount" component={MyAccount} />
-          <Stack.Screen name="sellerItemsTabs" component={sellerItemsTabs} />
+          <Stack.Screen name="userListingsTabs" component={userListingsTabs} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

@@ -85,7 +85,7 @@ export const itemStatusOptions = [
 ];
 
 // MY ACCOUNT
-export const listingOptions = [
+export const viewOptions = [
   {
     name: 'Listings',
     icon: icons.listings,

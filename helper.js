@@ -49,6 +49,7 @@ export function getSellerAllItems(items, sellerId) {
     const item = {...items[key], itemId, sellerId};
     arr.push(item);
   }
+  arr.sort((a, b) => new Date(a.date) < new Date(b.date));
   return arr;
 }
 
@@ -67,6 +68,7 @@ export function getAllSellersItems(sellers, listings) {
       arr.push(item);
     }
   }
+  arr.sort((a, b) => new Date(a.date) < new Date(b.date));
   return arr;
 }
 
@@ -78,12 +80,11 @@ export function filterItems(itemId, items, filter, selectedCategory) {
       return items.filter((item) => item.status === 'Active');
     case 'sold':
       return items.filter((item) => item.status === 'Sold');
-
-    case 'sortByDate':
-      return items.sort((a, b) => a.date < b.date);
+    case 'hidden':
+      return items.filter((item) => item.status === 'Hidden');
     case 'getCategory':
       return items.filter((item) => item.category === selectedCategory);
     default:
-      throw new Error(`Unknown filter: ${filter}`);
+      new Error(`Unknown filter: ${filter}`);
   }
 }

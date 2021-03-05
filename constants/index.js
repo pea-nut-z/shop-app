@@ -1,6 +1,6 @@
 import icons from './icons';
 import {
-  listingOptions,
+  viewOptions,
   locationOptions,
   infoOptions,
   categoryOptions,
@@ -19,7 +19,7 @@ export {
   SIZES,
   FONTS,
   categoryOptions,
-  listingOptions,
+  viewOptions,
   locationOptions,
   infoOptions,
   categoryDropDown,

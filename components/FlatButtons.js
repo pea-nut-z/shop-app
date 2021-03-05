@@ -38,7 +38,7 @@ export default function FlatButtons({options, func, navigation}) {
               ) : (
                 <Icon
                   name={option['icon']}
-                  size={25}
+                  size={30}
                   //   color={images ? COLORS.white : COLORS.black}
                 />
               )}
@@ -57,6 +57,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: SIZES.padding,
     paddingHorizontal: SIZES.padding * 2,
+    // backgroundColor: 'red',
   },
   text: {
     ...FONTS.h5,

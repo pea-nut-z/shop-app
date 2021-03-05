@@ -14,7 +14,6 @@ import {ItemButtons} from '../../components';
 export default function All({items, navigation}) {
   return (
     <View>
-      <Text>All Tab</Text>
       <ItemButtons items={items} navigation={navigation} />
     </View>
   );

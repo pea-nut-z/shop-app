@@ -1,4 +1,5 @@
 import bottomMainTabs from './bottomMainTabs';
 import sellerItemsTabs from './sellerItemsTabs';
+import userListingsTabs from './userListingsTabs';
 
-export {bottomMainTabs, sellerItemsTabs};
+export {bottomMainTabs, sellerItemsTabs, userListingsTabs};

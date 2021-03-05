@@ -21,11 +21,11 @@ import {categoryOptions} from '../constants';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 export default function Categories({navigation}) {
-  function buttonFunc(option) {
+  const buttonFunc = (option) => {
     navigation.navigate('Category', {
       selectedCategory: option.name,
     });
-  }
+  };
 
   return (
     <SafeAreaView>

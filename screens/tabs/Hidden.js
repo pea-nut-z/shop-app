@@ -11,11 +11,15 @@ import {
 } from 'react-native';
 import {ItemButtons} from '../../components';
 
-export default function Sold({items, navigation}) {
+export default function Hidden({items, navigation}) {
   return (
     <View>
-      {items.length === 0 && <Text>No sold items</Text>}
-      <ItemButtons items={items} navigation={navigation} />
+      {items.length === 0 && <Text>No hidden items</Text>}
+      <ItemButtons
+        items={items}
+        navigation={navigation}
+        atUserHiddenItemScreen={true}
+      />
     </View>
   );
 }

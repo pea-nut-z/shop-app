@@ -2,26 +2,29 @@ import React from 'react';
 import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
 import {SIZES, FONTS, COLORS} from '../constants';
 
-export default function CircleButton({iconSrc, name}) {
-  return (
-    <View style={styles.container}>
-      <TouchableOpacity>
-        <View style={styles.alignCircle}>
-          <View style={styles.circle}>
-            <Image
-              source={iconSrc}
-              resizeMode={'contain'}
-              style={{
-                width: 25,
-                height: 25,
-              }}
-            />
+// export default function CircleButton({iconSrc, name}) {
+export default function CircleButton({options, func, navigation}) {
+  return options.map((option, index) => {
+    return (
+      <View key={`option-${index}`} style={styles.container}>
+        <TouchableOpacity onPress={() => func(option['name'])}>
+          <View style={styles.alignCircle}>
+            <View style={styles.circle}>
+              <Image
+                source={option.icon}
+                resizeMode={'contain'}
+                style={{
+                  width: 25,
+                  height: 25,
+                }}
+              />
+            </View>
           </View>
-        </View>
-        <Text style={styles.name}>{name}</Text>
-      </TouchableOpacity>
-    </View>
-  );
+          <Text style={styles.text}>{option.name}</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  });
 }
 
 const styles = StyleSheet.create({
@@ -42,7 +45,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginVertical: SIZES.padding,
   },
-  name: {
+  text: {
     ...FONTS.h5,
   },
 });

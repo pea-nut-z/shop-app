@@ -22,11 +22,9 @@ import {allSellersItems} from '../store/reducer';
 import {filterItems} from '../helper';
 
 export default function Home({navigation}) {
-  const itemsByDate = filterItems(0, allSellersItems, 'sortByDate');
-
   return (
     <SafeAreaView style={styles.container}>
-      <ItemButtons items={itemsByDate} navigation={navigation} />
+      <ItemButtons items={allSellersItems} navigation={navigation} />
       <SellButton navigation={navigation} />
     </SafeAreaView>
   );

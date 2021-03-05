@@ -34,8 +34,7 @@ export default function itemDetails({route, navigation}) {
 
   // SELLER'S LISTINGS
   const items = useSelector((state) => state['listings'][sellerId]);
-  const sellerAllItemsArr = getSellerAllItems(items, sellerId); // easier for mapping
-  console.log({sellerAllItemsArr});
+  const sellerAllItemsArr = getSellerAllItems(items, sellerId);
 
   // CUREENT ITEM INFO
   const item = items[itemId];

@@ -20,8 +20,10 @@ const users = {
 const listings = {
   111: {
     1: {
-      status: 'Active',
-      date: new Date('2021-02-28'),
+      status: 'Hidden',
+      date: new Date(
+        'Thu Feb 04 2021 20:36:28 GMT-0500 (Eastern Standard Time',
+      ).toString(),
       chats: 0,
       favorites: 0,
       views: 0,
@@ -37,7 +39,10 @@ const listings = {
   222: {
     66: {
       status: 'Sold',
-      date: new Date('2021-03-01'),
+      date: new Date(
+        'Thu Feb 09 2021 20:36:28 GMT-0500 (Eastern Standard Time',
+      ).toString(),
+
       chats: 0,
       favorites: 0,
       views: 0,
@@ -54,7 +59,9 @@ const listings = {
     },
     77: {
       status: 'Active',
-      date: new Date('2021-02-01'),
+      date: new Date(
+        'Thu Jan 26 2020 20:36:28 GMT-0500 (Eastern Standard Time',
+      ).toString(),
       chats: 0,
       favorites: 0,
       views: 0,
@@ -68,7 +75,9 @@ const listings = {
     },
     88: {
       status: 'Reserved',
-      date: new Date('2021-03-03'),
+      date: new Date(
+        'Thu Feb 04 2021 20:36:28 GMT-0500 (Eastern Standard Time',
+      ).toString(),
       chats: 0,
       favorites: 0,
       views: 0,
@@ -84,8 +93,10 @@ const listings = {
       description: 'some description',
     },
     99: {
-      status: 'Reserved',
-      date: new Date('2021-01-28'),
+      status: 'Sold',
+      date: new Date(
+        'Thu Jun 04 2019 20:36:28 GMT-0500 (Eastern Standard Time',
+      ).toString(),
       chats: 0,
       favorites: 0,
       views: 0,
@@ -102,7 +113,9 @@ const listings = {
     },
     55: {
       status: 'Active',
-      date: new Date('2020-01-30'),
+      date: new Date(
+        'Thu Mar 01 2021 20:36:28 GMT-0500 (Eastern Standard Time',
+      ).toString(),
       chats: 0,
       favorites: 0,
       views: 0,
@@ -137,8 +150,8 @@ function listingsReducer(state = listings, action) {
         [action.sellerId]: {
           ...state[action.sellerId],
           [action.itemId]: {
-            status: 'active',
-            date: new Date(),
+            status: 'Active',
+            date: new Date().toString(),
             chats: 0,
             favorites: 0,
             views: 0,
@@ -152,6 +165,18 @@ function listingsReducer(state = listings, action) {
           },
         },
       };
+    case actions.STATUS_CHANGED:
+      return {
+        ...state,
+        [action.sellerId]: {
+          ...state[action.sellerId],
+          [action.itemId]: {
+            ...state[action.sellerId][action.itemId],
+            status: action.payload.status,
+          },
+        },
+      };
+
     default:
       return state;
   }

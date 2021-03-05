@@ -8,6 +8,7 @@ import itemDetails from './itemDetails';
 import All from './tabs/All';
 import Active from './tabs/Active';
 import Sold from './tabs/Sold';
+import Hidden from './tabs/Hidden';
 
 export {
   Home,
@@ -20,4 +21,5 @@ export {
   All,
   Active,
   Sold,
+  Hidden,
 };
