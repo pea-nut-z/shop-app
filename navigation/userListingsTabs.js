@@ -1,17 +1,19 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+
 import {Active, Sold, Hidden} from '../screens';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {Header} from '../components';
-import {filterItems} from '../helper';
+import {useDispatch, useSelector} from 'react-redux';
+import {restructSellerItemsObj} from '../helper';
 
 const MaterialTopTabs = createMaterialTopTabNavigator();
 
 export default function userListingsTabs({route, navigation}) {
-  const {items} = route.params;
+  const {userId} = route.params;
 
-  const activeItems = filterItems(0, items, 'active');
-  const soldItems = filterItems(0, items, 'sold');
-  const hiddenItems = filterItems(0, items, 'hidden');
+  // USER INFO
+  const items = useSelector((state) => state['listings'][userId]);
+  const userAllItems = restructSellerItemsObj(items, userId);
 
   return (
     <MaterialTopTabs.Navigator
@@ -22,16 +24,16 @@ export default function userListingsTabs({route, navigation}) {
     >
       <MaterialTopTabs.Screen
         name="Active"
-        children={() => <Active items={activeItems} navigation={navigation} />}
+        children={() => <Active items={userAllItems} navigation={navigation} />}
       />
 
       <MaterialTopTabs.Screen
         name="Sold"
-        children={() => <Sold items={soldItems} navigation={navigation} />}
+        children={() => <Sold items={userAllItems} navigation={navigation} />}
       />
       <MaterialTopTabs.Screen
         name="Hidden"
-        children={() => <Hidden items={hiddenItems} navigation={navigation} />}
+        children={() => <Hidden items={userAllItems} navigation={navigation} />}
       />
     </MaterialTopTabs.Navigator>
   );

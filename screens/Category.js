@@ -17,7 +17,7 @@ export default function Category({route, navigation}) {
   const itemsByCategory = filterItems(
     0,
     allSellersItems,
-    'getCategory',
+    'get-category',
     selectedCategory,
   );
   return (

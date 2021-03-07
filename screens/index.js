@@ -5,6 +5,8 @@ import Category from './Category';
 import Chats from './Chats';
 import MyAccount from './MyAccount';
 import itemDetails from './itemDetails';
+import Purchases from './Purchases';
+import Favourites from './Favourites';
 import All from './tabs/All';
 import Active from './tabs/Active';
 import Sold from './tabs/Sold';
@@ -17,6 +19,8 @@ export {
   Categories,
   Category,
   Chats,
+  Purchases,
+  Favourites,
   MyAccount,
   All,
   Active,

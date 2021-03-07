@@ -12,6 +12,8 @@ import {
   Category,
   Chats,
   MyAccount,
+  Purchases,
+  Favourites,
 } from './screens/';
 import {bottomMainTabs, sellerItemsTabs, userListingsTabs} from './navigation';
 import store from './store/store';
@@ -40,6 +42,8 @@ export default function App() {
           {/* MY ACCOUNT */}
           <Stack.Screen name="MyAccount" component={MyAccount} />
           <Stack.Screen name="userListingsTabs" component={userListingsTabs} />
+          <Stack.Screen name="Purchases" component={Purchases} />
+          <Stack.Screen name="Favourites" component={Favourites} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

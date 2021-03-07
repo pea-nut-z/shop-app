@@ -42,7 +42,7 @@ export function timeSince(date) {
   return interval + ' ' + intervalType + ' ago';
 }
 
-export function getSellerAllItems(items, sellerId) {
+export function restructSellerItemsObj(items, sellerId) {
   const arr = [];
   for (const key in items) {
     const itemId = parseInt(key);
@@ -53,12 +53,14 @@ export function getSellerAllItems(items, sellerId) {
   return arr;
 }
 
-export function getAllSellersItems(sellers, listings) {
+export function getAllOtherSellersItems(userId, sellers, listings) {
   const arr = [];
   for (let sellerId in listings) {
     sellerId = parseInt(sellerId);
+    if (sellerId === userId) continue;
     for (let itemId in listings[sellerId]) {
       itemId = parseInt(itemId);
+      if (listings[sellerId][itemId]['status'] !== 'Active') continue;
       const item = {
         sellerId,
         itemId,
@@ -72,17 +74,37 @@ export function getAllSellersItems(sellers, listings) {
   return arr;
 }
 
+// export function restructUserFavs(userId, favourites, users, listings) {
+//   const list = favourites[userId];
+//   list.map((item) => {
+//     const sellerId = item[sellerId];
+//     const itemId = item[itemId];
+//     return {
+//       sellerId,
+//       itemId,
+//       ...users[item.sellerId],
+//       ...listings[item.sellerId][item.itemId],
+//     };
+//   });
+// }
+
 export function filterItems(itemId, items, filter, selectedCategory) {
   switch (filter) {
-    case 'fourOtherItems':
-      return items.filter((item) => item.itemId !== itemId).slice(0, 4);
+    case 'four-other-items':
+      return items
+        .filter((item) => item.itemId !== itemId && item.status === 'Active')
+        .slice(0, 4);
     case 'active':
       return items.filter((item) => item.status === 'Active');
     case 'sold':
       return items.filter((item) => item.status === 'Sold');
     case 'hidden':
       return items.filter((item) => item.status === 'Hidden');
-    case 'getCategory':
+    case 'active-and-reserved':
+      return items.filter(
+        (item) => item.status === 'Active' || item.status === 'Reserved',
+      );
+    case 'get-category':
       return items.filter((item) => item.category === selectedCategory);
     default:
       new Error(`Unknown filter: ${filter}`);

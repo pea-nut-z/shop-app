@@ -10,12 +10,15 @@ import {
   FlatList,
 } from 'react-native';
 import {ItemButtons} from '../../components';
+import {filterItems} from '../../helper';
 
 export default function Sold({items, navigation}) {
+  const soldItems = filterItems(0, items, 'sold');
+
   return (
     <View>
       {items.length === 0 && <Text>No sold items</Text>}
-      <ItemButtons items={items} navigation={navigation} />
+      <ItemButtons items={soldItems} navigation={navigation} />
     </View>
   );
 }

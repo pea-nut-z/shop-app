@@ -1,9 +1,13 @@
 import {combineReducers} from 'redux';
 import * as actions from './actionTypes';
-import {getAllSellersItems} from '../helper';
+import {getAllOtherSellersItems, restructUserFavs} from '../helper';
 
 // sync id to database
 //actions (add, edit , delete)
+// userId -> sellerId -> itemId
+
+// MOCK USER
+const userId = 111;
 
 const users = {
   111: {
@@ -28,8 +32,24 @@ const listings = {
       favorites: 0,
       views: 0,
       images: [11],
-      title: 'Electronics',
+      title: 'toy -active',
       price: 1,
+      free: true,
+      negotiable: true,
+      category: 'Electronics',
+      description: 'some description',
+    },
+    2: {
+      status: 'Reserved',
+      date: new Date(
+        'Thu Feb 04 2021 20:36:28 GMT-0500 (Eastern Standard Time',
+      ).toString(),
+      chats: 0,
+      favorites: 0,
+      views: 0,
+      images: [11],
+      title: 'pacifier- reserved',
+      price: 100,
       free: true,
       negotiable: true,
       category: 'Electronics',
@@ -133,6 +153,21 @@ const listings = {
   },
 };
 
+const favourites = {
+  111: [
+    {
+      sellerId: 222,
+      itemId: 77,
+    },
+  ],
+  222: [
+    {
+      sellerId: 111,
+      itemId: 1,
+    },
+  ],
+};
+
 function usersReducer(state = users, action) {
   switch (action.type) {
     case actions.USER_ADDED:
@@ -176,7 +211,31 @@ function listingsReducer(state = listings, action) {
           },
         },
       };
+    default:
+      return state;
+  }
+}
 
+function favouritesReducer(state = favourites, action) {
+  console.log(action.type);
+
+  switch (action.type) {
+    case actions.FAVOURITE_ADDED:
+      return {
+        ...state,
+        [action.userId]: state[action.userId].concat({
+          sellerId: action.payload.sellerId,
+          itemId: action.payload.itemId,
+        }),
+      };
+
+    case actions.FAVOURITE_REMOVED:
+      return {
+        ...state,
+        [action.userId]: state[action.userId].filter(
+          (item) => item.itemId !== action.payload.itemId,
+        ),
+      };
     default:
       return state;
   }
@@ -185,6 +244,13 @@ function listingsReducer(state = listings, action) {
 export default rootReducer = combineReducers({
   users: usersReducer,
   listings: listingsReducer,
+  favourites: favouritesReducer,
 });
 
-export const allSellersItems = getAllSellersItems(users, listings);
+export const allSellersItems = getAllOtherSellersItems(userId, users, listings);
+export const UserFavsRestructed = restructUserFavs(
+  userId,
+  favourites,
+  users,
+  listings,
+);

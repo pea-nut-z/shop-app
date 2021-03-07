@@ -1,26 +1,38 @@
 import React from 'react';
-import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
+import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import {SIZES, FONTS, COLORS} from '../constants';
+import Icon from 'react-native-vector-icons/Ionicons';
 
-// export default function CircleButton({iconSrc, name}) {
-export default function CircleButton({options, func, navigation}) {
+export default function CircleButton({options, userId, navigation}) {
+  const navigateTo = (name) => {
+    switch (name) {
+      case 'Listings':
+        return navigation.navigate('userListingsTabs', {
+          userId,
+        });
+      case 'Purchases':
+        return navigation.navigate('Purchases', {
+          userId,
+        });
+      case 'Favourites':
+        return navigation.navigate('Favourites', {
+          userId,
+        });
+      default:
+        return;
+    }
+  };
+
   return options.map((option, index) => {
     return (
       <View key={`option-${index}`} style={styles.container}>
-        <TouchableOpacity onPress={() => func(option['name'])}>
+        <TouchableOpacity onPress={() => navigateTo(option['name'])}>
           <View style={styles.alignCircle}>
             <View style={styles.circle}>
-              <Image
-                source={option.icon}
-                resizeMode={'contain'}
-                style={{
-                  width: 25,
-                  height: 25,
-                }}
-              />
+              <Icon name={option['icon']} size={25} />
             </View>
           </View>
-          <Text style={styles.text}>{option.name}</Text>
+          <Text style={styles.text}>{option['name']}</Text>
         </TouchableOpacity>
       </View>
     );

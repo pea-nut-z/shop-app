@@ -11,15 +11,18 @@ import {
 } from 'react-native';
 import {ItemButtons} from '../../components';
 import {useNavigationState} from '@react-navigation/native';
+import {filterItems} from '../../helper';
 
 export default function Active({items, navigation}) {
   const currentScreen = useNavigationState((state) => state.routes[0].name);
   const atUserActiveItemScreen = currentScreen === 'Active' ? true : false;
+  const activeAndReservedItems = filterItems(0, items, 'active-and-reserved');
+
   return (
     <View>
       {items.length === 0 && <Text>No active items</Text>}
       <ItemButtons
-        items={items}
+        items={activeAndReservedItems}
         navigation={navigation}
         atUserActiveItemScreen={atUserActiveItemScreen}
       />

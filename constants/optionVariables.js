@@ -88,15 +88,15 @@ export const itemStatusOptions = [
 export const viewOptions = [
   {
     name: 'Listings',
-    icon: icons.listings,
+    icon: 'list-circle-outline',
   },
   {
     name: 'Purchases',
-    icon: icons.bag,
+    icon: 'basket-outline',
   },
   {
     name: 'Favourites',
-    icon: icons.heart,
+    icon: 'heart-outline',
   },
 ];
 export const locationOptions = [

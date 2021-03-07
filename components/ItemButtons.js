@@ -10,7 +10,7 @@ import {
   Alert,
 } from 'react-native';
 import {icons, SIZES, FONTS, COLORS} from '../constants';
-import {timeSince, getSellerAllItems} from '../helper';
+import {timeSince, restructSellerItemsObj} from '../helper';
 
 import {useDispatch, useSelector} from 'react-redux';
 import * as actions from '../store/actionTypes';
@@ -22,11 +22,6 @@ export default function ItemButtons({
   atUserHiddenItemScreen,
 }) {
   const dispatch = useDispatch();
-  // let itemss = useSelector((state) => state['listings'][111]);
-  // itemss = getSellerAllItems(items, 111);
-
-  const getState = useSelector((state) => state['listings'][111][1]);
-  console.log({getState});
 
   const unhidePostAlert = (sellerId, itemId) => {
     Alert.alert(
@@ -63,12 +58,13 @@ export default function ItemButtons({
       {items.map((item, index) => {
         const sellerId = item.sellerId;
         const itemId = item.itemId;
+        const status = item.status;
 
         const img = item['images'][0];
         return (
           <View key={`item-${index}`}>
             <TouchableOpacity
-              style={{height: 100, width: 100}}
+              style={{height: 120, backgroundColor: 'pink'}}
               onPress={() =>
                 navigation.navigate('itemDetails', {
                   sellerId,
@@ -86,7 +82,28 @@ export default function ItemButtons({
               <View>
                 <Text>{item.title}</Text>
                 <Text>location?? • {timeSince(item.date)}</Text>
-                <Text>$ {item.price}</Text>
+                <View
+                  style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    backgroundColor: 'red',
+                  }}>
+                  {status === 'Reserved' && (
+                    <View
+                      style={{
+                        // padding: SIZES.padding,
+                        height: 20,
+                        width: 70,
+                        backgroundColor: 'green',
+                        // flex: 1,
+                      }}>
+                      <Text style={{color: 'white'}}>Reserved</Text>
+                    </View>
+                  )}
+                  <View style={{height: 20, width: 70}}>
+                    <Text>$ {item.price}</Text>
+                  </View>
+                </View>
               </View>
             </TouchableOpacity>
             {atUserActiveItemScreen && (
@@ -110,11 +127,15 @@ export default function ItemButtons({
                       sellerId,
                       itemId,
                       payload: {
-                        status: 'Reserved',
+                        status: status === 'Reserved' ? 'Active' : 'Reserved',
                       },
                     })
                   }>
-                  <Text>Change to RESERVED</Text>
+                  <Text>
+                    {status === 'Reserved'
+                      ? 'Change to ACTIVE'
+                      : 'Change to RESERVED'}
+                  </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={{borderWidth: 1, width: '50%'}}

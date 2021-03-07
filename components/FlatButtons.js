@@ -36,11 +36,7 @@ export default function FlatButtons({options, func, navigation}) {
                   }}
                 />
               ) : (
-                <Icon
-                  name={option['icon']}
-                  size={30}
-                  //   color={images ? COLORS.white : COLORS.black}
-                />
+                <Icon name={option['icon']} size={30} />
               )}
               <Text style={styles.text}>{option.name}</Text>
             </View>

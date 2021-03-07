@@ -26,29 +26,11 @@ import {
 } from '../components';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useDispatch, useSelector} from 'react-redux';
-import {timeSince, getSellerAllItems} from '../helper';
+import {timeSince, restructSellerItemsObj} from '../helper';
 
 export default function MyAccount({navigation}) {
   // MOCK USERID
   const userId = 111;
-
-  // USER INFO
-  const user = useSelector((state) => state['users'][userId]);
-  // USER'S LISTINGS IF EXIST
-  const items = useSelector((state) => state['listings'][userId]);
-  const userAllItems = getSellerAllItems(items, userId);
-
-  const viewOptionsFunc = (name) => {
-    switch (name) {
-      case 'Listings':
-        return navigation.navigate('userListingsTabs', {
-          items: userAllItems,
-        });
-
-      default:
-        return;
-    }
-  };
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -70,19 +52,9 @@ export default function MyAccount({navigation}) {
 
         {/* CIRCLE BUTTONS */}
         <View style={styles.circleButtons}>
-          {/* {viewOptions.map((button) => {
-            return (
-              <CircleButton
-                key={button.name}
-                iconSrc={button.icon}
-                name={button.name}
-
-              />
-            );
-          })} */}
           <CircleButton
             options={viewOptions}
-            func={viewOptionsFunc}
+            userId={userId}
             navigation={navigation}
           />
         </View>

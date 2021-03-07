@@ -11,7 +11,6 @@ import {
   FlatList,
   ImageBackground,
 } from 'react-native';
-// import {connect} from 'react-redux';
 
 import {
   COLORS,
@@ -125,10 +124,6 @@ export default function Sell({navigation}) {
         description,
       },
     });
-
-    // const test = store.getState();
-    // const test1 = JSON.stringify(test);
-    // console.log(test1);
 
     navigation.navigate('itemDetails', {
       sellerId,

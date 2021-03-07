@@ -23,7 +23,7 @@ import {
 import {filterItems} from '../helper';
 
 export default function SellerOtherItems({itemId, items, navigation}) {
-  const otherItems = filterItems(itemId, items, 'fourOtherItems');
+  const otherItems = filterItems(itemId, items, 'four-other-items');
 
   return (
     <View
