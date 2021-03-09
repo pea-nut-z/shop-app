@@ -8,24 +8,31 @@ import {
   SafeAreaView,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-// import {UserFavsRestructed} from 'react-redux';
 import {ItemButtons} from '../components';
+import {selectSellersAndListingsByFav} from '../store/selectors';
+import {createSelector} from 'reselect';
 
 export default function Favourites({route, navigation}) {
   const {userId} = route.params;
-  // console.log({UserFavsRestructed});
 
-  // USER'S FAVS
-  const items = useSelector((state) => state['listings'][userId][1]['status']);
-  console.log({items});
-
-  // const items = useSelector((state) => state['users'][userId]);
-  // const items = useSelector((state) => state['listings'][userId]);
+  // USER'S FAVOURITES
+  const favs = useSelector((state) =>
+    selectSellersAndListingsByFav(
+      state.favourites[userId],
+      state.members,
+      state.listings,
+    ),
+  );
 
   return (
     <SafeAreaView>
       <Text>Favourites</Text>
-      {/* <ItemButtons items={UserFavsRestructed} navigation={navigation} /> */}
+      <ItemButtons
+        userId={userId}
+        items={favs}
+        navigation={navigation}
+        atUserFavouritesScreen={true}
+      />
     </SafeAreaView>
   );
 }

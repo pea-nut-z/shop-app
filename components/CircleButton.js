@@ -26,13 +26,13 @@ export default function CircleButton({options, userId, navigation}) {
   return options.map((option, index) => {
     return (
       <View key={`option-${index}`} style={styles.container}>
-        <TouchableOpacity onPress={() => navigateTo(option['name'])}>
+        <TouchableOpacity onPress={() => navigateTo(option.name)}>
           <View style={styles.alignCircle}>
             <View style={styles.circle}>
-              <Icon name={option['icon']} size={25} />
+              <Icon name={option.icon} size={25} />
             </View>
           </View>
-          <Text style={styles.text}>{option['name']}</Text>
+          <Text style={styles.text}>{option.name}</Text>
         </TouchableOpacity>
       </View>
     );

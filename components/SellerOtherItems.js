@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 
 import {
   SafeAreaView,
@@ -20,10 +20,14 @@ import {
   COLORS,
 } from '../constants';
 
-import {filterItems} from '../helper';
+import {filterItems} from '../store/selectors';
+import {useDispatch, useSelector} from 'react-redux';
 
-export default function SellerOtherItems({itemId, items, navigation}) {
-  const otherItems = filterItems(itemId, items, 'four-other-items');
+export default function SellerOtherItems({sellerId, itemId, navigation}) {
+  const getOtherItems = useMemo(filterItems, []);
+  const otherItems = useSelector((state) =>
+    getOtherItems(state, sellerId, itemId, 'four-other-items'),
+  );
 
   return (
     <View

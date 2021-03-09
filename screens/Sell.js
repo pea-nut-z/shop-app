@@ -29,7 +29,9 @@ import ImagePicker from 'react-native-image-crop-picker';
 import store from '../store/store';
 import * as actions from '../store/actionTypes';
 
-export default function Sell({navigation}) {
+export default function Sell({route, navigation}) {
+  const {userId} = route.params;
+
   const [numOfImg, setNumOfImg] = useState(0);
   const [images, setImages] = useState([]);
   const [title, setTitle] = useState('');
@@ -96,10 +98,8 @@ export default function Sell({navigation}) {
     //   Alert.alert('Tell us a bit more for description - minimum 20 characters');
     // }
     // else {
-    // MOCK USERID
-    const sellerId = 222;
-    let itemId = 5;
 
+    let itemId = 5;
     let imgPath;
 
     if (images.length === 0) {
@@ -112,7 +112,7 @@ export default function Sell({navigation}) {
 
     store.dispatch({
       type: actions.ITEM_ADDED,
-      sellerId,
+      sellerId: userId,
       itemId: ++itemId,
       payload: {
         images: imgPath,
@@ -126,7 +126,8 @@ export default function Sell({navigation}) {
     });
 
     navigation.navigate('itemDetails', {
-      sellerId,
+      userId,
+      sellerId: userId,
       itemId,
     });
   }

@@ -1,19 +1,15 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useMemo} from 'react';
 
 import {Active, Sold, Hidden} from '../screens';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {Header} from '../components';
 import {useDispatch, useSelector} from 'react-redux';
-import {restructSellerItemsObj} from '../helper';
+import {selectMemberAllItems} from '../store/selectors';
 
 const MaterialTopTabs = createMaterialTopTabNavigator();
 
 export default function userListingsTabs({route, navigation}) {
   const {userId} = route.params;
-
-  // USER INFO
-  const items = useSelector((state) => state['listings'][userId]);
-  const userAllItems = restructSellerItemsObj(items, userId);
 
   return (
     <MaterialTopTabs.Navigator
@@ -24,16 +20,27 @@ export default function userListingsTabs({route, navigation}) {
     >
       <MaterialTopTabs.Screen
         name="Active"
-        children={() => <Active items={userAllItems} navigation={navigation} />}
+        children={() => (
+          <Active
+            userId={userId}
+            atUserItemsTabs={true}
+            navigation={navigation}
+          />
+        )}
       />
-
       <MaterialTopTabs.Screen
         name="Sold"
-        children={() => <Sold items={userAllItems} navigation={navigation} />}
+        children={() => (
+          <Sold
+            userId={userId}
+            atUserItemsTabs={true}
+            navigation={navigation}
+          />
+        )}
       />
       <MaterialTopTabs.Screen
         name="Hidden"
-        children={() => <Hidden items={userAllItems} navigation={navigation} />}
+        children={() => <Hidden userId={userId} navigation={navigation} />}
       />
     </MaterialTopTabs.Navigator>
   );

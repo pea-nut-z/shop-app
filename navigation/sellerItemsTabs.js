@@ -3,12 +3,9 @@ import {All, Active, Sold} from '../screens';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {Header} from '../components';
 const MaterialTopTabs = createMaterialTopTabNavigator();
-import {filterItems} from '../helper';
 
 export default function sellerItemsTabs({route, navigation}) {
-  const {items} = route.params;
-  const activeItems = filterItems(0, items, 'active');
-  const soldItems = filterItems(0, items, 'sold');
+  const {userId, sellerId} = route.params;
 
   return (
     <MaterialTopTabs.Navigator
@@ -19,16 +16,37 @@ export default function sellerItemsTabs({route, navigation}) {
     >
       <MaterialTopTabs.Screen
         name="All"
-        children={() => <All items={items} navigation={navigation} />}
+        children={() => (
+          <All
+            userId={userId}
+            sellerId={sellerId}
+            atUserItemsTabs={false}
+            navigation={navigation}
+          />
+        )}
       />
 
       <MaterialTopTabs.Screen
         name="Active"
-        children={() => <Active items={activeItems} navigation={navigation} />}
+        children={() => (
+          <Active
+            userId={userId}
+            sellerId={sellerId}
+            atUserItemsTabs={false}
+            navigation={navigation}
+          />
+        )}
       />
       <MaterialTopTabs.Screen
         name="Sold"
-        children={() => <Sold items={soldItems} navigation={navigation} />}
+        children={() => (
+          <Sold
+            userId={userId}
+            sellerId={sellerId}
+            atUserItemsTabs={false}
+            navigation={navigation}
+          />
+        )}
       />
     </MaterialTopTabs.Navigator>
   );

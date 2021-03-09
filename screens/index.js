@@ -7,10 +7,10 @@ import MyAccount from './MyAccount';
 import itemDetails from './itemDetails';
 import Purchases from './Purchases';
 import Favourites from './Favourites';
-import All from './tabs/All';
-import Active from './tabs/Active';
-import Sold from './tabs/Sold';
-import Hidden from './tabs/Hidden';
+import All from './item-status-tabs/All';
+import Active from './item-status-tabs/Active';
+import Sold from './item-status-tabs/Sold';
+import Hidden from './item-status-tabs/Hidden';
 
 export {
   Home,

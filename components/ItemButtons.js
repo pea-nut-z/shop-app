@@ -10,16 +10,18 @@ import {
   Alert,
 } from 'react-native';
 import {icons, SIZES, FONTS, COLORS} from '../constants';
-import {timeSince, restructSellerItemsObj} from '../helper';
-
+import Icon from 'react-native-vector-icons/Ionicons';
+import {timeSince} from '../helper';
 import {useDispatch, useSelector} from 'react-redux';
 import * as actions from '../store/actionTypes';
 
 export default function ItemButtons({
+  userId,
   items,
   navigation,
-  atUserActiveItemScreen,
-  atUserHiddenItemScreen,
+  atUserActiveItemsScreen,
+  atUserHiddenItemsScreen,
+  atUserFavouritesScreen,
 }) {
   const dispatch = useDispatch();
 
@@ -67,6 +69,7 @@ export default function ItemButtons({
               style={{height: 120, backgroundColor: 'pink'}}
               onPress={() =>
                 navigation.navigate('itemDetails', {
+                  userId,
                   sellerId,
                   itemId,
                 })
@@ -81,7 +84,9 @@ export default function ItemButtons({
               />
               <View>
                 <Text>{item.title}</Text>
-                <Text>location?? • {timeSince(item.date)}</Text>
+                <Text>
+                  {item.location} • {timeSince(item.date)}
+                </Text>
                 <View
                   style={{
                     flex: 1,
@@ -106,7 +111,9 @@ export default function ItemButtons({
                 </View>
               </View>
             </TouchableOpacity>
-            {atUserActiveItemScreen && (
+
+            {/* IF ON USER ACTIVE ITEMS SCREEN */}
+            {atUserActiveItemsScreen && (
               <View
                 style={{
                   flexDirection: 'row',
@@ -153,7 +160,9 @@ export default function ItemButtons({
                 </TouchableOpacity>
               </View>
             )}
-            {atUserHiddenItemScreen && (
+
+            {/* IF ON USER HIDDEN ITEMS SCREEN */}
+            {atUserHiddenItemsScreen && (
               <TouchableOpacity
                 style={{
                   borderWidth: 1,
@@ -164,6 +173,23 @@ export default function ItemButtons({
                 }}
                 onPress={() => unhidePostAlert(sellerId, itemId)}>
                 <Text>unhide</Text>
+              </TouchableOpacity>
+            )}
+
+            {/* IF ON USER FAVOURITES SCREEN */}
+            {atUserFavouritesScreen && (
+              <TouchableOpacity
+                onPress={() => {
+                  dispatch({
+                    type: actions.FAVOURITE_REMOVED,
+                    userId,
+                    payload: {
+                      sellerId,
+                      itemId,
+                    },
+                  });
+                }}>
+                <Icon name={'heart'} size={30} color={COLORS.primary} />
               </TouchableOpacity>
             )}
           </View>

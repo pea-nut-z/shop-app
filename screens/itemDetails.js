@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useMemo} from 'react';
 import {
   SafeAreaView,
   View,
@@ -32,29 +32,32 @@ import {timeSince, restructSellerItemsObj} from '../helper';
 import {useDispatch, useSelector} from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
 import * as actions from '../store/actionTypes';
+import {selectMemberAllItems} from '../store/selectors';
+import {createSelector} from 'reselect';
 
 export default function itemDetails({route, navigation}) {
-  // MOCK USERID
-  const userId = 111;
+  const {userId, sellerId, itemId} = route.params;
 
-  const {sellerId, itemId} = route.params;
   const dispatch = useDispatch();
 
   // SELLER INFO
-  const seller = useSelector((state) => state['users'][sellerId]);
+  const seller = useSelector((state) => state.members[sellerId]);
 
-  // SELLER'S LISTINGS
-  const items = useSelector((state) => state['listings'][sellerId]);
-  const sellerAllItems = restructSellerItemsObj(items, sellerId);
+  // CURRENT ITEM INFO
+  const item = useSelector((state) => state.listings[sellerId][itemId]);
+
+  const itemImages = item.images;
+  const imagesProvided = typeof item.images[0] === 'number' ? false : true;
 
   // USER'S FAVOURITES
-  const favs = useSelector((state) => state['favourites'][userId]);
-  const isFav = favs.find((item) => item['itemId'] === itemId);
+  const favs = useSelector((state) => state.favourites[userId]);
+  const isFav = favs.find((item) => item.itemId === itemId);
 
-  // CUREENT ITEM INFO
-  const item = items[itemId];
-  const itemImages = item['images'];
-  const imagesProvided = typeof item['images'][0] === 'number' ? false : true;
+  // SELLER'S LISTINGS
+  const getSellerAllItems = useMemo(selectMemberAllItems, []);
+  const sellerAllItems = useSelector((state) =>
+    getSellerAllItems(state, sellerId),
+  );
 
   const [itemStatus, setItemStatus] = useState(item.status);
 
@@ -115,7 +118,7 @@ export default function itemDetails({route, navigation}) {
               height: 40,
               margin: SIZES.padding * 2,
             }}
-            placeholder={itemStatus}
+            placeholder={item.status}
             onChangeItem={(item) => setItemStatus(item.value)}
             dropDownMaxHeight={itemStatusOptions.length * SIZES.height}
             // style={{
@@ -152,10 +155,10 @@ export default function itemDetails({route, navigation}) {
         </View>
 
         {/* OTHER ITEMS FROM SELLER */}
-        {sellerAllItems.length === 1 && (
+        {sellerAllItems.length !== 1 && (
           <View
             style={{
-              height: SIZES.height * 0.6,
+              // height: SIZES.height * 0.6,
               backgroundColor: 'pink',
             }}>
             <View
@@ -170,7 +173,8 @@ export default function itemDetails({route, navigation}) {
               <TouchableOpacity
                 onPress={() => {
                   navigation.navigate('sellerItemsTabs', {
-                    items: sellerAllItems,
+                    userId,
+                    sellerId,
                   });
                 }}>
                 <Text>See all</Text>
@@ -178,51 +182,55 @@ export default function itemDetails({route, navigation}) {
             </View>
             {/* FOUR OTHER ITEMS */}
             <SellerOtherItems
+              sellerId={sellerId}
               itemId={itemId}
-              items={sellerAllItems}
               navigation={navigation}
             />
-            <SafeAreaView />
           </View>
         )}
-      </KeyboardAwareScrollView>
-      <View
-        style={{
-          flexDirection: 'row',
-        }}>
-        <TouchableOpacity
-          onPress={() => {
-            dispatch({
-              type: isFav ? actions.FAVOURITE_REMOVED : actions.FAVOURITE_ADDED,
-              userId,
-              payload: {
-                sellerId,
-                itemId,
-              },
-            });
-          }}>
-          <Icon
-            name={isFav ? 'heart' : 'heart-outline'}
-            size={30}
-            color={isFav ? COLORS.primary : null}
-          />
-        </TouchableOpacity>
 
-        <View>
-          <Text>$ {item.price}</Text>
-          <Text>Make Offer</Text>
-        </View>
-        {/* <View> */}
-        <TouchableOpacity
+        {/* FOOTER BUTTON */}
+        <View
           style={{
-            borderColor: 'black',
-            borderWidth: 1,
-            backgroundColor: COLORS.primary,
+            flexDirection: 'row',
           }}>
-          <Text style={{color: COLORS.white}}>Chat</Text>
-        </TouchableOpacity>
-        {/* </View> */}
-      </View>
+          <TouchableOpacity
+            onPress={() => {
+              dispatch({
+                type: isFav
+                  ? actions.FAVOURITE_REMOVED
+                  : actions.FAVOURITE_ADDED,
+                userId,
+                payload: {
+                  sellerId,
+                  itemId,
+                },
+              });
+            }}>
+            <Icon
+              name={isFav ? 'heart' : 'heart-outline'}
+              size={30}
+              color={isFav ? COLORS.primary : null}
+            />
+          </TouchableOpacity>
+
+          <View>
+            <Text>$ {item.price}</Text>
+            <Text>Make Offer</Text>
+          </View>
+          {/* <View> */}
+          <TouchableOpacity
+            style={{
+              borderColor: 'black',
+              borderWidth: 1,
+              backgroundColor: COLORS.primary,
+            }}>
+            <Text style={{color: COLORS.white}}>Chat</Text>
+          </TouchableOpacity>
+          {/* </View> */}
+        </View>
+        <SafeAreaView />
+      </KeyboardAwareScrollView>
     </View>
   );
 }

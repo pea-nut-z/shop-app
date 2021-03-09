@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {
   View,
   Text,
@@ -9,20 +9,25 @@ import {
   StyleSheet,
 } from 'react-native';
 import {allSellersItems} from '../store/reducer';
-import {filterItems} from '../helper';
+import {filterAllListingsByCategory} from '../store/selectors';
 import {ItemButtons} from '../components';
+import {useDispatch, useSelector} from 'react-redux';
 
 export default function Category({route, navigation}) {
+  // MOCK USERID
+  const userId = 111;
   const {selectedCategory} = route.params;
-  const itemsByCategory = filterItems(
-    0,
-    allSellersItems,
-    'get-category',
-    selectedCategory,
+  const getItemsByCategory = useMemo(filterAllListingsByCategory, []);
+  const itemsByCategory = useSelector((state) =>
+    getItemsByCategory(state.listings, state.members, userId, selectedCategory),
   );
   return (
     <SafeAreaView>
-      <ItemButtons items={itemsByCategory} navigation={navigation} />
+      <ItemButtons
+        userId={userId}
+        items={itemsByCategory}
+        navigation={navigation}
+      />
     </SafeAreaView>
   );
 }
