@@ -2,8 +2,6 @@ import React from 'react';
 import {Provider} from 'react-redux';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-// import {PaperProvider} from 'react-native-paper';
-
 import {
   Home,
   Sell,
@@ -15,7 +13,12 @@ import {
   Purchases,
   Favourites,
 } from './screens/';
-import {bottomMainTabs, sellerItemsTabs, userListingsTabs} from './navigation';
+import {
+  bottomMainTabs,
+  sellerItemsTabs,
+  userItemsTabs,
+  searchTabs,
+} from './navigation';
 import store from './store/store';
 
 const Stack = createStackNavigator();
@@ -41,9 +44,11 @@ export default function App() {
           <Stack.Screen name="Chats" component={Chats} />
           {/* MY ACCOUNT */}
           <Stack.Screen name="MyAccount" component={MyAccount} />
-          <Stack.Screen name="userListingsTabs" component={userListingsTabs} />
+          <Stack.Screen name="userItemsTabs" component={userItemsTabs} />
           <Stack.Screen name="Purchases" component={Purchases} />
           <Stack.Screen name="Favourites" component={Favourites} />
+          {/* HEARDER NAVIGATE */}
+          <Stack.Screen name="searchTabs" component={searchTabs} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

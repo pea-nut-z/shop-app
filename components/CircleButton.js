@@ -7,7 +7,7 @@ export default function CircleButton({options, userId, navigation}) {
   const navigateTo = (name) => {
     switch (name) {
       case 'Listings':
-        return navigation.navigate('userListingsTabs', {
+        return navigation.navigate('userItemsTabs', {
           userId,
         });
       case 'Purchases':

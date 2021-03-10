@@ -144,3 +144,14 @@ export const infoOptions = [
     icon: 'settings-outline',
   },
 ];
+
+// SEARCH
+// [
+//   'armchair',
+//   'air fryer',
+//   'arm chair',
+//   'apple watch',
+//   'automatic cars',
+//   'airpods',
+//   'audi'
+// ]

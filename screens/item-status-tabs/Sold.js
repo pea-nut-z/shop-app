@@ -9,7 +9,7 @@ import {
   Image,
   FlatList,
 } from 'react-native';
-import {filterItems} from '../../store/selectors';
+import {filterMemberItems} from '../../store/selectors';
 import {useDispatch, useSelector} from 'react-redux';
 import {ItemButtons} from '../../components';
 
@@ -18,7 +18,7 @@ export default function Sold({userId, sellerId, atUserItemsTabs, navigation}) {
   const memberId = atUserItemsTabs ? userId : sellerId;
 
   // LISTINGS
-  const getSoldItems = useMemo(filterItems, []);
+  const getSoldItems = useMemo(filterMemberItems, []);
   const soldItems = useSelector((state) =>
     getSoldItems(state, memberId, undefined, 'sold'),
   );

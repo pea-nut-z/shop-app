@@ -20,11 +20,11 @@ import {
   COLORS,
 } from '../constants';
 
-import {filterItems} from '../store/selectors';
+import {filterMemberItems} from '../store/selectors';
 import {useDispatch, useSelector} from 'react-redux';
 
 export default function SellerOtherItems({sellerId, itemId, navigation}) {
-  const getOtherItems = useMemo(filterItems, []);
+  const getOtherItems = useMemo(filterMemberItems, []);
   const otherItems = useSelector((state) =>
     getOtherItems(state, sellerId, itemId, 'four-other-items'),
   );

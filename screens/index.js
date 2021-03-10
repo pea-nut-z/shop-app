@@ -11,6 +11,8 @@ import All from './item-status-tabs/All';
 import Active from './item-status-tabs/Active';
 import Sold from './item-status-tabs/Sold';
 import Hidden from './item-status-tabs/Hidden';
+import ForSale from './search-tabs/ForSale';
+import User from './search-tabs/User';
 
 export {
   Home,
@@ -26,4 +28,6 @@ export {
   Active,
   Sold,
   Hidden,
+  ForSale,
+  User,
 };

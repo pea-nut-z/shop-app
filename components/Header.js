@@ -1,16 +1,30 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   SafeAreaView,
   TouchableOpacity,
   View,
   Text,
   StyleSheet,
+  TextInput,
 } from 'react-native';
 import {SIZES, FONTS, COLORS} from '../constants';
-import {BackButton, ImageScrollView, ScrollViewDots} from './index';
+import {BackButton, ImageScrollView, HeaderButton} from './index';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-export default function Header({navigation, images, text}) {
+export default function Header({
+  userId,
+  navigation,
+  submitSearchString,
+  backBtnNeeded,
+  isImgProvided,
+  title,
+  displayTextInput,
+  iconButton1,
+  iconButton2,
+  iconButton3,
+}) {
+  const [searchString, setSearchString] = useState('');
+
   function renderBackBtn(navigation) {
     return (
       <TouchableOpacity
@@ -19,27 +33,92 @@ export default function Header({navigation, images, text}) {
         <Icon
           name="arrow-back-outline"
           size={25}
-          color={images ? COLORS.white : COLORS.black}
+          style={isImgProvided ? styles.backBtnWithImg : null}
         />
       </TouchableOpacity>
     );
   }
-  return (
-    <SafeAreaView>
-      <View style={images ? styles.headerWithImg : styles.headerWithoutImg}>
-        {/* BACK BUTTON */}
-        {navigation && renderBackBtn(navigation)}
 
-        {/* TEXT*/}
-        {text && (
-          <Text
-            style={{
-              ...styles.text,
-              marginLeft: navigation ? SIZES.padding : 0,
-            }}>
-            {text}
-          </Text>
-        )}
+  return (
+    <SafeAreaView
+      style={{backgroundColor: isImgProvided ? 'transparent' : 'white'}}>
+      <View
+        style={isImgProvided ? styles.headerWithImg : styles.headerWithoutImg}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          {/* BACK BUTTON */}
+          {backBtnNeeded && renderBackBtn(navigation)}
+
+          {/* SEARCH INPUT  */}
+          {displayTextInput && (
+            <View
+              style={{
+                flex: 1,
+                flexDirection: 'row',
+                alignItems: 'center',
+                backgroundColor: COLORS.lightGray,
+              }}>
+              <Icon name={'search-outline'} size={20} style={{marginLeft: 4}} />
+              <TextInput
+                value={searchString}
+                onChangeText={(text) => setSearchString(text)}
+                onSubmitEditing={() => submitSearchString(searchString)}
+                underlineColorAndroid="transparent"
+                style={{
+                  flex: 1,
+                  width: '90%',
+                  padding: 9,
+                  fontSize: 18,
+                }}
+              />
+            </View>
+          )}
+
+          {/* TITLE */}
+          {title && (
+            <Text
+              style={{
+                ...styles.title,
+                marginLeft: navigation ? SIZES.padding : 0,
+              }}>
+              {title}
+            </Text>
+          )}
+        </View>
+
+        {/* RIGHT BUTTONS */}
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          {iconButton1 && (
+            <HeaderButton
+              userId={userId}
+              name={iconButton1}
+              navigation={navigation}
+            />
+          )}
+          {iconButton2 && (
+            <HeaderButton
+              userId={userId}
+              name={iconButton2}
+              navigation={navigation}
+            />
+          )}
+          {iconButton3 && (
+            <HeaderButton
+              userId={userId}
+              name={iconButton3}
+              navigation={navigation}
+            />
+          )}
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -54,20 +133,31 @@ const styles = StyleSheet.create({
     borderBottomColor: COLORS.secondary,
     alignItems: 'center',
     flexDirection: 'row',
+    width: SIZES.width,
+    backgroundColor: COLORS.white,
+    justifyContent: 'space-between',
   },
   headerWithImg: {
     paddingVertical: SIZES.padding,
     paddingHorizontal: SIZES.padding * 2,
     alignItems: 'center',
     flexDirection: 'row',
+    width: SIZES.width,
     backgroundColor: COLORS.transparent,
+    justifyContent: 'space-between',
   },
   backBtn: {
     width: 35,
     height: 35,
     justifyContent: 'center',
   },
-  text: {
+  backBtnWithImg: {
+    shadowOffset: {width: 3, height: 3},
+    shadowColor: COLORS.darkgray,
+    shadowOpacity: 1.0,
+    color: COLORS.white,
+  },
+  title: {
     ...FONTS.h3,
   },
 });

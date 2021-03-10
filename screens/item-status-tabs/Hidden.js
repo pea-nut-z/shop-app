@@ -11,11 +11,11 @@ import {
 } from 'react-native';
 import {ItemButtons} from '../../components';
 import {useDispatch, useSelector} from 'react-redux';
-import {filterItems} from '../../store/selectors';
+import {filterMemberItems} from '../../store/selectors';
 
 export default function Hidden({userId, navigation}) {
   // USER'S LISTINGS
-  const getHiddenItems = useMemo(filterItems, []);
+  const getHiddenItems = useMemo(filterMemberItems, []);
   const hiddenItems = useSelector((state) =>
     getHiddenItems(state, userId, undefined, 'hidden'),
   );

@@ -19,6 +19,7 @@ import {Header, HeaderButton, SellButton, ItemButtons} from '../components';
 
 import {useDispatch, useSelector} from 'react-redux';
 import {createSelector} from 'reselect';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 import {selectAllListings} from '../store/selectors';
 
@@ -26,44 +27,49 @@ export default function Home({navigation}) {
   // MOCK USER
   const userId = 111;
 
-  const getSellersItems = useMemo(selectAllListings, []);
-  const sellersItems = useSelector((state) =>
-    getSellersItems(state.listings, state.members, userId),
+  const getAllListings = useMemo(selectAllListings, []);
+  const allListings = useSelector((state) =>
+    getAllListings(state.listings, state.members, userId),
   );
 
-  // const sellersItems = useSelector((state) =>
-  //   selectAllListings(state.listings, state.members, userId),
-  // );
-
   return (
-    <SafeAreaView style={styles.container}>
-      <ItemButtons
+    <View style={styles.container}>
+      <Header
         userId={userId}
-        items={sellersItems}
         navigation={navigation}
+        title={'Location'}
+        iconButton1={'search-outline'}
+        iconButton2={'filter-outline'}
+        iconButton3={'notifications-outline'}
       />
-      {/* <SellButton userId={userId} navigation={navigation} /> */}
+      <KeyboardAwareScrollView extraHeight={0} enableOnAndroid>
+        <ItemButtons
+          userId={userId}
+          items={allListings}
+          navigation={navigation}
+        />
 
-      {/* SELL BUTTON */}
-      <View>
-        <TouchableOpacity
-          style={styles.sellBtn}
-          onPress={() =>
-            navigation.navigate('Sell', {
-              userId,
-            })
-          }>
-          <Text style={styles.btnText}>+ Sell</Text>
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+        {/* SELL BUTTON */}
+        <View>
+          <TouchableOpacity
+            style={styles.sellBtn}
+            onPress={() =>
+              navigation.navigate('Sell', {
+                userId,
+              })
+            }>
+            <Text style={styles.btnText}>+ Sell</Text>
+          </TouchableOpacity>
+        </View>
+      </KeyboardAwareScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: COLORS.lightGray3,
+    // flex: 1,
+    // backgroundColor: COLORS.lightGray3,
   },
   shadow: {
     shadowColor: '#000',

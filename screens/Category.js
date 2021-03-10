@@ -8,9 +8,18 @@ import {
   SafeAreaView,
   StyleSheet,
 } from 'react-native';
-import {allSellersItems} from '../store/reducer';
+import {
+  icons,
+  SIZES,
+  FONTS,
+  COLORS,
+  viewOptions,
+  locationOptions,
+  infoOptions,
+} from '../constants';
 import {filterAllListingsByCategory} from '../store/selectors';
-import {ItemButtons} from '../components';
+import {Header, ItemButtons} from '../components';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useDispatch, useSelector} from 'react-redux';
 
 export default function Category({route, navigation}) {
@@ -21,13 +30,32 @@ export default function Category({route, navigation}) {
   const itemsByCategory = useSelector((state) =>
     getItemsByCategory(state.listings, state.members, userId, selectedCategory),
   );
+  console.log({itemsByCategory});
+
   return (
-    <SafeAreaView>
-      <ItemButtons
-        userId={userId}
-        items={itemsByCategory}
+    <View
+      style={{
+        flex: 1,
+      }}>
+      {/* HEADER */}
+      <Header
         navigation={navigation}
+        title={selectedCategory}
+        backBtnNeeded={true}
+        iconButton1={'search-outline'}
       />
-    </SafeAreaView>
+
+      <KeyboardAwareScrollView extraHeight={0} enableOnAndroid>
+        {itemsByCategory.length === 0 ? (
+          <Text>Oops, no listings under this category.</Text>
+        ) : (
+          <ItemButtons
+            userId={userId}
+            items={itemsByCategory}
+            navigation={navigation}
+          />
+        )}
+      </KeyboardAwareScrollView>
+    </View>
   );
 }

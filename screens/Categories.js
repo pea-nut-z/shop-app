@@ -21,50 +21,39 @@ import {categoryOptions} from '../constants';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 export default function Categories({navigation}) {
-  const buttonFunc = (option) => {
+  const navigateTo = (option) => {
     navigation.navigate('Category', {
       selectedCategory: option.name,
     });
   };
 
   return (
-    <SafeAreaView>
-      <KeyboardAwareScrollView enableOnAndroid>
-        <Header text={'Categories'} />
-        {/* <View style={styles.headerButtons}>
-        <HeaderButton iconSrc={icons.search} />
-      </View> */}
-        <FlatButtons
-          options={categoryOptions}
-          func={buttonFunc}
-          navigation={navigation}
-        />
+    <View style={{flex: 1}}>
+      <Header
+        navigation={navigation}
+        title={'Categories'}
+        iconButton1={'search-outline'}
+        iconButton2={'notifications-outline'}
+      />
+      <KeyboardAwareScrollView style={{paddingBottom: 130}} enableOnAndroid>
+        <View style={{paddingBottom: 30}}>
+          <Text style={styles.subheader}>For Sale</Text>
+
+          <FlatButtons
+            options={categoryOptions}
+            navigateTo={navigateTo}
+            navigation={navigation}
+          />
+        </View>
       </KeyboardAwareScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  headerButtons: {
-    position: 'absolute',
-    top: SIZES.height * 0.07,
-    right: SIZES.padding * 2,
-  },
-
-  subHeader: {
+  subheader: {
     paddingVertical: SIZES.padding,
     paddingHorizontal: SIZES.padding * 2,
     ...FONTS.h4,
-    fontWeight: 'bold',
   },
-  // categories: {
-  //   flexDirection: 'row',
-  //   paddingVertical: SIZES.padding,
-  //   paddingHorizontal: SIZES.padding * 2,
-  // },
-  // categoryText: {
-  //   ...FONTS.h5,
-  //   paddingLeft: SIZES.padding * 2,
-  //   paddingTop: 10,
-  // },
 });

@@ -14,6 +14,9 @@ export const selectAllListings = () =>
         if (sellerId === userId) continue;
         for (let itemId in listings[sellerId]) {
           itemId = parseInt(itemId);
+          console.log({sellerId});
+          console.log({userId});
+
           if (listings[sellerId][itemId]['status'] !== 'Active') continue;
           const item = {
             sellerId,
@@ -55,7 +58,7 @@ export const selectMemberAllItems = () =>
     },
   );
 
-export const filterItems = (state, memberId) =>
+export const filterMemberItems = (state, memberId) =>
   createSelector(
     selectMemberAllItems(state, memberId),
     (_, memberId) => memberId,

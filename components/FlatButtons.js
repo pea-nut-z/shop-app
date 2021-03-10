@@ -12,7 +12,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 import {icons, SIZES, FONTS, COLORS} from '../constants';
 
-export default function FlatButtons({options, func, navigation}) {
+export default function FlatButtons({options, navigateTo, navigation}) {
   return (
     <View
       style={
@@ -24,7 +24,7 @@ export default function FlatButtons({options, func, navigation}) {
         return (
           <TouchableOpacity
             key={`option-${index}`}
-            onPress={() => func(option)}>
+            onPress={() => navigateTo(option)}>
             <View style={styles.container}>
               {typeof option['icon'] === 'number' ? (
                 <Image

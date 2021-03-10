@@ -135,7 +135,7 @@ export default function Sell({route, navigation}) {
   return (
     <>
       <SafeAreaView>
-        <Header navigation={navigation} text={'Post For Sale'} />
+        <Header navigation={navigation} title={'Post For Sale'} />
         {/* DONE BUTTON */}
         <TouchableOpacity onPress={onDone} style={styles.doneBtn}>
           <Text style={{...FONTS.body2}}>Done</Text>

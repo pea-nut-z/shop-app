@@ -47,7 +47,7 @@ export default function itemDetails({route, navigation}) {
   const item = useSelector((state) => state.listings[sellerId][itemId]);
 
   const itemImages = item.images;
-  const imagesProvided = typeof item.images[0] === 'number' ? false : true;
+  const isImgProvided = typeof item.images[0] === 'number' ? false : true;
 
   // USER'S FAVOURITES
   const favs = useSelector((state) => state.favourites[userId]);
@@ -62,19 +62,25 @@ export default function itemDetails({route, navigation}) {
   const [itemStatus, setItemStatus] = useState(item.status);
 
   return (
-    <View>
+    <View style={{flex: 1}}>
       {/* HEADER */}
       <View
         style={{
           zIndex: 1,
           position: 'absolute',
         }}>
-        <Header navigation={navigation} images={imagesProvided} />
+        <Header
+          navigation={navigation}
+          isImgProvided={isImgProvided}
+          backBtnNeeded={true}
+          iconButton1={'share-social-outline'}
+          iconButton2={'ellipsis-vertical-circle-outline'}
+        />
       </View>
       <KeyboardAwareScrollView extraHeight={0} enableOnAndroid style={{}}>
         {/* IMAGES */}
-        {imagesProvided && <ImageScrollView images={itemImages} />}
-        {!imagesProvided && <View style={{height: 105}} />}
+        {isImgProvided && <ImageScrollView images={itemImages} />}
+        {!isImgProvided && <View style={{height: 105}} />}
 
         {/* RENDER SELLER INFO */}
         <View
@@ -189,48 +195,53 @@ export default function itemDetails({route, navigation}) {
           </View>
         )}
 
-        {/* FOOTER BUTTON */}
-        <View
-          style={{
-            flexDirection: 'row',
-          }}>
-          <TouchableOpacity
-            onPress={() => {
-              dispatch({
-                type: isFav
-                  ? actions.FAVOURITE_REMOVED
-                  : actions.FAVOURITE_ADDED,
-                userId,
-                payload: {
-                  sellerId,
-                  itemId,
-                },
-              });
-            }}>
-            <Icon
-              name={isFav ? 'heart' : 'heart-outline'}
-              size={30}
-              color={isFav ? COLORS.primary : null}
-            />
-          </TouchableOpacity>
-
-          <View>
-            <Text>$ {item.price}</Text>
-            <Text>Make Offer</Text>
-          </View>
-          {/* <View> */}
-          <TouchableOpacity
-            style={{
-              borderColor: 'black',
-              borderWidth: 1,
-              backgroundColor: COLORS.primary,
-            }}>
-            <Text style={{color: COLORS.white}}>Chat</Text>
-          </TouchableOpacity>
-          {/* </View> */}
-        </View>
         <SafeAreaView />
       </KeyboardAwareScrollView>
+      {/* FOOTER BUTTON */}
+      <View
+        style={{
+          flexDirection: 'row',
+          height: SIZES.height * 0.05,
+          // width: '100%',
+        }}>
+        <TouchableOpacity
+          onPress={() => {
+            dispatch({
+              type: isFav ? actions.FAVOURITE_REMOVED : actions.FAVOURITE_ADDED,
+              userId,
+              payload: {
+                sellerId,
+                itemId,
+              },
+            });
+          }}>
+          <Icon
+            name={isFav ? 'heart' : 'heart-outline'}
+            size={30}
+            color={isFav ? COLORS.primary : null}
+          />
+        </TouchableOpacity>
+
+        <View>
+          <Text>$ {item.price}</Text>
+          {item.negotiable ? (
+            <TouchableOpacity>
+              <Text style={{color: COLORS.primary}}>Make Offer</Text>
+            </TouchableOpacity>
+          ) : (
+            <Text>Non-negotiable</Text>
+          )}
+        </View>
+        <TouchableOpacity
+          style={{
+            borderColor: 'black',
+            borderWidth: 1,
+            backgroundColor: COLORS.primary,
+          }}>
+          <Text style={{color: COLORS.white}}>Chat</Text>
+        </TouchableOpacity>
+      </View>
+      <SafeAreaView />
     </View>
   );
 }

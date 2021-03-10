@@ -1,38 +1,28 @@
-import React from 'react';
-import {View} from 'react-native';
-import {All, Active, Sold} from '../screens';
+import React, {useEffect, useMemo} from 'react';
+import {Active, Sold, Hidden} from '../screens';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {Header} from '../components';
+import {useDispatch, useSelector} from 'react-redux';
 import {COLORS} from '../constants';
+
+import {selectMemberAllItems} from '../store/selectors';
+
 const MaterialTopTabs = createMaterialTopTabNavigator();
 
-export default function sellerItemsTabs({route, navigation}) {
-  const {userId, sellerId} = route.params;
+export default function userItemsTabs({route, navigation}) {
+  const {userId} = route.params;
 
   return (
     <>
-      <Header navigation={navigation} title={'Items'} backBtnNeeded={true} />
+      <Header navigation={navigation} title={'Listings'} backBtnNeeded={true} />
       <MaterialTopTabs.Navigator
         tabBarOptions={{indicatorStyle: {backgroundColor: COLORS.primary}}}>
-        <MaterialTopTabs.Screen
-          name="All"
-          children={() => (
-            <All
-              userId={userId}
-              sellerId={sellerId}
-              atUserItemsTabs={false}
-              navigation={navigation}
-            />
-          )}
-        />
-
         <MaterialTopTabs.Screen
           name="Active"
           children={() => (
             <Active
               userId={userId}
-              sellerId={sellerId}
-              atUserItemsTabs={false}
+              atUserItemsTabs={true}
               navigation={navigation}
             />
           )}
@@ -42,11 +32,14 @@ export default function sellerItemsTabs({route, navigation}) {
           children={() => (
             <Sold
               userId={userId}
-              sellerId={sellerId}
-              atUserItemsTabs={false}
+              atUserItemsTabs={true}
               navigation={navigation}
             />
           )}
+        />
+        <MaterialTopTabs.Screen
+          name="Hidden"
+          children={() => <Hidden userId={userId} navigation={navigation} />}
         />
       </MaterialTopTabs.Navigator>
     </>

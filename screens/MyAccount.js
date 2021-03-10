@@ -33,14 +33,11 @@ export default function MyAccount({navigation}) {
   const userId = 111;
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <View style={{flex: 1}}>
       {/* HEADER */}
-      <Header text={'Me'} />
-      <View style={styles.headerButton}>
-        <HeaderButton iconSrc={icons.settings} />
-      </View>
+      <Header title={'My ShopApp'} iconButton1={'settings-outline'} />
 
-      <KeyboardAwareScrollView extraHeight={100} enableOnAndroid>
+      <KeyboardAwareScrollView extraHeight={0} enableOnAndroid>
         {/* PROFILE DISPLAY */}
 
         {/* VIEW PROFILE BUTTON */}
@@ -63,17 +60,11 @@ export default function MyAccount({navigation}) {
         <FlatButtons options={locationOptions} navigation={navigation} />
         <FlatButtons options={infoOptions} navigation={navigation} />
       </KeyboardAwareScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  headerButton: {
-    position: 'absolute',
-    top: SIZES.height * 0.07,
-    right: SIZES.padding * 2,
-  },
-
   profileButton: {
     // position: 'absolute',
     // top: SIZES.height * 0.2,
