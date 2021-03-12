@@ -73,8 +73,10 @@ export default function itemDetails({route, navigation}) {
           navigation={navigation}
           isImgProvided={isImgProvided}
           backBtnNeeded={true}
-          iconButton1={'share-social-outline'}
-          iconButton2={'ellipsis-vertical-circle-outline'}
+          RightButtons={[
+            'share-social-outline',
+            'ellipsis-vertical-circle-outline',
+          ]}
         />
       </View>
       <KeyboardAwareScrollView extraHeight={0} enableOnAndroid style={{}}>

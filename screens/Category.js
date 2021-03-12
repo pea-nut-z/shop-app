@@ -17,21 +17,23 @@ import {
   locationOptions,
   infoOptions,
 } from '../constants';
-import {filterAllListingsByCategory} from '../store/selectors';
-import {Header, ItemButtons} from '../components';
+import {filterListings} from '../store/selectors';
+import {Header, ItemCards} from '../components';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useDispatch, useSelector} from 'react-redux';
 
 export default function Category({route, navigation}) {
-  // MOCK USERID
-  const userId = 111;
-  const {selectedCategory} = route.params;
-  const getItemsByCategory = useMemo(filterAllListingsByCategory, []);
+  const {userId, selectedCategory} = route.params;
+  const getItemsByCategory = useMemo(filterListings, []);
   const itemsByCategory = useSelector((state) =>
-    getItemsByCategory(state.listings, state.members, userId, selectedCategory),
+    getItemsByCategory(
+      state.listings,
+      state.members,
+      userId,
+      'category',
+      selectedCategory,
+    ),
   );
-  console.log({itemsByCategory});
-
   return (
     <View
       style={{
@@ -42,14 +44,14 @@ export default function Category({route, navigation}) {
         navigation={navigation}
         title={selectedCategory}
         backBtnNeeded={true}
-        iconButton1={'search-outline'}
+        RightButtons={['search-outline']}
       />
 
       <KeyboardAwareScrollView extraHeight={0} enableOnAndroid>
         {itemsByCategory.length === 0 ? (
           <Text>Oops, no listings under this category.</Text>
         ) : (
-          <ItemButtons
+          <ItemCards
             userId={userId}
             items={itemsByCategory}
             navigation={navigation}

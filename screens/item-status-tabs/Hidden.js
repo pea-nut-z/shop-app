@@ -9,7 +9,7 @@ import {
   Image,
   FlatList,
 } from 'react-native';
-import {ItemButtons} from '../../components';
+import {ItemCards} from '../../components';
 import {useDispatch, useSelector} from 'react-redux';
 import {filterMemberItems} from '../../store/selectors';
 
@@ -24,7 +24,7 @@ export default function Hidden({userId, navigation}) {
   return (
     <View>
       {hiddenItems.length === 0 && <Text>No hidden items</Text>}
-      <ItemButtons
+      <ItemCards
         userId={userId}
         items={hiddenItems}
         navigation={navigation}

@@ -12,6 +12,7 @@ import {
   MyAccount,
   Purchases,
   Favourites,
+  Filters,
 } from './screens/';
 import {
   bottomMainTabs,
@@ -49,6 +50,7 @@ export default function App() {
           <Stack.Screen name="Favourites" component={Favourites} />
           {/* HEARDER NAVIGATE */}
           <Stack.Screen name="searchTabs" component={searchTabs} />
+          <Stack.Screen name="Filters" component={Filters} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

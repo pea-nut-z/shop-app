@@ -15,7 +15,7 @@ import {timeSince} from '../helper';
 import {useDispatch, useSelector} from 'react-redux';
 import * as actions from '../store/actionTypes';
 
-export default function ItemButtons({
+export default function ItemCards({
   userId,
   items,
   navigation,

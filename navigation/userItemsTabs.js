@@ -5,8 +5,6 @@ import {Header} from '../components';
 import {useDispatch, useSelector} from 'react-redux';
 import {COLORS} from '../constants';
 
-import {selectMemberAllItems} from '../store/selectors';
-
 const MaterialTopTabs = createMaterialTopTabNavigator();
 
 export default function userItemsTabs({route, navigation}) {

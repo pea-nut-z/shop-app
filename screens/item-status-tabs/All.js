@@ -9,7 +9,7 @@ import {
   Image,
   FlatList,
 } from 'react-native';
-import {ItemButtons} from '../../components';
+import {ItemCards} from '../../components';
 import {useDispatch, useSelector} from 'react-redux';
 
 import {selectMemberAllItems} from '../../store/selectors';
@@ -25,7 +25,7 @@ export default function All({userId, sellerId, atUserItemsTabs, navigation}) {
 
   return (
     <View>
-      <ItemButtons
+      <ItemCards
         userId={userId}
         items={memberAllItems}
         navigation={navigation}

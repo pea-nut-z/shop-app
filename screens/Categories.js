@@ -21,8 +21,12 @@ import {categoryOptions} from '../constants';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 export default function Categories({navigation}) {
+  // MOCK USERID
+  const userId = 111;
+
   const navigateTo = (option) => {
     navigation.navigate('Category', {
+      userId,
       selectedCategory: option.name,
     });
   };
@@ -30,10 +34,10 @@ export default function Categories({navigation}) {
   return (
     <View style={{flex: 1}}>
       <Header
+        userId={userId}
         navigation={navigation}
         title={'Categories'}
-        iconButton1={'search-outline'}
-        iconButton2={'notifications-outline'}
+        RightButtons={['search-outline', 'notifications-outline']}
       />
       <KeyboardAwareScrollView style={{paddingBottom: 130}} enableOnAndroid>
         <View style={{paddingBottom: 30}}>

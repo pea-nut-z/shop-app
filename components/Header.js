@@ -19,9 +19,7 @@ export default function Header({
   isImgProvided,
   title,
   displayTextInput,
-  iconButton1,
-  iconButton2,
-  iconButton3,
+  RightButtons,
 }) {
   const [searchString, setSearchString] = useState('');
 
@@ -68,6 +66,7 @@ export default function Header({
                 onChangeText={(text) => setSearchString(text)}
                 onSubmitEditing={() => submitSearchString(searchString)}
                 underlineColorAndroid="transparent"
+                clearButtonMode="always"
                 style={{
                   flex: 1,
                   width: '90%',
@@ -97,27 +96,17 @@ export default function Header({
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          {iconButton1 && (
-            <HeaderButton
-              userId={userId}
-              name={iconButton1}
-              navigation={navigation}
-            />
-          )}
-          {iconButton2 && (
-            <HeaderButton
-              userId={userId}
-              name={iconButton2}
-              navigation={navigation}
-            />
-          )}
-          {iconButton3 && (
-            <HeaderButton
-              userId={userId}
-              name={iconButton3}
-              navigation={navigation}
-            />
-          )}
+          {RightButtons &&
+            RightButtons.map((buttonName, index) => {
+              return (
+                <HeaderButton
+                  key={`button-${index}`}
+                  userId={userId}
+                  name={buttonName}
+                  navigation={navigation}
+                />
+              );
+            })}
         </View>
       </View>
     </SafeAreaView>

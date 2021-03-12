@@ -12,11 +12,13 @@ const members = {
   111: {
     userName: 'Test1',
     location: 'Toronto',
+    displayPic: 'https://i.ytimg.com/vi/H8X7FHrq278/maxresdefault.jpg',
     rating: 60,
   },
   222: {
     userName: 'Test2',
     location: 'Ottawa',
+    displayPic: 'https://i.ytimg.com/vi/H8X7FHrq278/maxresdefault.jpg',
     rating: 19,
   },
 };
@@ -86,7 +88,7 @@ const listings = {
       favorites: 0,
       views: 0,
       images: [11],
-      title: 'user2 , item7',
+      title: 'basket ball',
       price: 10,
       free: true,
       negotiable: true,
@@ -110,7 +112,7 @@ const listings = {
       free: true,
       negotiable: true,
       category: 'Sports & leisure',
-      description: 'some description',
+      description: 'yellow basketball',
     },
     99: {
       status: 'Sold',
@@ -148,7 +150,7 @@ const listings = {
       free: true,
       negotiable: true,
       category: 'Baby & kids',
-      description: 'some description',
+      description: 'cans',
     },
   },
 };

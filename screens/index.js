@@ -13,6 +13,7 @@ import Sold from './item-status-tabs/Sold';
 import Hidden from './item-status-tabs/Hidden';
 import ForSale from './search-tabs/ForSale';
 import User from './search-tabs/User';
+import Filters from './search-tabs/Filters';
 
 export {
   Home,
@@ -30,4 +31,5 @@ export {
   Hidden,
   ForSale,
   User,
+  Filters,
 };

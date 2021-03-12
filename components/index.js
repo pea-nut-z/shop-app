@@ -5,7 +5,7 @@ import HeaderButton from './HeaderButton';
 import ImageScrollView from './ImageScrollView';
 import RatingEmoji from './RatingEmoji';
 import SellerOtherItems from './SellerOtherItems';
-import ItemButtons from './ItemButtons';
+import ItemCards from './ItemCards';
 
 export {
   CircleButton,
@@ -15,5 +15,5 @@ export {
   ImageScrollView,
   RatingEmoji,
   SellerOtherItems,
-  ItemButtons,
+  ItemCards,
 };

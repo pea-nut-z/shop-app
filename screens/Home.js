@@ -15,21 +15,21 @@ import {
   SIZES,
   FONTS,
 } from '../constants';
-import {Header, HeaderButton, SellButton, ItemButtons} from '../components';
+import {Header, HeaderButton, SellButton, ItemCards} from '../components';
 
 import {useDispatch, useSelector} from 'react-redux';
 import {createSelector} from 'reselect';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
-import {selectAllListings} from '../store/selectors';
+import {filterListings} from '../store/selectors';
 
 export default function Home({navigation}) {
   // MOCK USER
   const userId = 111;
 
-  const getAllListings = useMemo(selectAllListings, []);
-  const allListings = useSelector((state) =>
-    getAllListings(state.listings, state.members, userId),
+  const getActiveListings = useMemo(filterListings, []);
+  const activeListings = useSelector((state) =>
+    getActiveListings(state.listings, state.members, userId, 'active'),
   );
 
   return (
@@ -38,14 +38,12 @@ export default function Home({navigation}) {
         userId={userId}
         navigation={navigation}
         title={'Location'}
-        iconButton1={'search-outline'}
-        iconButton2={'filter-outline'}
-        iconButton3={'notifications-outline'}
+        RightButtons={['search-outline', 'filter', 'notifications-outline']}
       />
       <KeyboardAwareScrollView extraHeight={0} enableOnAndroid>
-        <ItemButtons
+        <ItemCards
           userId={userId}
-          items={allListings}
+          items={activeListings}
           navigation={navigation}
         />
 

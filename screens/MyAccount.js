@@ -21,7 +21,7 @@ import {
   Header,
   HeaderButton,
   CircleButton,
-  ItemButtons,
+  ItemCards,
   FlatButtons,
 } from '../components';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -35,7 +35,7 @@ export default function MyAccount({navigation}) {
   return (
     <View style={{flex: 1}}>
       {/* HEADER */}
-      <Header title={'My ShopApp'} iconButton1={'settings-outline'} />
+      <Header title={'My ShopApp'} RightButtons={['settings-outline']} />
 
       <KeyboardAwareScrollView extraHeight={0} enableOnAndroid>
         {/* PROFILE DISPLAY */}

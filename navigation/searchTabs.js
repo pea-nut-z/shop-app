@@ -25,7 +25,7 @@ export default function searchTabs({route, navigation}) {
       <MaterialTopTabs.Navigator
         tabBarOptions={{indicatorStyle: {backgroundColor: COLORS.primary}}}>
         <MaterialTopTabs.Screen
-          name="ForSale"
+          name="For Sale"
           children={() => (
             <ForSale
               userId={userId}

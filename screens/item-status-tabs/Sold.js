@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import {filterMemberItems} from '../../store/selectors';
 import {useDispatch, useSelector} from 'react-redux';
-import {ItemButtons} from '../../components';
+import {ItemCards} from '../../components';
 
 export default function Sold({userId, sellerId, atUserItemsTabs, navigation}) {
   // CHECK CURRENT SCREEN
@@ -28,7 +28,7 @@ export default function Sold({userId, sellerId, atUserItemsTabs, navigation}) {
   return (
     <View>
       {soldItems.length === 0 && <Text>No sold items</Text>}
-      <ItemButtons userId={userId} items={soldItems} navigation={navigation} />
+      <ItemCards userId={userId} items={soldItems} navigation={navigation} />
     </View>
   );
 }
