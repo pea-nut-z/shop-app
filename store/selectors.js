@@ -45,9 +45,13 @@ export const filterListings = (listings, members, userId) =>
             (item) => item.category === value && item.status === 'Active',
           );
         case 'string':
+          const words = value.split(' ');
+          let exp = words.map((word) => {
+            return '\\b' + word + '\\b';
+          });
+          exp = exp.join('|');
+          const regex = new RegExp(exp, 'i');
           return items.filter((item) => {
-            const string = value.trim();
-            const regex = new RegExp(string, 'gi');
             return (
               item.title.match(regex) ||
               item.description.match(regex) ||
@@ -60,27 +64,80 @@ export const filterListings = (listings, members, userId) =>
     },
   );
 
-export const filterSearchedListings = (
+export const furtherFilterListings = (
   listings,
   members,
   userId,
-  filter1,
+  initialFilter,
   value,
 ) =>
   createSelector(
-    filterListings(listings, members, userId, filter1, value),
+    filterListings(listings, members, userId, initialFilter, value),
     (_, members) => members,
     (_, __, userId) => userId,
-    (_, __, ___, filter1) => filter1,
+    (_, __, ___, initialFilter) => initialFilter,
     (_, __, ___, ____, value) => value,
-    (_, __, ___, ____, _____, filter2) => filter2,
-    (items, __, ___, ____, _____, filter2) => {
-      switch (filter2) {
-        case 'sold-items':
-          return items.filter((item) => item.status !== 'Sold');
-        default:
-          return items;
+    (_, __, ___, ____, _____, furtherFilters) => furtherFilters,
+    (items, __, ___, ____, value, furtherFilters) => {
+      if (items.length === 0) return;
+
+      const {
+        hideSoldItems,
+        categories,
+        minPrice,
+        maxPrice,
+        sort,
+      } = furtherFilters;
+
+      // SOLD?
+      if (hideSoldItems) {
+        items = items.filter((item) => item.status !== 'Sold');
+        if (items.length === 0) return;
       }
+
+      // CATEGORY?
+      if (categories) {
+        if (categories.length !== 0) {
+          items = items.filter((item) => categories.includes(item.category));
+          if (items.length === 0) return;
+        }
+      }
+
+      // Sort?
+      if (sort === 'Relevance') {
+        let searchWords = value.split(' ');
+        items = items.map((item) => {
+          console.log('item', item);
+          let score = 0;
+          searchWords.forEach((word) => {
+            const exp = '\\b' + word + '\\b';
+            const regex = new RegExp(exp, 'i');
+            // console.log('word', word);
+            item.category.match(regex) && ++score;
+            item.description.match(regex) && ++score;
+            item.title.match(regex) && ++score;
+          });
+          // console.log({score});
+          return {...item, score};
+        });
+        return items.sort((a, b) => a.score < b.score);
+      }
+
+      if (sort === 'Most recent') {
+        items.sort((a, b) => new Date(a.date) < new Date(b.date));
+      }
+
+      // Price
+      if (minPrice) {
+        items = items.filter((item) => item.price >= minPrice);
+        if (items.length === 0) return;
+      }
+
+      if (maxPrice) {
+        items = items.filter((item) => item.price <= maxPrice);
+        if (items.length === 0) return;
+      }
+      return items;
     },
   );
 
@@ -92,7 +149,7 @@ export const selectMembers = () =>
       for (let memberId in members) {
         // memberId = parseInt(memberId);
         const member = {
-          memberId,
+          memberId: `#${memberId}`,
           ...members[memberId],
         };
         arr.push(member);
@@ -107,16 +164,14 @@ export const filterMembers = (state) =>
     (_, filter) => filter,
     (_, __, value) => value,
     (members, filter, value) => {
-      switch (filter) {
-        case 'string':
-          return members.filter((member) => {
-            const string = value.trim();
-            const regex = new RegExp(string, 'gi');
-            return member.memberId.match(regex) || member.userName.match(regex);
-          });
-        default:
-          new Error(`Unknown filter: ${filter}`);
-      }
+      // switch (filter) {
+      // case 'string':
+      const filteredMembers = members.filter((member) => {
+        const string = value.trim();
+        const regex = new RegExp(string, 'i');
+        return member.memberId.match(regex) || member.userName.match(regex);
+      });
+      return filteredMembers.length === 0 ? null : filteredMembers;
     },
   );
 

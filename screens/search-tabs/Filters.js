@@ -7,12 +7,20 @@ import CurrencyInput from 'react-native-currency-input';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 export default function Filters({navigation}) {
-  const [category, setCategory] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [sort, setSort] = useState();
   const [minPrice, setMinPrice] = useState();
   const [maxPrice, setMaxPrice] = useState();
-  console.log({minPrice});
-  console.log({maxPrice});
+  //   console.log({minPrice});
+  //   console.log({maxPrice});
+  //   console.log({sort});
+
+  const clearFields = () => {
+    setCategories([]);
+    setSort(null);
+    setMinPrice(null);
+    setMaxPrice(null);
+  };
 
   return (
     <View style={{flex: 1}}>
@@ -31,18 +39,18 @@ export default function Filters({navigation}) {
               <TouchableOpacity
                 key={`option-${index}`}
                 onPress={() =>
-                  category.includes(option.name)
-                    ? setCategory([
-                        ...category.filter((name) => name !== option.name),
+                  categories.includes(option.name)
+                    ? setCategories([
+                        ...categories.filter((name) => name !== option.name),
                       ])
-                    : setCategory([...category, option.name])
+                    : setCategories([...categories, option.name])
                 }
                 style={{flexDirection: 'row'}}>
                 <Icon
                   name="checkmark-circle-outline"
                   size={25}
                   color={
-                    category.includes(option.name)
+                    categories.includes(option.name)
                       ? COLORS.primary
                       : COLORS.secondary
                   }
@@ -65,6 +73,7 @@ export default function Filters({navigation}) {
               <Icon
                 name={sort === 'Relevance' ? 'ellipse' : 'ellipse-outline'}
                 size={25}
+                color={sort === 'Relevance' ? COLORS.primary : null}
               />
               <Text>Relevance</Text>
             </TouchableOpacity>
@@ -77,6 +86,7 @@ export default function Filters({navigation}) {
               <Icon
                 name={sort === 'Most recent' ? 'ellipse' : 'ellipse-outline'}
                 size={25}
+                color={sort === 'Most recent' ? COLORS.primary : null}
               />
               <Text>Most recent</Text>
             </TouchableOpacity>
@@ -142,6 +152,7 @@ export default function Filters({navigation}) {
       </KeyboardAwareScrollView>
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
         <TouchableOpacity
+          onPress={() => clearFields()}
           style={{
             width: SIZES.width / 2,
             height: 65,
@@ -152,6 +163,16 @@ export default function Filters({navigation}) {
           <Text>Clear fields</Text>
         </TouchableOpacity>
         <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('searchTabs', {
+              filters: {
+                categories,
+                sort,
+                minPrice,
+                maxPrice,
+              },
+            });
+          }}
           style={{
             width: SIZES.width / 2,
             height: 65,

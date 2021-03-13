@@ -7,7 +7,7 @@ import {COLORS} from '../constants';
 const MaterialTopTabs = createMaterialTopTabNavigator();
 
 export default function searchTabs({route, navigation}) {
-  const {userId} = route.params;
+  const {userId, filters} = route.params;
 
   const [submittedSearchString, setSubmittedSearchString] = useState('');
   const submitSearchString = (str) => {
@@ -31,6 +31,7 @@ export default function searchTabs({route, navigation}) {
               userId={userId}
               navigation={navigation}
               submittedSearchString={submittedSearchString}
+              filters={filters}
             />
           )}
         />

@@ -4,6 +4,7 @@ import {ItemCards} from '../../components';
 import {filterMembers} from '../../store/selectors';
 import {useSelector} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
+import {SIZES, COLORS} from '../../constants';
 
 export default function User({useId, navigation, submittedSearchString}) {
   const focused = useIsFocused();
@@ -36,7 +37,7 @@ export default function User({useId, navigation, submittedSearchString}) {
             </View>
             <View>
               <Text>
-                {member.userName} #{member.memberId}
+                {member.userName} {member.memberId}
               </Text>
               <Text>{member.location}</Text>
             </View>
@@ -46,5 +47,29 @@ export default function User({useId, navigation, submittedSearchString}) {
     }
   };
 
-  return <View>{renderMemberCards()}</View>;
+  const renderNoResultsMsg = () => {
+    if (submittedSearchString && !members) {
+      return (
+        <View>
+          <Text>No results</Text>
+          <View style={{backgroundColor: COLORS.secondary}}>
+            <Text>Tips</Text>
+            <Text>
+              •Search by name.{'\n'}
+              •Or search by User ID(the number following the hashtag # in the
+              profile page).{'\n'}
+              E.g. ShopApp #1314
+            </Text>
+          </View>
+        </View>
+      );
+    }
+  };
+
+  return (
+    <View>
+      {renderNoResultsMsg()}
+      {renderMemberCards()}
+    </View>
+  );
 }
