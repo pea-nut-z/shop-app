@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View} from 'react-native';
+import {View, Keyboard} from 'react-native';
 import {ForSale, User} from '../screens';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {Header} from '../components';
@@ -14,14 +14,30 @@ export default function searchTabs({route, navigation}) {
     setSubmittedSearchString(str);
   };
 
+  const [searchHistoryView, setSearchHistoryView] = useState(true);
+  console.log({searchHistoryView});
+
+  const hideSearchHistory = () => {
+    setSearchHistoryView(false);
+    Keyboard.dismiss();
+  };
+
+  const showSearchHistory = () => {
+    setSearchHistoryView(true);
+  };
+
   return (
     <>
-      <Header
-        navigation={navigation}
-        submitSearchString={submitSearchString}
-        backBtnNeeded={true}
-        displayTextInput={true}
-      />
+      <View style={{zIndex: 1}}>
+        <Header
+          navigation={navigation}
+          submitSearchString={submitSearchString}
+          showSearchHistory={showSearchHistory}
+          useBackBtn={true}
+          useSearchBar={true}
+          useSearchHistory={searchHistoryView}
+        />
+      </View>
       <MaterialTopTabs.Navigator
         tabBarOptions={{indicatorStyle: {backgroundColor: COLORS.primary}}}>
         <MaterialTopTabs.Screen
@@ -31,6 +47,7 @@ export default function searchTabs({route, navigation}) {
               userId={userId}
               navigation={navigation}
               submittedSearchString={submittedSearchString}
+              hideSearchHistory={hideSearchHistory}
               filters={filters}
             />
           )}

@@ -43,8 +43,8 @@ export default function Category({route, navigation}) {
       <Header
         navigation={navigation}
         title={selectedCategory}
-        backBtnNeeded={true}
-        RightButtons={['search-outline']}
+        useBackBtn={true}
+        useRightBtns={['search-outline']}
       />
 
       <KeyboardAwareScrollView extraHeight={0} enableOnAndroid>

@@ -11,9 +11,10 @@ import All from './item-status-tabs/All';
 import Active from './item-status-tabs/Active';
 import Sold from './item-status-tabs/Sold';
 import Hidden from './item-status-tabs/Hidden';
-import ForSale from './search-tabs/ForSale';
-import User from './search-tabs/User';
-import Filters from './search-tabs/Filters';
+import ForSale from './header/search-tabs/ForSale';
+import User from './header/search-tabs/User';
+import Filters from './header/search-tabs/Filters';
+import CustomizeFeed from './header/CustomizeFeed';
 
 export {
   Home,
@@ -32,4 +33,5 @@ export {
   ForSale,
   User,
   Filters,
+  CustomizeFeed,
 };

@@ -11,7 +11,7 @@ export default function sellerItemsTabs({route, navigation}) {
 
   return (
     <>
-      <Header navigation={navigation} title={'Items'} backBtnNeeded={true} />
+      <Header navigation={navigation} title={'Items'} useBackBtn={true} />
       <MaterialTopTabs.Navigator
         tabBarOptions={{indicatorStyle: {backgroundColor: COLORS.primary}}}>
         <MaterialTopTabs.Screen

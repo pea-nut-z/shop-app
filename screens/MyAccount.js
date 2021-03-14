@@ -35,7 +35,7 @@ export default function MyAccount({navigation}) {
   return (
     <View style={{flex: 1}}>
       {/* HEADER */}
-      <Header title={'My ShopApp'} RightButtons={['settings-outline']} />
+      <Header title={'My ShopApp'} useRightBtns={['settings-outline']} />
 
       <KeyboardAwareScrollView extraHeight={0} enableOnAndroid>
         {/* PROFILE DISPLAY */}

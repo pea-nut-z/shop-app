@@ -10,6 +10,10 @@ export default function HeaderButton({userId, name, navigation}) {
         return navigation.navigate('searchTabs', {
           userId,
         });
+      case 'funnel':
+        return navigation.navigate('CustomizeFeed', {
+          userId,
+        });
       default:
         return;
     }

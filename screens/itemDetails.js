@@ -47,7 +47,7 @@ export default function itemDetails({route, navigation}) {
   const item = useSelector((state) => state.listings[sellerId][itemId]);
 
   const itemImages = item.images;
-  const isImgProvided = typeof item.images[0] === 'number' ? false : true;
+  const useImgStyle = typeof item.images[0] === 'number' ? false : true;
 
   // USER'S FAVOURITES
   const favs = useSelector((state) => state.favourites[userId]);
@@ -71,9 +71,9 @@ export default function itemDetails({route, navigation}) {
         }}>
         <Header
           navigation={navigation}
-          isImgProvided={isImgProvided}
-          backBtnNeeded={true}
-          RightButtons={[
+          useImgStyle={useImgStyle}
+          useBackBtn={true}
+          useRightBtns={[
             'share-social-outline',
             'ellipsis-vertical-circle-outline',
           ]}
@@ -81,8 +81,8 @@ export default function itemDetails({route, navigation}) {
       </View>
       <KeyboardAwareScrollView extraHeight={0} enableOnAndroid style={{}}>
         {/* IMAGES */}
-        {isImgProvided && <ImageScrollView images={itemImages} />}
-        {!isImgProvided && <View style={{height: 105}} />}
+        {useImgStyle && <ImageScrollView images={itemImages} />}
+        {!useImgStyle && <View style={{height: 105}} />}
 
         {/* RENDER SELLER INFO */}
         <View

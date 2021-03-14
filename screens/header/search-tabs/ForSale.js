@@ -1,17 +1,19 @@
 import React, {useEffect, useMemo, useState} from 'react';
-import {View, StyleSheet, Text} from 'react-native';
-import {ItemCards} from '../../components';
-import {furtherFilterListings} from '../../store/selectors';
+import {View, StyleSheet, Text, TouchableWithoutFeedback} from 'react-native';
+import {ItemCards} from '../../../components';
+import {furtherFilterListings} from '../../../store/selectors';
 import {useSelector} from 'react-redux';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {SIZES, COLORS} from '../../constants';
+import {SIZES, COLORS} from '../../../constants';
 import {useIsFocused} from '@react-navigation/native';
 
 export default function ForSale({
   userId,
   navigation,
   submittedSearchString,
+  toggleSearchHistory,
+  hideSearchHistory,
   filters,
 }) {
   const [hideSoldItems, setHideSoldItems] = useState(false);
@@ -90,7 +92,7 @@ export default function ForSale({
   };
 
   return (
-    <View>
+    <View style={{flex: 1}}>
       <View
         style={{
           flexDirection: 'row',
@@ -103,10 +105,14 @@ export default function ForSale({
       </View>
       <View>{renderNoResultsMsg()}</View>
       <View>
-        {items && (
+        {items ? (
           <View>
             <ItemCards userId={userId} items={items} navigation={navigation} />
           </View>
+        ) : (
+          <TouchableWithoutFeedback onPress={() => hideSearchHistory()}>
+            <View style={{height: SIZES.height, backgroundColor: 'pink'}} />
+          </TouchableWithoutFeedback>
         )}
       </View>
     </View>

@@ -6,24 +6,31 @@ import {
   Text,
   StyleSheet,
   TextInput,
+  Button,
 } from 'react-native';
 import {SIZES, FONTS, COLORS} from '../constants';
 import {BackButton, ImageScrollView, HeaderButton} from './index';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 export default function Header({
   userId,
   navigation,
-  submitSearchString,
-  backBtnNeeded,
-  isImgProvided,
   title,
-  displayTextInput,
-  RightButtons,
+  submitSearchString,
+  showSearchHistory,
+  useImgStyle,
+  useBackBtn,
+  useSearchBar,
+  useRightBtns,
+  useSearchHistory,
 }) {
   const [searchString, setSearchString] = useState('');
+  const [recentSearches, setRecentSearches] = useState(['test', '2']);
 
-  function renderBackBtn(navigation) {
+  console.log({searchString});
+
+  const renderBackBtn = (navigation) => {
     return (
       <TouchableOpacity
         style={styles.backBtn}
@@ -31,17 +38,158 @@ export default function Header({
         <Icon
           name="arrow-back-outline"
           size={25}
-          style={isImgProvided ? styles.backBtnWithImg : null}
+          style={useImgStyle ? styles.backBtnWithImg : null}
         />
       </TouchableOpacity>
     );
-  }
+  };
 
+  const renderSearchBar = () => {
+    return (
+      <View
+        style={{
+          flex: 1,
+          flexDirection: 'row',
+          alignItems: 'center',
+          backgroundColor: COLORS.lightGray,
+        }}>
+        <Icon name={'search-outline'} size={20} style={{marginLeft: 4}} />
+
+        <TextInput
+          value={searchString}
+          onFocus={() => showSearchHistory()}
+          onChangeText={(text) => setSearchString(text)}
+          onSubmitEditing={() => {
+            submitSearchString(searchString);
+            setRecentSearches([searchString, ...recentSearches]);
+          }}
+          underlineColorAndroid="transparent"
+          clearButtonMode="always"
+          autoFocus={true}
+          style={{
+            flex: 1,
+            width: '90%',
+            padding: 9,
+            fontSize: 18,
+          }}
+        />
+      </View>
+    );
+  };
+
+  const renderRecentSearches = () => {
+    if (recentSearches.length !== 0 && !searchString) {
+      return (
+        <View
+          style={{
+            width: '100%',
+            position: 'absolute',
+            top: 109,
+            backgroundColor: 'red',
+            paddingHorizontal: SIZES.padding * 2,
+          }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              height: 40,
+            }}>
+            <Text>RECENT SEARCHES</Text>
+            <TouchableOpacity
+              style={{
+                width: 80,
+                backgroundColor: 'green',
+              }}
+              onPress={() => setRecentSearches([])}>
+              <Text style={{textAlign: 'center'}}>Delete All</Text>
+            </TouchableOpacity>
+          </View>
+          <KeyboardAwareScrollView enableOnAndroid style={{maxHeight: 400}}>
+            {recentSearches.map((item, index) => {
+              return (
+                <TouchableOpacity
+                  key={`item-${index}`}
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    height: 50,
+                  }}
+                  onPress={() => {
+                    setSearchString(item);
+                    submitSearchString(item);
+                  }}>
+                  <View style={{flexDirection: 'row'}}>
+                    <View
+                      style={{
+                        // backgroundColor: 'pink',
+                        height: 30,
+                        width: 30,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        borderRadius: 20,
+                        borderWidth: 1,
+                        borderColor: COLORS.secondary,
+                      }}>
+                      <Icon name={'pricetag-outline'} size={20} />
+                    </View>
+                    <View
+                      style={{
+                        justifyContent: 'center',
+                        marginLeft: SIZES.padding,
+                      }}>
+                      <Text>{item}</Text>
+                    </View>
+                  </View>
+                  <View>
+                    <Button
+                      title="x"
+                      color={COLORS.secondary}
+                      onPress={() => {
+                        const newSearches = recentSearches.filter(
+                          (previousItem) => previousItem !== item,
+                        );
+                        setRecentSearches(newSearches);
+                      }}
+                    />
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
+          </KeyboardAwareScrollView>
+        </View>
+      );
+    }
+  };
+
+  const renderRightBtn = () => {
+    return (
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        {useRightBtns &&
+          useRightBtns.map((buttonName, index) => {
+            return (
+              <HeaderButton
+                key={`button-${index}`}
+                userId={userId}
+                name={buttonName}
+                navigation={navigation}
+              />
+            );
+          })}
+      </View>
+    );
+  };
   return (
     <SafeAreaView
-      style={{backgroundColor: isImgProvided ? 'transparent' : 'white'}}>
+      style={{backgroundColor: useImgStyle ? 'transparent' : 'white'}}>
       <View
-        style={isImgProvided ? styles.headerWithImg : styles.headerWithoutImg}>
+        style={useImgStyle ? styles.headerWithImg : styles.headerWithoutImg}>
         <View
           style={{
             flexDirection: 'row',
@@ -49,33 +197,10 @@ export default function Header({
             alignItems: 'center',
           }}>
           {/* BACK BUTTON */}
-          {backBtnNeeded && renderBackBtn(navigation)}
+          {useBackBtn && renderBackBtn(navigation)}
 
           {/* SEARCH INPUT  */}
-          {displayTextInput && (
-            <View
-              style={{
-                flex: 1,
-                flexDirection: 'row',
-                alignItems: 'center',
-                backgroundColor: COLORS.lightGray,
-              }}>
-              <Icon name={'search-outline'} size={20} style={{marginLeft: 4}} />
-              <TextInput
-                value={searchString}
-                onChangeText={(text) => setSearchString(text)}
-                onSubmitEditing={() => submitSearchString(searchString)}
-                underlineColorAndroid="transparent"
-                clearButtonMode="always"
-                style={{
-                  flex: 1,
-                  width: '90%',
-                  padding: 9,
-                  fontSize: 18,
-                }}
-              />
-            </View>
-          )}
+          {useSearchBar && renderSearchBar()}
 
           {/* TITLE */}
           {title && (
@@ -88,27 +213,10 @@ export default function Header({
             </Text>
           )}
         </View>
-
         {/* RIGHT BUTTONS */}
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          {RightButtons &&
-            RightButtons.map((buttonName, index) => {
-              return (
-                <HeaderButton
-                  key={`button-${index}`}
-                  userId={userId}
-                  name={buttonName}
-                  navigation={navigation}
-                />
-              );
-            })}
-        </View>
+        {useRightBtns && renderRightBtn()}
       </View>
+      {useSearchHistory && renderRecentSearches()}
     </SafeAreaView>
   );
 }

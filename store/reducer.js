@@ -174,16 +174,21 @@ const favourites = {
   ],
 };
 
-function usersReducer(state = members, action) {
+const feeds = {
+  111: ["Women's fashion"],
+  222: ['Electronics'],
+};
+
+const usersReducer = (state = members, action) => {
   switch (action.type) {
     case actions.USER_ADDED:
       return state;
     default:
       return state;
   }
-}
+};
 
-function listingsReducer(state = listings, action) {
+const listingsReducer = (state = listings, action) => {
   switch (action.type) {
     case actions.ITEM_ADDED:
       return {
@@ -220,9 +225,9 @@ function listingsReducer(state = listings, action) {
     default:
       return state;
   }
-}
+};
 
-function favouritesReducer(state = favourites, action) {
+const favouritesReducer = (state = favourites, action) => {
   switch (action.type) {
     case actions.FAVOURITE_ADDED:
       return {
@@ -243,10 +248,22 @@ function favouritesReducer(state = favourites, action) {
     default:
       return state;
   }
-}
+};
 
+const feedsReducer = (state = feeds, action) => {
+  switch (action.type) {
+    case actions.FEED_ADDED:
+      return {
+        ...state,
+        [action.userId]: [...state[action.userId], action.payload.feed],
+      };
+    default:
+      return state;
+  }
+};
 export default rootReducer = combineReducers({
   members: usersReducer,
   listings: listingsReducer,
   favourites: favouritesReducer,
+  feeds: feedsReducer,
 });

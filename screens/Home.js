@@ -38,7 +38,11 @@ export default function Home({navigation}) {
         userId={userId}
         navigation={navigation}
         title={'Location'}
-        RightButtons={['search-outline', 'filter', 'notifications-outline']}
+        useRightBtns={[
+          'search-outline',
+          'funnel-outline',
+          'notifications-outline',
+        ]}
       />
       <KeyboardAwareScrollView extraHeight={0} enableOnAndroid>
         <ItemCards

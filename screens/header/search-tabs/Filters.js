@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {View, Text, Image, TouchableOpacity, SafeAreaView} from 'react-native';
-import {Header} from '../../components';
-import {COLORS, categoryOptions, SIZES} from '../../constants';
+import {Header} from '../../../components';
+import {COLORS, categoryOptions, SIZES} from '../../../constants';
 import Icon from 'react-native-vector-icons/Ionicons';
 import CurrencyInput from 'react-native-currency-input';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -24,7 +24,7 @@ export default function Filters({navigation}) {
 
   return (
     <View style={{flex: 1}}>
-      <Header navigation={navigation} backBtnNeeded={true} title={'Filter'} />
+      <Header navigation={navigation} useBackBtn={true} title={'Filter'} />
 
       {/* CATEGORIES */}
       <KeyboardAwareScrollView>

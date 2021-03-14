@@ -13,6 +13,7 @@ import {
   Purchases,
   Favourites,
   Filters,
+  CustomizeFeed,
 } from './screens/';
 import {
   bottomMainTabs,
@@ -51,6 +52,7 @@ export default function App() {
           {/* HEARDER NAVIGATE */}
           <Stack.Screen name="searchTabs" component={searchTabs} />
           <Stack.Screen name="Filters" component={Filters} />
+          <Stack.Screen name="CustomizeFeed" component={CustomizeFeed} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

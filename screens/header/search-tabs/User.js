@@ -1,10 +1,10 @@
 import React, {useEffect, useMemo} from 'react';
 import {View, Text, Image, TouchableOpacity} from 'react-native';
-import {ItemCards} from '../../components';
-import {filterMembers} from '../../store/selectors';
+import {ItemCards} from '../../../components';
+import {filterMembers} from '../../../store/selectors';
 import {useSelector} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
-import {SIZES, COLORS} from '../../constants';
+import {SIZES, COLORS} from '../../../constants';
 
 export default function User({useId, navigation, submittedSearchString}) {
   const focused = useIsFocused();

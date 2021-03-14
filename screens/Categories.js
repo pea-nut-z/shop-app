@@ -37,7 +37,7 @@ export default function Categories({navigation}) {
         userId={userId}
         navigation={navigation}
         title={'Categories'}
-        RightButtons={['search-outline', 'notifications-outline']}
+        useRightBtns={['search-outline', 'notifications-outline']}
       />
       <KeyboardAwareScrollView style={{paddingBottom: 130}} enableOnAndroid>
         <View style={{paddingBottom: 30}}>
