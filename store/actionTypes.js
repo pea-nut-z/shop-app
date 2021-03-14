@@ -4,3 +4,4 @@ export const STATUS_CHANGED = 'status-changed';
 export const FAVOURITE_ADDED = 'favourite-added';
 export const FAVOURITE_REMOVED = 'favourite-removed';
 export const FEED_ADDED = 'feed-added';
+export const FEED_REMOVED = 'feed-removed';

@@ -14,6 +14,10 @@ export default function HeaderButton({userId, name, navigation}) {
         return navigation.navigate('CustomizeFeed', {
           userId,
         });
+      case 'notifications':
+        return navigation.navigate('notificationsTabs', {
+          userId,
+        });
       default:
         return;
     }

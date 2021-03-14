@@ -28,8 +28,6 @@ export default function Header({
   const [searchString, setSearchString] = useState('');
   const [recentSearches, setRecentSearches] = useState(['test', '2']);
 
-  console.log({searchString});
-
   const renderBackBtn = (navigation) => {
     return (
       <TouchableOpacity

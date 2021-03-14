@@ -175,7 +175,23 @@ const favourites = {
 };
 
 const feeds = {
-  111: ["Women's fashion"],
+  111: [
+    'Electronics',
+    'Furniture',
+    'Home, garden & DIY',
+    'Baby & kids',
+    "Women's fashion",
+    "Men's fashion",
+    'Health & beauty',
+    'Sports & leisure',
+    'Games, hobbies & crafts',
+    'Books, music & tickets',
+    'Pets stuff',
+    'Musical instruments',
+    'Vehicles & parts',
+    'Other',
+    'Wanted',
+  ],
   222: ['Electronics'],
 };
 
@@ -251,11 +267,35 @@ const favouritesReducer = (state = favourites, action) => {
 };
 
 const feedsReducer = (state = feeds, action) => {
+  const initialFeed = [
+    'Electronics',
+    'Furniture',
+    'Home, garden & DIY',
+    'Baby & kids',
+    "Women's fashion",
+    "Men's fashion",
+    'Health & beauty',
+    'Sports & leisure',
+    'Games, hobbies & crafts',
+    'Books, music & tickets',
+    'Pets stuff',
+    'Musical instruments',
+    'Vehicles & parts',
+    'Other',
+    'Wanted',
+  ];
   switch (action.type) {
     case actions.FEED_ADDED:
       return {
         ...state,
         [action.userId]: [...state[action.userId], action.payload.feed],
+      };
+    case actions.FEED_REMOVED:
+      return {
+        ...state,
+        [action.userId]: state[action.userId].filter(
+          (item) => item !== action.payload.feed,
+        ),
       };
     default:
       return state;

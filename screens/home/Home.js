@@ -14,14 +14,14 @@ import {
   // images,
   SIZES,
   FONTS,
-} from '../constants';
-import {Header, HeaderButton, SellButton, ItemCards} from '../components';
+} from '../../constants';
+import {Header, HeaderButton, SellButton, ItemCards} from '../../components';
 
 import {useDispatch, useSelector} from 'react-redux';
 import {createSelector} from 'reselect';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
-import {filterListings} from '../store/selectors';
+import {filterListings} from '../../store/selectors';
 
 export default function Home({navigation}) {
   // MOCK USER
@@ -29,7 +29,13 @@ export default function Home({navigation}) {
 
   const getActiveListings = useMemo(filterListings, []);
   const activeListings = useSelector((state) =>
-    getActiveListings(state.listings, state.members, userId, 'active'),
+    getActiveListings(
+      state.listings,
+      state.members,
+      state.feeds,
+      userId,
+      'feed',
+    ),
   );
 
   return (

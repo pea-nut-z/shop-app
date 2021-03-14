@@ -18,16 +18,16 @@ import {
   FONTS,
   categoryOptions,
   categoryDropDown,
-} from '../constants';
-import {Header} from '../components';
+} from '../../constants';
+import {Header} from '../../components';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import CurrencyInput from 'react-native-currency-input';
 import Textarea from 'react-native-textarea';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ImagePicker from 'react-native-image-crop-picker';
-import store from '../store/store';
-import * as actions from '../store/actionTypes';
+import store from '../../store/store';
+import * as actions from '../../store/actionTypes';
 
 export default function Sell({route, navigation}) {
   const {userId} = route.params;
@@ -135,7 +135,11 @@ export default function Sell({route, navigation}) {
   return (
     <>
       <SafeAreaView>
-        <Header navigation={navigation} title={'Post For Sale'} />
+        <Header
+          navigation={navigation}
+          title={'Post For Sale'}
+          useBackBtn={true}
+        />
         {/* DONE BUTTON */}
         <TouchableOpacity onPress={onDone} style={styles.doneBtn}>
           <Text style={{...FONTS.body2}}>Done</Text>

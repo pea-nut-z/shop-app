@@ -16,9 +16,9 @@ import {
   viewOptions,
   locationOptions,
   infoOptions,
-} from '../constants';
-import {filterListings} from '../store/selectors';
-import {Header, ItemCards} from '../components';
+} from '../../constants';
+import {filterListings} from '../../store/selectors';
+import {Header, ItemCards} from '../../components';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useDispatch, useSelector} from 'react-redux';
 
@@ -29,6 +29,7 @@ export default function Category({route, navigation}) {
     getItemsByCategory(
       state.listings,
       state.members,
+      state.feeds,
       userId,
       'category',
       selectedCategory,
@@ -44,7 +45,7 @@ export default function Category({route, navigation}) {
         navigation={navigation}
         title={selectedCategory}
         useBackBtn={true}
-        useRightBtns={['search-outline']}
+        useRightBtns={['search-outline', 'notifications-outline']}
       />
 
       <KeyboardAwareScrollView extraHeight={0} enableOnAndroid>

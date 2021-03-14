@@ -33,7 +33,6 @@ export default function ForSale({
       );
     }
   });
-  console.log({items});
 
   const renderMoreFiltersBtn = () => {
     return (

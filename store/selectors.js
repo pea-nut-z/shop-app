@@ -29,17 +29,20 @@ export const selectListings = () =>
     },
   );
 
-export const filterListings = (listings, members, userId) =>
+export const filterListings = (listings, members, feeds, userId) =>
   createSelector(
     selectListings(listings, members, userId),
     (_, members) => members,
-    (_, __, userId) => userId,
-    (_, __, ___, filter) => filter,
-    (_, __, ___, ____, value) => value,
-    (items, __, ___, filter, value) => {
+    (_, __, feeds, userId) => feeds[userId],
+    (_, __, ___, userId) => userId,
+    (_, __, ___, ____, filter) => filter,
+    (_, __, ___, ____, _____, value) => value,
+    (items, __, feed, userId, filter, value) => {
       switch (filter) {
-        case 'active':
-          return items.filter((item) => item.status === 'Active');
+        case 'feed':
+          return items.filter(
+            (item) => feed.includes(item.category) && item.status === 'Active',
+          );
         case 'category':
           return items.filter(
             (item) => item.category === value && item.status === 'Active',
@@ -107,7 +110,7 @@ export const furtherFilterListings = (
       if (sort === 'Relevance') {
         let searchWords = value.split(' ');
         items = items.map((item) => {
-          console.log('item', item);
+          // console.log('item', item);
           let score = 0;
           searchWords.forEach((word) => {
             const exp = '\\b' + word + '\\b';

@@ -8,8 +8,8 @@ import {
   SafeAreaView,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {ItemCards} from '../components';
-import {selectSellersAndListingsByFav} from '../store/selectors';
+import {ItemCards} from '../../components';
+import {selectSellersAndListingsByFav} from '../../store/selectors';
 import {createSelector} from 'reselect';
 
 export default function Favourites({route, navigation}) {

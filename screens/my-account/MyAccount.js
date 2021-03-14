@@ -16,17 +16,17 @@ import {
   viewOptions,
   locationOptions,
   infoOptions,
-} from '../constants';
+} from '../../constants';
 import {
   Header,
   HeaderButton,
   CircleButton,
   ItemCards,
   FlatButtons,
-} from '../components';
+} from '../../components';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useDispatch, useSelector} from 'react-redux';
-import {timeSince, restructSellerItemsObj} from '../helper';
+import {timeSince, restructSellerItemsObj} from '../../helper';
 
 export default function MyAccount({navigation}) {
   // MOCK USERID

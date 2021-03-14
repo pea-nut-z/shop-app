@@ -8,7 +8,7 @@ import {
   SafeAreaView,
   StyleSheet,
 } from 'react-native';
-import {icons, SIZES, FONTS, COLORS} from '../constants';
+import {icons, SIZES, FONTS, COLORS} from '../../constants';
 import {
   Header,
   Subheader,
@@ -16,8 +16,8 @@ import {
   CircleButton,
   BarButton,
   FlatButtons,
-} from '../components';
-import {categoryOptions} from '../constants';
+} from '../../components';
+import {categoryOptions} from '../../constants';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 export default function Categories({navigation}) {

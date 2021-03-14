@@ -15,7 +15,6 @@ export default function searchTabs({route, navigation}) {
   };
 
   const [searchHistoryView, setSearchHistoryView] = useState(true);
-  console.log({searchHistoryView});
 
   const hideSearchHistory = () => {
     setSearchHistoryView(false);

@@ -11,9 +11,6 @@ export default function Filters({navigation}) {
   const [sort, setSort] = useState();
   const [minPrice, setMinPrice] = useState();
   const [maxPrice, setMaxPrice] = useState();
-  //   console.log({minPrice});
-  //   console.log({maxPrice});
-  //   console.log({sort});
 
   const clearFields = () => {
     setCategories([]);

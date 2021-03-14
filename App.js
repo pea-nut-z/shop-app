@@ -14,12 +14,14 @@ import {
   Favourites,
   Filters,
   CustomizeFeed,
+  Profile,
 } from './screens/';
 import {
   bottomMainTabs,
   sellerItemsTabs,
   userItemsTabs,
   searchTabs,
+  notificationsTabs,
 } from './navigation';
 import store from './store/store';
 
@@ -37,7 +39,6 @@ export default function App() {
           {/* HOME */}
           <Stack.Screen name="Home" component={bottomMainTabs} />
           <Stack.Screen name="Sell" component={Sell} />
-          <Stack.Screen name="itemDetails" component={itemDetails} />
           <Stack.Screen name="sellerItemsTabs" component={sellerItemsTabs} />
           {/* CATEGORIES */}
           <Stack.Screen name="Categories" component={Categories} />
@@ -49,10 +50,17 @@ export default function App() {
           <Stack.Screen name="userItemsTabs" component={userItemsTabs} />
           <Stack.Screen name="Purchases" component={Purchases} />
           <Stack.Screen name="Favourites" component={Favourites} />
+          {/* SHARED */}
+          <Stack.Screen name="Profile" component={Profile} />
+          <Stack.Screen name="itemDetails" component={itemDetails} />
           {/* HEARDER NAVIGATE */}
           <Stack.Screen name="searchTabs" component={searchTabs} />
           <Stack.Screen name="Filters" component={Filters} />
           <Stack.Screen name="CustomizeFeed" component={CustomizeFeed} />
+          <Stack.Screen
+            name="notificationsTabs"
+            component={notificationsTabs}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
