@@ -172,7 +172,7 @@ export const filterMembers = (state) =>
       const filteredMembers = members.filter((member) => {
         const string = value.trim();
         const regex = new RegExp(string, 'i');
-        return member.memberId.match(regex) || member.userName.match(regex);
+        return member.memberId.match(regex) || member.username.match(regex);
       });
       return filteredMembers.length === 0 ? null : filteredMembers;
     },

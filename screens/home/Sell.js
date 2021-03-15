@@ -26,12 +26,11 @@ import Textarea from 'react-native-textarea';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ImagePicker from 'react-native-image-crop-picker';
-import store from '../../store/store';
 import * as actions from '../../store/actionTypes';
+import {useDispatch} from 'react-redux';
 
 export default function Sell({route, navigation}) {
   const {userId} = route.params;
-
   const [numOfImg, setNumOfImg] = useState(0);
   const [images, setImages] = useState([]);
   const [title, setTitle] = useState('');
@@ -41,6 +40,7 @@ export default function Sell({route, navigation}) {
   const [category, setCategory] = useState('Categories');
   const [description, setDescription] = useState('');
   const maxNumOfImg = 10;
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (price === 0) {
@@ -49,7 +49,7 @@ export default function Sell({route, navigation}) {
     }
   }, [price]);
 
-  function choosePhotoFromLibrary() {
+  const choosePhotoFromLibrary = () => {
     ImagePicker.openPicker({
       width: 300,
       height: 300,
@@ -59,9 +59,9 @@ export default function Sell({route, navigation}) {
       setNumOfImg(numOfImg + 1);
       setImages([...images, image.path]);
     });
-  }
+  };
 
-  function renderImage({item}) {
+  const renderImage = ({item}) => {
     return (
       <View style={styles.imgContainer}>
         <ImageBackground
@@ -76,17 +76,17 @@ export default function Sell({route, navigation}) {
         </TouchableOpacity>
       </View>
     );
-  }
+  };
 
-  function deleteImg(selectedImg) {
+  const deleteImg = (selectedImg) => {
     const newImgs = images.filter((img) => {
       return img !== selectedImg;
     });
     setImages(newImgs);
     setNumOfImg(numOfImg - 1);
-  }
+  };
 
-  function onDone() {
+  const onDone = () => {
     // if (!title) {
     //   Alert.alert('Enter a title');
     // } else if (category === 'Categories') {
@@ -110,7 +110,7 @@ export default function Sell({route, navigation}) {
       imgPath = images;
     }
 
-    store.dispatch({
+    dispatch({
       type: actions.ITEM_ADDED,
       sellerId: userId,
       itemId: ++itemId,
@@ -130,11 +130,11 @@ export default function Sell({route, navigation}) {
       sellerId: userId,
       itemId,
     });
-  }
+  };
 
   return (
     <>
-      <SafeAreaView>
+      <View>
         <Header
           navigation={navigation}
           title={'Post For Sale'}
@@ -261,7 +261,7 @@ export default function Sell({route, navigation}) {
             />
           </View>
         </KeyboardAwareScrollView>
-      </SafeAreaView>
+      </View>
     </>
   );
 }

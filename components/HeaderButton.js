@@ -1,10 +1,15 @@
-import React from 'react';
-import {View, Image, TouchableOpacity} from 'react-native';
+import React, {useState} from 'react';
+import {View, Image, TouchableOpacity, Text} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {COLORS, SIZES} from '../constants';
 
-export default function HeaderButton({userId, name, navigation}) {
-  const navigateTo = (name) => {
-    const keyword = name.split('-')[0];
+export default function HeaderButton({
+  userId,
+  name,
+  showPopupMenu,
+  navigation,
+}) {
+  const navigateTo = (keyword) => {
     switch (keyword) {
       case 'search':
         return navigation.navigate('searchTabs', {
@@ -18,6 +23,10 @@ export default function HeaderButton({userId, name, navigation}) {
         return navigation.navigate('notificationsTabs', {
           userId,
         });
+      // case 'edit':
+      //   return navigation.navigate('EditProfile', {
+      //     userId,
+      //   });
       default:
         return;
     }
@@ -25,7 +34,10 @@ export default function HeaderButton({userId, name, navigation}) {
   return (
     <View>
       <TouchableOpacity
-        onPress={() => navigateTo(name)}
+        onPress={() => {
+          const keyword = name.split('-')[0];
+          keyword === 'ellipsis' ? showPopupMenu() : navigateTo(keyword);
+        }}
         style={{paddingLeft: 25, paddingVertical: 3, backgroundColor: 'red'}}>
         <Icon name={name} size={25} />
       </TouchableOpacity>

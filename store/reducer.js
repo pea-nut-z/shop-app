@@ -10,13 +10,14 @@ const userId = 111;
 
 const members = {
   111: {
-    userName: 'Test1',
+    username: 'Test1',
     location: 'Toronto',
-    displayPic: 'https://i.ytimg.com/vi/H8X7FHrq278/maxresdefault.jpg',
+    // displayPic: 'https://i.ytimg.com/vi/H8X7FHrq278/maxresdefault.jpg',
+    displayPic: 'N/A',
     rating: 60,
   },
   222: {
-    userName: 'Test2',
+    username: 'Test2',
     location: 'Ottawa',
     displayPic: 'https://i.ytimg.com/vi/H8X7FHrq278/maxresdefault.jpg',
     rating: 19,
@@ -198,7 +199,32 @@ const feeds = {
 const usersReducer = (state = members, action) => {
   switch (action.type) {
     case actions.USER_ADDED:
+      // display pic is 'N/A'
       return state;
+    case actions.USERNAME_CHANGED:
+      return {
+        ...state,
+        [action.userId]: {
+          ...state[action.userId],
+          username: action.payload.username,
+        },
+      };
+    case actions.DISPLAYPIC_CHANGED:
+      return {
+        ...state,
+        [action.userId]: {
+          ...state[action.userId],
+          displayPic: action.payload.image,
+        },
+      };
+    // case actions.DISPLAYPIC_DELETED:
+    //   return {
+    //     ...state,
+    //     [action.userId]: {
+    //       ...state[action.userId],
+    //       displayPic: '',
+    //     },
+    //   };
     default:
       return state;
   }

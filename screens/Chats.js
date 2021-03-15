@@ -8,19 +8,13 @@ import {
   SafeAreaView,
   StyleSheet,
 } from 'react-native';
+import {Header} from '../components';
 import {icons, SIZES, FONTS, COLORS} from '../constants';
 
 export default function Chats() {
-  function renderHeader() {
-    return (
-      <View style={styles.header}>
-        <Text style={styles.headerText}>Chats</Text>
-      </View>
-    );
-  }
   return (
     <View>
-      <SafeAreaView>{renderHeader()}</SafeAreaView>
+      <Header title={'Chats'} />
     </View>
   );
 }

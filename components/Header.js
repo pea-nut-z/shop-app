@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useImperativeHandle, forwardRef} from 'react';
 import {
   SafeAreaView,
   TouchableOpacity,
@@ -17,6 +17,7 @@ export default function Header({
   userId,
   navigation,
   title,
+  showPopupMenu,
   submitSearchString,
   showSearchHistory,
   useImgStyle,
@@ -28,7 +29,9 @@ export default function Header({
   const [searchString, setSearchString] = useState('');
   const [recentSearches, setRecentSearches] = useState(['test', '2']);
 
-  const renderBackBtn = (navigation) => {
+  console.log('third Check', {userId});
+
+  const renderBackBtn = () => {
     return (
       <TouchableOpacity
         style={styles.backBtn}
@@ -177,6 +180,7 @@ export default function Header({
                 userId={userId}
                 name={buttonName}
                 navigation={navigation}
+                showPopupMenu={showPopupMenu}
               />
             );
           })}
@@ -195,7 +199,7 @@ export default function Header({
             alignItems: 'center',
           }}>
           {/* BACK BUTTON */}
-          {useBackBtn && renderBackBtn(navigation)}
+          {useBackBtn && renderBackBtn()}
 
           {/* SEARCH INPUT  */}
           {useSearchBar && renderSearchBar()}

@@ -106,7 +106,7 @@ export default function itemDetails({route, navigation}) {
             }
           </View>
           <View>
-            <Text style={{}}>{seller.userName}</Text>
+            <Text style={{}}>{seller.username}</Text>
             <Text>{seller.location}</Text>
           </View>
           <View>
@@ -175,7 +175,7 @@ export default function itemDetails({route, navigation}) {
                 justifyContent: 'space-between',
                 paddingHorizontal: SIZES.padding * 2,
               }}>
-              <Text>Other items by {seller.userName}</Text>
+              <Text>Other items by {seller.username}</Text>
 
               {/* SEE ALL ITEMS BUTTON */}
               <TouchableOpacity

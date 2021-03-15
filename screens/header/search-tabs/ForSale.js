@@ -26,6 +26,7 @@ export default function ForSale({
       return getItems(
         state.listings,
         state.members,
+        state.feeds,
         userId,
         'string',
         submittedSearchString,

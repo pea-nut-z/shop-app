@@ -18,6 +18,7 @@ import CustomizeFeed from './header/CustomizeFeed';
 import Activity from './header/notifications-tabs/Activity';
 import SearchAlerts from './header/notifications-tabs/SearchAlerts';
 import Profile from './Profile';
+import EditProfile from './my-account/EditProfile';
 
 export {
   Home,
@@ -40,4 +41,5 @@ export {
   Activity,
   SearchAlerts,
   Profile,
+  EditProfile,
 };

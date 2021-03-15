@@ -37,7 +37,7 @@ export default function User({useId, navigation, submittedSearchString}) {
             </View>
             <View>
               <Text>
-                {member.userName} {member.memberId}
+                {member.username} {member.memberId}
               </Text>
               <Text>{member.location}</Text>
             </View>
