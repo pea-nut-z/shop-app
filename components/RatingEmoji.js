@@ -11,38 +11,19 @@ import {
 } from 'react-native';
 import {icons} from '../constants';
 export default function RatingEmoji({rating}) {
+  const emojiName =
+    rating < 20 ? icons.unamused : rating > 50 ? icons.excited : icons.happy;
+
   return (
     <View>
-      {rating > 50 && (
-        <Image
-          source={icons.excited}
-          resizeMode="contain"
-          style={{
-            width: 25,
-            height: 25,
-          }}
-        />
-      )}
-      {rating < 20 && (
-        <Image
-          source={icons.unamused}
-          resizeMode="contain"
-          style={{
-            width: 25,
-            height: 25,
-          }}
-        />
-      )}
-      {
-        <Image
-          source={icons.happy}
-          resizeMode="contain"
-          style={{
-            width: 25,
-            height: 25,
-          }}
-        />
-      }
+      <Image
+        source={emojiName}
+        resizeMode="contain"
+        style={{
+          width: 25,
+          height: 25,
+        }}
+      />
     </View>
   );
 }

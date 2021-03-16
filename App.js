@@ -16,6 +16,7 @@ import {
   CustomizeFeed,
   Profile,
   EditProfile,
+  Feedback,
 } from './screens/';
 import {
   bottomMainTabs,
@@ -52,6 +53,7 @@ export default function App() {
           <Stack.Screen name="Purchases" component={Purchases} />
           <Stack.Screen name="Favourites" component={Favourites} />
           <Stack.Screen name="EditProfile" component={EditProfile} />
+          <Stack.Screen name="Feedback" component={Feedback} />
           {/* SHARED */}
           <Stack.Screen name="Profile" component={Profile} />
           <Stack.Screen name="itemDetails" component={itemDetails} />

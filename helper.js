@@ -1,6 +1,6 @@
 import {Category} from './screens';
 
-export function timeSince(date) {
+export const timeSince = (date) => {
   //   var aDay = 24*60*60*1000;
   if (typeof date !== 'object') {
     date = new Date(date);
@@ -42,4 +42,25 @@ export function timeSince(date) {
   }
 
   return interval + ' ' + intervalType + ' ago';
-}
+};
+
+export const dateWithoutTime = () => {
+  const month = new Array();
+  month[0] = 'January';
+  month[1] = 'February';
+  month[2] = 'March';
+  month[3] = 'April';
+  month[4] = 'May';
+  month[5] = 'June';
+  month[6] = 'July';
+  month[7] = 'August';
+  month[8] = 'September';
+  month[9] = 'October';
+  month[10] = 'November';
+  month[11] = 'December';
+  const monthLetters = month[new Date().getMonth()];
+  const date = new Date().getDate();
+  const year = new Date().getFullYear();
+
+  return `${monthLetters} ${date}, ${year}`;
+};

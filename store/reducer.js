@@ -1,25 +1,27 @@
 import {combineReducers} from 'redux';
 import * as actions from './actionTypes';
-
+import {dateWithoutTime} from '../helper';
 // sync id to database
 //actions (add, edit , delete)
 // userId -> sellerId -> itemId
 
 // MOCK USER
 const userId = 111;
-
+const dateTime = new Date();
 const members = {
   111: {
     username: 'Test1',
     location: 'Toronto',
     // displayPic: 'https://i.ytimg.com/vi/H8X7FHrq278/maxresdefault.jpg',
     displayPic: 'N/A',
+    joined: dateWithoutTime(),
     rating: 60,
   },
   222: {
     username: 'Test2',
     location: 'Ottawa',
     displayPic: 'https://i.ytimg.com/vi/H8X7FHrq278/maxresdefault.jpg',
+    joined: dateWithoutTime(),
     rating: 19,
   },
 };

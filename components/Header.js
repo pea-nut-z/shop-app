@@ -29,8 +29,6 @@ export default function Header({
   const [searchString, setSearchString] = useState('');
   const [recentSearches, setRecentSearches] = useState(['test', '2']);
 
-  console.log('third Check', {userId});
-
   const renderBackBtn = () => {
     return (
       <TouchableOpacity

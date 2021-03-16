@@ -19,6 +19,7 @@ import Activity from './header/notifications-tabs/Activity';
 import SearchAlerts from './header/notifications-tabs/SearchAlerts';
 import Profile from './Profile';
 import EditProfile from './my-account/EditProfile';
+import Feedback from './my-account/Feedback';
 
 export {
   Home,
@@ -42,4 +43,5 @@ export {
   SearchAlerts,
   Profile,
   EditProfile,
+  Feedback,
 };
