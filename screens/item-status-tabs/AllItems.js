@@ -14,7 +14,12 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import {selectMemberAllItems} from '../../store/selectors';
 
-export default function All({userId, sellerId, atUserItemsTabs, navigation}) {
+export default function AllItems({
+  userId,
+  sellerId,
+  atUserItemsTabs,
+  navigation,
+}) {
   // CHECK CURRENT SCREEN
   const memberId = atUserItemsTabs ? userId : sellerId;
   // LISTINGS

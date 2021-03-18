@@ -17,6 +17,7 @@ import {
   Profile,
   EditProfile,
   Feedback,
+  Report,
 } from './screens/';
 import {
   bottomMainTabs,
@@ -24,6 +25,7 @@ import {
   userItemsTabs,
   searchTabs,
   notificationsTabs,
+  reviewsTabs,
 } from './navigation';
 import store from './store/store';
 
@@ -54,6 +56,7 @@ export default function App() {
           <Stack.Screen name="Favourites" component={Favourites} />
           <Stack.Screen name="EditProfile" component={EditProfile} />
           <Stack.Screen name="Feedback" component={Feedback} />
+          <Stack.Screen name="reviewsTabs" component={reviewsTabs} />
           {/* SHARED */}
           <Stack.Screen name="Profile" component={Profile} />
           <Stack.Screen name="itemDetails" component={itemDetails} />
@@ -65,6 +68,7 @@ export default function App() {
             name="notificationsTabs"
             component={notificationsTabs}
           />
+          <Stack.Screen name="Report" component={Report} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

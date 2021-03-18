@@ -37,7 +37,7 @@ export default function EditProfile({route, navigation}) {
         onPress={() => {
           displayPic !== currentPic &&
             dispatch({
-              type: actions.DISPLAYPIC_CHANGED,
+              type: actions.USER_DISPLAYPIC_CHANGED,
               userId,
               payload: {
                 image: displayPic,

@@ -10,19 +10,31 @@ const userId = 111;
 const dateTime = new Date();
 const members = {
   111: {
-    username: 'Test1',
+    username: 'User1',
     location: 'Toronto',
     // displayPic: 'https://i.ytimg.com/vi/H8X7FHrq278/maxresdefault.jpg',
     displayPic: 'N/A',
     joined: dateWithoutTime(),
-    rating: 60,
+    rating: 3,
+    numOfReviews: 3,
   },
   222: {
-    username: 'Test2',
+    username: 'User2',
     location: 'Ottawa',
     displayPic: 'https://i.ytimg.com/vi/H8X7FHrq278/maxresdefault.jpg',
+    // displayPic: 'N/A',
     joined: dateWithoutTime(),
-    rating: 19,
+    rating: 2,
+    numOfReviews: 10,
+  },
+  333: {
+    username: 'User3',
+    location: 'Ottawa',
+    displayPic:
+      'https://ih1.redbubble.net/image.171880009.2437/flat,750x,075,f-pad,750x1000,f8f8f8.u3.jpg',
+    joined: dateWithoutTime(),
+    rating: 5,
+    numOfReviews: 100,
   },
 };
 
@@ -62,7 +74,7 @@ const listings = {
     },
   },
   222: {
-    66: {
+    1: {
       status: 'Sold',
       date: new Date(
         'Thu Feb 09 2021 20:36:28 GMT-0500 (Eastern Standard Time',
@@ -82,7 +94,7 @@ const listings = {
       category: "Women's fashion",
       description: 'some description',
     },
-    77: {
+    2: {
       status: 'Active',
       date: new Date(
         'Thu Jan 26 2021 20:36:28 GMT-0500 (Eastern Standard Time',
@@ -98,7 +110,7 @@ const listings = {
       category: 'Sports & leisure',
       description: 'some description',
     },
-    88: {
+    3: {
       status: 'Sold',
       date: new Date(
         'Thu Feb 04 2021 20:36:28 GMT-0500 (Eastern Standard Time',
@@ -117,7 +129,7 @@ const listings = {
       category: 'Sports & leisure',
       description: 'yellow basketball',
     },
-    99: {
+    4: {
       status: 'Sold',
       date: new Date(
         'Thu Jun 04 2019 20:36:28 GMT-0500 (Eastern Standard Time',
@@ -136,7 +148,7 @@ const listings = {
       category: 'Sports & leisure',
       description: 'some description',
     },
-    55: {
+    5: {
       status: 'Active',
       date: new Date(
         'Thu Mar 01 2021 20:36:28 GMT-0500 (Eastern Standard Time',
@@ -153,7 +165,46 @@ const listings = {
       free: true,
       negotiable: true,
       category: 'Baby & kids',
-      description: 'cans',
+      description:
+        'Fdsfiphsdpifhjspdifhspdifhsdipfohsdpfihsdfpisdhfspidfhspdifhspdifhspdifhspdifhspdifhdspifhspd’fihspdfihsdp’fhspdfhspdfhspdfhspdfhspdfhspdfhspdifhs’pdfhsdpfhsdpfshdpfhs THE END',
+    },
+  },
+  333: {
+    1: {
+      status: 'Active',
+      date: new Date(
+        'Thu Feb 09 2021 20:36:28 GMT-0500 (Eastern Standard Time',
+      ).toString(),
+
+      chats: 0,
+      favorites: 0,
+      views: 0,
+      images: [
+        'https://i.ytimg.com/vi/H8X7FHrq278/maxresdefault.jpg',
+        'https://static.wikia.nocookie.net/pokemon/images/4/49/Ash_Pikachu.png/revision/latest?cb=20200405125039',
+      ],
+      title: 'Hat',
+      price: 400,
+      free: true,
+      negotiable: true,
+      category: "Women's fashion",
+      description: "it's a hat",
+    },
+    2: {
+      status: 'Active',
+      date: new Date(
+        'Thu Jan 26 2021 20:36:28 GMT-0500 (Eastern Standard Time',
+      ).toString(),
+      chats: 0,
+      favorites: 0,
+      views: 0,
+      images: [11],
+      title: 'Dress',
+      price: 10,
+      free: true,
+      negotiable: true,
+      category: 'Sports & leisure',
+      description: "it's a dress",
     },
   },
 };
@@ -198,6 +249,10 @@ const feeds = {
   222: ['Electronics'],
 };
 
+const blacklists = {
+  111: [222],
+};
+
 const usersReducer = (state = members, action) => {
   switch (action.type) {
     case actions.USER_ADDED:
@@ -211,7 +266,7 @@ const usersReducer = (state = members, action) => {
           username: action.payload.username,
         },
       };
-    case actions.DISPLAYPIC_CHANGED:
+    case actions.USER_DISPLAYPIC_CHANGED:
       return {
         ...state,
         [action.userId]: {
@@ -255,7 +310,7 @@ const listingsReducer = (state = listings, action) => {
           },
         },
       };
-    case actions.STATUS_CHANGED:
+    case actions.ITEM_STATUS_CHANGED:
       return {
         ...state,
         [action.sellerId]: {
@@ -329,9 +384,23 @@ const feedsReducer = (state = feeds, action) => {
       return state;
   }
 };
+
+const blackListsReducer = (state = blacklists, action) => {
+  switch (action.type) {
+    case actions.BLACKLIST_ADDED:
+      return {
+        ...state,
+        [action.userId]: [...state[action.userId], action.payload.sellerId],
+      };
+    default:
+      return state;
+  }
+};
 export default rootReducer = combineReducers({
   members: usersReducer,
   listings: listingsReducer,
   favourites: favouritesReducer,
   feeds: feedsReducer,
+  feeds: feedsReducer,
+  blackLists: blackListsReducer,
 });

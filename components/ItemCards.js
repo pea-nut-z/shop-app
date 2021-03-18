@@ -40,8 +40,9 @@ export default function ItemCards({
         {
           text: 'UNHIDE',
           onPress: () => {
+            console.warn('user blocked.');
             dispatch({
-              type: actions.STATUS_CHANGED,
+              type: actions.ITEM_STATUS_CHANGED,
               sellerId,
               itemId,
               payload: {
@@ -130,7 +131,7 @@ export default function ItemCards({
                   }}
                   onPress={() =>
                     dispatch({
-                      type: actions.STATUS_CHANGED,
+                      type: actions.ITEM_STATUS_CHANGED,
                       sellerId,
                       itemId,
                       payload: {
@@ -148,7 +149,7 @@ export default function ItemCards({
                   style={{borderWidth: 1, width: '50%'}}
                   onPress={() =>
                     dispatch({
-                      type: actions.STATUS_CHANGED,
+                      type: actions.ITEM_STATUS_CHANGED,
                       sellerId,
                       itemId,
                       payload: {

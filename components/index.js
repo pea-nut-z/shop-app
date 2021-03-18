@@ -3,9 +3,11 @@ import FlatButtons from './FlatButtons';
 import Header from './Header';
 import HeaderButton from './HeaderButton';
 import ImageScrollView from './ImageScrollView';
-import RatingEmoji from './RatingEmoji';
+import MemberRating from './MemberRating';
 import SellerOtherItems from './SellerOtherItems';
 import ItemCards from './ItemCards';
+import MemberInfo from './MemberInfo';
+import PopoutMenu from './PopoutMenu';
 
 export {
   CircleButton,
@@ -13,7 +15,9 @@ export {
   Header,
   HeaderButton,
   ImageScrollView,
-  RatingEmoji,
+  MemberRating,
   SellerOtherItems,
   ItemCards,
+  MemberInfo,
+  PopoutMenu,
 };

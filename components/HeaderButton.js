@@ -6,7 +6,7 @@ import {COLORS, SIZES} from '../constants';
 export default function HeaderButton({
   userId,
   name,
-  showPopupMenu,
+  showPopoutMenu,
   navigation,
 }) {
   const navigateTo = (keyword) => {
@@ -36,7 +36,7 @@ export default function HeaderButton({
       <TouchableOpacity
         onPress={() => {
           const keyword = name.split('-')[0];
-          keyword === 'ellipsis' ? showPopupMenu() : navigateTo(keyword);
+          keyword === 'ellipsis' ? showPopoutMenu() : navigateTo(keyword);
         }}
         style={{paddingLeft: 25, paddingVertical: 3, backgroundColor: 'red'}}>
         <Icon name={name} size={25} />

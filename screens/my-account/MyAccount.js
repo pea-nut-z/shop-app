@@ -23,6 +23,7 @@ import {
   CircleButton,
   ItemCards,
   FlatButtons,
+  MemberInfo,
 } from '../../components';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useDispatch, useSelector} from 'react-redux';
@@ -37,42 +38,22 @@ export default function MyAccount({navigation}) {
   const renderProfilePicAndBtn = () => {
     return (
       <TouchableOpacity
-        onPress={() => navigation.navigate('Profile', {userId})}
+        onPress={() =>
+          navigation.navigate('Profile', {
+            sellerId: userId,
+            userId,
+          })
+        }
         style={{
-          // backgroundColor: 'green',
           paddingVertical: SIZES.padding,
           paddingHorizontal: SIZES.padding * 2,
         }}>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          {userInfo.displayPic !== 'N/A' ? (
-            <Image
-              source={{uri: userInfo.displayPic}}
-              resizeMode={'contain'}
-              style={{
-                width: 100,
-                height: 100,
-                backgroundColor: 'red',
-                justifyContent: 'center',
-                alignItems: 'center',
-                borderWidth: 1,
-                borderColor: COLORS.secondary,
-                borderRadius: 50,
-              }}
-            />
-          ) : (
-            <Icon
-              name={'person-circle-outline'}
-              size={100}
-              color={COLORS.secondary}
-            />
-          )}
-          <View style={{marginLeft: SIZES.padding}}>
-            <Text>{userInfo.username}</Text>
-            <Text>
-              {userInfo.location} #{userId}
-            </Text>
-          </View>
-        </View>
+        <MemberInfo
+          picture={userInfo.displayPic}
+          name={userInfo.username}
+          location={userInfo.location}
+          id={userId}
+        />
         {/* VIEW PROFILE BUTTON */}
         <View style={styles.button}>
           <Text style={styles.btnText}>View profile</Text>
@@ -93,20 +74,21 @@ export default function MyAccount({navigation}) {
           alignItems: 'center',
           borderWidth: 1,
           borderColor: COLORS.secondary,
-          borderRadius: 20,
+          borderRadius: 50,
           position: 'absolute',
-          top: 75,
-          left: 80,
+          top: 90,
+          left: 220,
         }}>
-        <Icon name={'camera'} size={22} color={COLORS.darkgray} />
+        <Icon name={'camera'} size={25} color={COLORS.darkgray} />
       </TouchableOpacity>
     );
   };
+
   return (
     <View style={{flex: 1}}>
       <Header title={'My Account'} useRightBtns={['settings-outline']} />
-      {/* PROFILE DISPLAY */}
       <KeyboardAwareScrollView extraHeight={0} enableOnAndroid>
+        {/* PROFILE DISPLAY */}
         <View>
           {renderProfilePicAndBtn()}
           {renderCamerabtn()}
@@ -152,9 +134,7 @@ const styles = StyleSheet.create({
   circleButtons: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    // position: 'absolute',
     paddingVertical: SIZES.padding,
     height: SIZES.height * 0.12,
-    // top: SIZES.height * 0.5,
   },
 });

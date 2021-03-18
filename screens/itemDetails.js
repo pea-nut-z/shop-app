@@ -17,7 +17,8 @@ import {
   BackButton,
   ImageScrollView,
   ScrollViewDots,
-  RatingEmoji,
+  MemberInfo,
+  MemberRating,
   SellerOtherItems,
 } from '../components';
 
@@ -34,6 +35,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import * as actions from '../store/actionTypes';
 import {selectMemberAllItems} from '../store/selectors';
 import {createSelector} from 'reselect';
+import Tooltip from 'rn-tooltip';
 
 export default function itemDetails({route, navigation}) {
   const {userId, sellerId, itemId} = route.params;
@@ -75,72 +77,74 @@ export default function itemDetails({route, navigation}) {
           useBackBtn={true}
           useRightBtns={[
             'share-social-outline',
-            'ellipsis-vertical-circle-outline',
+            // 'ellipsis-vertical-circle-outline',
           ]}
         />
       </View>
-      <KeyboardAwareScrollView extraHeight={0} enableOnAndroid style={{}}>
-        {/* IMAGES */}
+      <KeyboardAwareScrollView
+        extraHeight={0}
+        enableOnAndroid
+        style={{flex: 1}}>
+        {/* HEADER ADJESTMENT */}
         {useImgStyle && <ImageScrollView images={itemImages} />}
         {!useImgStyle && <View style={{height: 105}} />}
 
-        {/* RENDER SELLER INFO */}
-        <View
+        {/* SELLER INFO */}
+        <TouchableOpacity
+          onPress={() => navigation.navigate('Profile', {userId, sellerId})}
           style={{
-            height: SIZES.height * 0.08,
-            backgroundColor: 'red',
+            flex: 1,
+            flexDirection: 'row',
+            justifyContent: 'space-evenly',
+            alignItems: 'center',
+            paddingVertical: SIZES.padding,
+            paddingHorizontal: SIZES.padding * 2,
           }}>
-          <View>
-            {
-              <Image
-                source={{
-                  uri: 'https://i.ytimg.com/vi/H8X7FHrq278/maxresdefault.jpg',
-                }}
-                resizeMode="contain"
-                style={{
-                  width: 40,
-                  height: 40,
-                  borderRadius: 100,
-                }}
-              />
-            }
-          </View>
-          <View>
-            <Text style={{}}>{seller.username}</Text>
-            <Text>{seller.location}</Text>
-          </View>
-          <View>
-            <Text>{seller.rating}</Text>
-            <RatingEmoji rating={seller.rating} />
-          </View>
-        </View>
+          <MemberInfo
+            picture={seller.displayPic}
+            name={seller.username}
+            location={seller.location}
+          />
+
+          <MemberRating
+            rating={seller.rating}
+            explanation={true}
+            numOfReviews={seller.numOfReviews}
+          />
+        </TouchableOpacity>
 
         {/* RENDER ITEM INFO */}
         {/* RENDER STATUS DROPDOWN ONLY TO SELLER */}
         <View
-          style={{minHeight: SIZES.height * 0.21, backgroundColor: 'green'}}>
-          <DropDownPicker
-            items={itemStatusOptions}
-            containerStyle={{
-              width: 100,
-              height: 40,
-              margin: SIZES.padding * 2,
-            }}
-            placeholder={item.status}
-            onChangeItem={(item) => setItemStatus(item.value)}
-            dropDownMaxHeight={itemStatusOptions.length * SIZES.height}
-            // style={{
-            //   height: 4,
-            // }}
-            labelStyle={{
-              ...FONTS.body5,
-            }}
-            itemStyle={{
-              justifyContent: 'flex-start',
-              paddingHorizontal: SIZES.padding,
-              //   height: '50%',
-            }}
-          />
+          style={{
+            // minHeight: SIZES.height * 0.21,
+            flex: 2,
+            backgroundColor: 'green',
+          }}>
+          {userId === sellerId && (
+            <DropDownPicker
+              items={itemStatusOptions}
+              containerStyle={{
+                width: 100,
+                height: 40,
+                margin: SIZES.padding * 2,
+              }}
+              placeholder={item.status}
+              onChangeItem={(item) => setItemStatus(item.value)}
+              dropDownMaxHeight={itemStatusOptions.length * SIZES.height}
+              // style={{
+              //   height: 4,
+              // }}
+              labelStyle={{
+                ...FONTS.body5,
+              }}
+              itemStyle={{
+                justifyContent: 'flex-start',
+                paddingHorizontal: SIZES.padding,
+                //   height: '50%',
+              }}
+            />
+          )}
 
           <Text>{item.title}</Text>
           <Text>
@@ -156,7 +160,7 @@ export default function itemDetails({route, navigation}) {
         {/* REPORT THIS POST  */}
         <View
           style={{
-            height: SIZES.height * 0.08,
+            flex: 1,
             backgroundColor: 'yellow',
           }}>
           <Text>Report Seller</Text>

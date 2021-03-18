@@ -1,6 +1,6 @@
 import React from 'react';
 import {View} from 'react-native';
-import {All, Active, Sold} from '../screens';
+import {AllItems, Active, Sold} from '../screens';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {Header} from '../components';
 import {COLORS} from '../constants';
@@ -17,7 +17,7 @@ export default function sellerItemsTabs({route, navigation}) {
         <MaterialTopTabs.Screen
           name="All"
           children={() => (
-            <All
+            <AllItems
               userId={userId}
               sellerId={sellerId}
               atUserItemsTabs={false}

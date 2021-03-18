@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TextInput,
   Button,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import {SIZES, FONTS, COLORS} from '../constants';
 import {BackButton, ImageScrollView, HeaderButton} from './index';
@@ -17,7 +18,8 @@ export default function Header({
   userId,
   navigation,
   title,
-  showPopupMenu,
+  showPopoutMenu,
+  hidePopoutMenu,
   submitSearchString,
   showSearchHistory,
   useImgStyle,
@@ -178,7 +180,7 @@ export default function Header({
                 userId={userId}
                 name={buttonName}
                 navigation={navigation}
-                showPopupMenu={showPopupMenu}
+                showPopoutMenu={showPopoutMenu}
               />
             );
           })}
@@ -188,34 +190,39 @@ export default function Header({
   return (
     <SafeAreaView
       style={{backgroundColor: useImgStyle ? 'transparent' : 'white'}}>
-      <View
-        style={useImgStyle ? styles.headerWithImg : styles.headerWithoutImg}>
+      <TouchableWithoutFeedback
+        onPress={() => {
+          if (hidePopoutMenu) hidePopoutMenu();
+        }}>
         <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          {/* BACK BUTTON */}
-          {useBackBtn && renderBackBtn()}
+          style={useImgStyle ? styles.headerWithImg : styles.headerWithoutImg}>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            {/* BACK BUTTON */}
+            {useBackBtn && renderBackBtn()}
 
-          {/* SEARCH INPUT  */}
-          {useSearchBar && renderSearchBar()}
+            {/* SEARCH INPUT  */}
+            {useSearchBar && renderSearchBar()}
 
-          {/* TITLE */}
-          {title && (
-            <Text
-              style={{
-                ...styles.title,
-                marginLeft: navigation ? SIZES.padding : 0,
-              }}>
-              {title}
-            </Text>
-          )}
+            {/* TITLE */}
+            {title && (
+              <Text
+                style={{
+                  ...styles.title,
+                  marginLeft: navigation ? SIZES.padding : 0,
+                }}>
+                {title}
+              </Text>
+            )}
+          </View>
+          {/* RIGHT BUTTONS */}
+          {useRightBtns && renderRightBtn()}
         </View>
-        {/* RIGHT BUTTONS */}
-        {useRightBtns && renderRightBtn()}
-      </View>
+      </TouchableWithoutFeedback>
       {useSearchHistory && renderRecentSearches()}
     </SafeAreaView>
   );
