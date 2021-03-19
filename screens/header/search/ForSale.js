@@ -24,10 +24,11 @@ export default function ForSale({
   const items = useSelector((state) => {
     if (focused && submittedSearchString) {
       return getItems(
+        userId,
         state.listings,
         state.members,
+        state.restrictions,
         state.feeds,
-        userId,
         'string',
         submittedSearchString,
         filters,

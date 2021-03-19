@@ -7,7 +7,6 @@ import MemberRating from './MemberRating';
 import SellerOtherItems from './SellerOtherItems';
 import ItemCards from './ItemCards';
 import MemberInfo from './MemberInfo';
-import PopoutMenu from './PopoutMenu';
 
 export {
   CircleButton,
@@ -19,5 +18,4 @@ export {
   SellerOtherItems,
   ItemCards,
   MemberInfo,
-  PopoutMenu,
 };

@@ -17,7 +17,7 @@ import {
   locationOptions,
   infoOptions,
 } from '../../constants';
-import {filterListings} from '../../store/selectors';
+import {selectListings, filterListings} from '../../store/selectors';
 import {Header, ItemCards} from '../../components';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useDispatch, useSelector} from 'react-redux';
@@ -27,14 +27,16 @@ export default function Category({route, navigation}) {
   const getItemsByCategory = useMemo(filterListings, []);
   const itemsByCategory = useSelector((state) =>
     getItemsByCategory(
+      userId,
       state.listings,
       state.members,
+      state.restrictions,
       state.feeds,
-      userId,
       'category',
       selectedCategory,
     ),
   );
+
   return (
     <View
       style={{

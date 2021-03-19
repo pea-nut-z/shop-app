@@ -6,7 +6,7 @@ import {useSelector} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
 import {SIZES, COLORS} from '../../../constants';
 
-export default function User({useId, navigation, submittedSearchString}) {
+export default function User({userId, navigation, submittedSearchString}) {
   const focused = useIsFocused();
 
   const getMembers = useMemo(filterMembers, []);
@@ -22,6 +22,12 @@ export default function User({useId, navigation, submittedSearchString}) {
         return (
           <TouchableOpacity
             key={`member-${index}`}
+            onPress={() =>
+              navigation.navigate('Profile', {
+                sellerId: parseInt(member.memberId),
+                userId,
+              })
+            }
             style={{flexDirection: 'row', alignItems: 'center'}}>
             <View>
               <Image
@@ -37,7 +43,7 @@ export default function User({useId, navigation, submittedSearchString}) {
             </View>
             <View>
               <Text>
-                {member.username} {member.memberId}
+                {member.username} #{member.memberId}
               </Text>
               <Text>{member.location}</Text>
             </View>

@@ -1,18 +1,22 @@
 import React from 'react';
 import {createSelector} from 'reselect';
 
-// ALL MEMBERS - LISTINGS excluding current user's
-
+// ALL MEMBERS'LISTINGS
+// excluding current user's items
+// by user's customized feed and block/hide restructions
 export const selectListings = () =>
   createSelector(
-    (listings) => listings,
-    (_, members) => members,
-    (_, __, userId) => userId,
-    (listings, members, userId) => {
+    (userId) => userId,
+    (_, listings) => listings,
+    (_, __, members) => members,
+    (userId, __, ____, restrictions) => restrictions[userId],
+    (userId, listings, members, restriction) => {
       const arr = [];
       for (let sellerId in listings) {
         sellerId = parseInt(sellerId);
         if (sellerId === userId) continue;
+        if (restriction.block.includes(sellerId)) continue;
+        if (restriction.hide.includes(sellerId)) continue;
         for (let itemId in listings[sellerId]) {
           itemId = parseInt(itemId);
           const item = {
@@ -29,15 +33,16 @@ export const selectListings = () =>
     },
   );
 
-export const filterListings = (listings, members, feeds, userId) =>
+export const filterListings = (userId, listings, members, restrictions) =>
   createSelector(
-    selectListings(listings, members, userId),
-    (_, members) => members,
-    (_, __, feeds, userId) => feeds[userId],
-    (_, __, ___, userId) => userId,
-    (_, __, ___, ____, filter) => filter,
-    (_, __, ___, ____, _____, value) => value,
-    (items, __, feed, userId, filter, value) => {
+    selectListings(userId, listings, members, restrictions),
+    (_, listings) => listings,
+    (_, __, members) => members,
+    (_, __, ____, restrictions) => restrictions,
+    (userId, __, ___, ____, feeds) => feeds[userId],
+    (_, __, ___, ____, _____, filter) => filter,
+    (_, __, ___, ____, _____, ______, value) => value,
+    (items, __, ___, ____, feed, filter, value) => {
       switch (filter) {
         case 'feed':
           return items.filter(
@@ -68,22 +73,34 @@ export const filterListings = (listings, members, feeds, userId) =>
   );
 
 export const furtherFilterListings = (
+  userId,
   listings,
   members,
-  userId,
+  restrictions,
+  feeds,
   initialFilter,
   value,
 ) =>
   createSelector(
-    filterListings(listings, members, userId, initialFilter, value),
-    (_, members) => members,
-    (_, __, userId) => userId,
-    (_, __, ___, initialFilter) => initialFilter,
-    (_, __, ___, ____, value) => value,
-    (_, __, ___, ____, _____, furtherFilters) => furtherFilters,
-    (items, __, ___, ____, value, furtherFilters) => {
+    filterListings(
+      userId,
+      listings,
+      members,
+      restrictions,
+      feeds,
+      initialFilter,
+      value,
+    ),
+    (_, listings) => listings,
+    (_, __, members) => members,
+    (_, __, ___, restrictions) => restrictions,
+    (_, __, ___, ____, feeds) => feeds,
+    (_, __, ___, ____, _____, initialFilter) => initialFilter,
+    (_, __, ___, ____, _____, value) => value,
+    (_, __, ___, ____, _____, ______, furtherFilters) => furtherFilters,
+    (items, __, ___, ____, _____, ______, value, furtherFilters) => {
+      // console.log({initialFilter});
       if (items.length === 0) return;
-
       const {
         hideSoldItems,
         categories,
@@ -152,7 +169,7 @@ export const selectMembers = () =>
       for (let memberId in members) {
         // memberId = parseInt(memberId);
         const member = {
-          memberId: `#${memberId}`,
+          memberId,
           ...members[memberId],
         };
         arr.push(member);
@@ -167,10 +184,9 @@ export const filterMembers = (state) =>
     (_, filter) => filter,
     (_, __, value) => value,
     (members, filter, value) => {
-      // switch (filter) {
-      // case 'string':
       const filteredMembers = members.filter((member) => {
         const string = value.trim();
+        // console.log({string});
         const regex = new RegExp(string, 'i');
         return member.memberId.match(regex) || member.username.match(regex);
       });

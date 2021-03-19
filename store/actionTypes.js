@@ -11,4 +11,7 @@ export const FAVOURITE_REMOVED = 'favourite-removed';
 export const FEED_ADDED = 'feed-added';
 export const FEED_REMOVED = 'feed-removed';
 
-export const BLACKLIST_ADDED = 'blacklist-added';
+export const BLOCK_ADDED = 'block-added';
+export const BLOCK_REMOVED = 'block-removed';
+export const HIDE_ADDED = 'hide-added';
+export const HIDE_REMOVED = 'hide-removed';

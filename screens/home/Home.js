@@ -21,7 +21,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {createSelector} from 'reselect';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
-import {filterListings} from '../../store/selectors';
+import {selectListings, filterListings} from '../../store/selectors';
 
 export default function Home({navigation}) {
   // MOCK USER
@@ -30,10 +30,11 @@ export default function Home({navigation}) {
   const getActiveListings = useMemo(filterListings, []);
   const activeListings = useSelector((state) =>
     getActiveListings(
+      userId,
       state.listings,
       state.members,
+      state.restrictions,
       state.feeds,
-      userId,
       'feed',
     ),
   );

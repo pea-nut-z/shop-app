@@ -9,7 +9,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
-import {PopoutMenu, Header, MemberInfo, MemberRating} from '../components';
+import {Header, MemberInfo, MemberRating} from '../components';
 import {SIZES, COLORS, FONTS} from '../constants';
 import Tooltip from 'rn-tooltip';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -18,21 +18,33 @@ import * as actions from '../store/actionTypes';
 
 export default function Profile({route, navigation}) {
   const {sellerId, userId} = route.params;
-  const atCurrentUserProfile = sellerId === userId ? true : false;
-  const itemTabs = atCurrentUserProfile ? 'userItemsTabs' : 'sellerItemsTabs';
 
-  const [popupMenu, setPopupMenu] = useState(false);
-  const [blockConfirmation, setBlockConfirmation] = useState(false);
-  const [hideConfirmation, setHideConfirmation] = useState(false);
-
+  // SELECTORS
   const seller = useSelector((state) => state.members[sellerId]);
   const numOfItems = useSelector(
     (state) => Object.keys(state.listings[sellerId]).length,
   );
+  const blockList = useSelector((state) => {
+    if (!atCurrentUserProfile) {
+      return state.restrictions[userId]['block'];
+    }
+  });
+  const hideList = useSelector((state) => {
+    if (!atCurrentUserProfile) {
+      return state.restrictions[userId]['hide'];
+    }
+  });
 
-  const blacklist = useSelector((state) => state.blackLists[userId]);
+  console.log({blockList});
 
-  console.log({blacklist});
+  const atCurrentUserProfile = sellerId === userId ? true : false;
+  const itemTabs = atCurrentUserProfile ? 'userItemsTabs' : 'sellerItemsTabs';
+  const sellerIsBlocked = blockList.includes(sellerId) ? true : false;
+  // const sellerIsBlocked = blockList.includes(sellerId) ? true : false;
+
+  const [popupMenu, setPopupMenu] = useState(false);
+  const [blockConfirmation, setBlockConfirmation] = useState(false);
+  const [hideConfirmation, setHideConfirmation] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -44,12 +56,22 @@ export default function Profile({route, navigation}) {
     setPopupMenu(false);
   };
 
-  const showBlockConfirmation = () => {
-    setBlockConfirmation(true);
+  const showUnblockedMsg = () => {
+    console.warn(`${seller.username} was unblocked`);
+    dispatch({
+      type: actions.BLOCK_REMOVED,
+      userId,
+      payload: {sellerId},
+    });
   };
 
-  const showHideConfirmation = () => {
-    setHideConfirmation(true);
+  const showUnhideMsg = () => {
+    console.warn(`${seller.username}'s posts have been unhidden`);
+    dispatch({
+      type: actions.HIDE_REMOVED,
+      userId,
+      payload: {sellerId},
+    });
   };
 
   const renderBlockConfirmation = () => {
@@ -70,10 +92,9 @@ export default function Profile({route, navigation}) {
             <TouchableOpacity
               onPress={() => {
                 console.warn('User blocked.');
-
                 setBlockConfirmation(false);
                 dispatch({
-                  type: actions.BLACKLIST_ADDED,
+                  type: actions.BLOCK_ADDED,
                   userId,
                   payload: {
                     sellerId,
@@ -124,6 +145,17 @@ export default function Profile({route, navigation}) {
               <Text>CANCEL</Text>
             </TouchableOpacity>
             <TouchableOpacity
+              onPress={() => {
+                setHideConfirmation(false);
+                console.warn(
+                  `${seller.username}'s posts will no longer be visible you`,
+                );
+                dispatch({
+                  type: actions.HIDE_ADDED,
+                  userId,
+                  payload: {sellerId},
+                });
+              }}
               style={{
                 ...styles.confirmationBtn,
                 borderColor: COLORS.secondary,
@@ -138,25 +170,62 @@ export default function Profile({route, navigation}) {
   };
 
   const renderPopoutMenu = () => {
-    return atCurrentUserProfile ? (
-      <PopoutMenu
-        navigation={navigation}
-        options={['Edit']}
-        hidePopoutMenu={hidePopoutMenu}
-        sellerId={seller}
-        userId={userId}
-      />
-    ) : (
-      <PopoutMenu
-        navigation={navigation}
-        options={['Report', 'Block', 'Hide this seller']}
-        hidePopoutMenu={hidePopoutMenu}
-        showBlockConfirmation={showBlockConfirmation}
-        showHideConfirmation={showHideConfirmation}
-        sellerId={seller}
-        userId={userId}
-      />
-    );
+    if (atCurrentUserProfile) {
+      return (
+        <View style={{...styles.popupMenuContainer}}>
+          <TouchableOpacity
+            style={{
+              ...styles.popupMenuOption,
+            }}
+            onPress={() => {
+              navigation.navigate('EditProfile', {userId});
+            }}
+            style={{
+              ...styles.popupMenuOption,
+            }}>
+            <Text>Edit</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    } else {
+      const hideOption = hideList.includes(sellerId)
+        ? "Unhide this seller's posts"
+        : 'Hide this seller';
+
+      const options = sellerIsBlocked
+        ? ['Report', 'Unblock']
+        : ['Report', 'Block', hideOption];
+
+      return (
+        <View style={{...styles.popupMenuContainer}}>
+          {options.map((option) => {
+            return (
+              <TouchableOpacity
+                key={option}
+                style={{
+                  ...styles.popupMenuOption,
+                }}
+                onPress={() => {
+                  if (option === 'Report')
+                    navigation.navigate('Report', {sellerId, userId});
+                  if (option === 'Block') {
+                    setBlockConfirmation(true);
+                  }
+                  if (option === 'Unblock') showUnblockedMsg();
+                  if (option === 'Hide this seller') setHideConfirmation(true);
+                  if (option === "Unhide this seller's posts") showUnhideMsg();
+                  hidePopoutMenu(false);
+                }}
+                style={{
+                  ...styles.popupMenuOption,
+                }}>
+                <Text>{option}</Text>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+      );
+    }
   };
 
   const renderUserMoreRatings = () => {
@@ -201,6 +270,19 @@ export default function Profile({route, navigation}) {
         useBackBtn={true}
         useRightBtns={['ellipsis-vertical-circle-outline']}
       />
+      <View>
+        {sellerIsBlocked && (
+          <View
+            style={{
+              backgroundColor: 'red',
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: 30,
+            }}>
+            <Text style={{color: COLORS.white}}>This user is blocked</Text>
+          </View>
+        )}
+      </View>
       <View>{renderBlockConfirmation()}</View>
       <View>{renderHideConfirmation()}</View>
       <View
@@ -217,6 +299,7 @@ export default function Profile({route, navigation}) {
           style={{
             flex: 1,
           }}>
+          {/* MEMBER INFO */}
           <View
             style={{
               flex: 1,
@@ -239,6 +322,7 @@ export default function Profile({route, navigation}) {
             />
           </View>
 
+          {/* RATE BUTTON  */}
           {!atCurrentUserProfile && (
             <View style={{paddingHorizontal: SIZES.padding * 2}}>
               <TouchableOpacity
@@ -255,7 +339,10 @@ export default function Profile({route, navigation}) {
               </TouchableOpacity>
             </View>
           )}
+
           {renderUserMoreRatings()}
+
+          {/* ACTITVITY */}
           <View style={{flex: 1, backgroundColor: 'green'}}>
             <Text>Verified 'NUM OF TIMES HERE!!!!' in {seller.location}</Text>
             <Text>Joined {seller.joined} (ACTIVE SINCE WHEN???)</Text>
@@ -317,6 +404,22 @@ export default function Profile({route, navigation}) {
 }
 
 const styles = StyleSheet.create({
+  popupMenuContainer: {
+    backgroundColor: COLORS.white,
+    shadowOffset: {width: 3, height: 3},
+    shadowColor: COLORS.darkgray,
+    shadowOpacity: 0.6,
+    borderWidth: 1,
+    borderColor: COLORS.secondary,
+    paddingVertical: SIZES.padding / 2,
+  },
+  popupMenuOption: {
+    height: 40,
+    minWidth: 100,
+    justifyContent: 'center',
+    paddingHorizontal: SIZES.padding * 2,
+    paddingVertical: SIZES.padding / 2,
+  },
   confirmationContainer: {
     width: SIZES.width - SIZES.padding * 8,
     backgroundColor: COLORS.white,

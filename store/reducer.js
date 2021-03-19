@@ -57,7 +57,7 @@ const listings = {
       description: 'some description',
     },
     2: {
-      status: 'Reserved',
+      status: 'Active',
       date: new Date(
         'Thu Feb 04 2021 20:36:28 GMT-0500 (Eastern Standard Time',
       ).toString(),
@@ -65,7 +65,7 @@ const listings = {
       favorites: 0,
       views: 0,
       images: [11],
-      title: 'user1 , item2',
+      title: "user1's product",
       price: 100,
       free: true,
       negotiable: true,
@@ -213,11 +213,11 @@ const favourites = {
   111: [
     {
       sellerId: 222,
-      itemId: 77,
+      itemId: 1,
     },
     {
       sellerId: 222,
-      itemId: 66,
+      itemId: 2,
     },
   ],
   222: [
@@ -249,8 +249,22 @@ const feeds = {
   222: ['Electronics'],
 };
 
-const blacklists = {
-  111: [222],
+const restrictions = {
+  111: {
+    block: [],
+    blockedBy: [],
+    hide: [],
+  },
+  333: {
+    block: [111],
+    blockedBy: [],
+    hide: [],
+  },
+  222: {
+    block: [],
+    blockedBy: [111],
+    hide: [],
+  },
 };
 
 const usersReducer = (state = members, action) => {
@@ -385,13 +399,61 @@ const feedsReducer = (state = feeds, action) => {
   }
 };
 
-const blackListsReducer = (state = blacklists, action) => {
+const restrictionsReducer = (state = restrictions, action) => {
   switch (action.type) {
-    case actions.BLACKLIST_ADDED:
+    case actions.BLOCK_ADDED:
       return {
         ...state,
-        [action.userId]: [...state[action.userId], action.payload.sellerId],
+        [action.userId]: {
+          ...state[action.userId],
+          block: [...state[action.userId]['block'], action.payload.sellerId],
+        },
+
+        [action.payload.sellerId]: {
+          ...state[action.payload.sellerId],
+          blockedBy: [
+            ...state[action.payload.sellerId]['blockedBy'],
+            action.userId,
+          ],
+        },
       };
+
+    case actions.BLOCK_REMOVED:
+      return {
+        ...state,
+        [action.userId]: {
+          ...state[action.userId],
+          block: state[action.userId]['block'].filter(
+            (id) => id !== action.payload.sellerId,
+          ),
+        },
+        [action.payload.sellerId]: {
+          ...state[action.payload.sellerId],
+          blockedBy: state[action.payload.sellerId]['blockedBy'].filter(
+            (id) => id !== action.userId,
+          ),
+        },
+      };
+
+    case actions.HIDE_ADDED:
+      return {
+        ...state,
+        [action.userId]: {
+          ...state[action.userId],
+          hide: [...state[action.userId]['hide'], action.payload.sellerId],
+        },
+      };
+    case actions.HIDE_REMOVED:
+      return {
+        ...state,
+        [action.userId]: {
+          ...state[action.userId],
+          hide: state[action.userId]['hide'].filter(
+            (id) => id !== action.payload.sellerId,
+          ),
+        },
+      };
+
     default:
       return state;
   }
@@ -401,6 +463,5 @@ export default rootReducer = combineReducers({
   listings: listingsReducer,
   favourites: favouritesReducer,
   feeds: feedsReducer,
-  feeds: feedsReducer,
-  blackLists: blackListsReducer,
+  restrictions: restrictionsReducer,
 });
