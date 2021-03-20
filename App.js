@@ -62,7 +62,7 @@ export default function App() {
           <Stack.Screen name="itemDetails" component={itemDetails} />
           {/* HEARDER NAVIGATE */}
           <Stack.Screen name="searchTabs" component={searchTabs} />
-          <Stack.Screen name="Filters" component={Filters} />
+          {/* <Stack.Screen name="Filters" component={Filters} /> */}
           <Stack.Screen name="CustomizeFeed" component={CustomizeFeed} />
           <Stack.Screen
             name="notificationsTabs"

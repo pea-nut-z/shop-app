@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -14,6 +14,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {timeSince} from '../helper';
 import {useDispatch, useSelector} from 'react-redux';
 import * as actions from '../store/actionTypes';
+import Modal from 'react-native-modal';
 
 export default function ItemCards({
   userId,
@@ -21,10 +22,12 @@ export default function ItemCards({
   navigation,
   atUserActiveItemsScreen,
   atUserHiddenItemsScreen,
+  atUserSoldItemsScreen,
   atUserFavouritesScreen,
 }) {
   const dispatch = useDispatch();
 
+  const [userItemOptionsBtn, setUserItemOptionsBtn] = useState(false);
   const unhidePostAlert = (sellerId, itemId) => {
     Alert.alert(
       'Post unhidden',
@@ -43,16 +46,43 @@ export default function ItemCards({
             console.warn('user blocked.');
             dispatch({
               type: actions.ITEM_STATUS_CHANGED,
+              // payload: {
               sellerId,
               itemId,
-              payload: {
-                status: 'Active',
-              },
+              status: 'Active',
+              // },
             });
           },
         },
       ],
       {cancelable: false},
+    );
+  };
+
+  // THREE DOTS OPTION BTN
+  const renderUserItemOptionsBtn = () => {
+    if (
+      atUserActiveItemsScreen ||
+      atUserHiddenItemsScreen ||
+      atUserSoldItemsScreen
+    ) {
+      return (
+        <TouchableOpacity onPress={() => setUserItemOptionsBtn(true)}>
+          <Icon name={'ellipsis-vertical-circle'} size={25} />
+        </TouchableOpacity>
+      );
+    }
+  };
+
+  const renderBtnModal = () => {
+    return (
+      <Modal
+        isVisible={userItemOptionsBtn}
+        onBackdropPress={() => setUserItemOptionsBtn(false)}>
+        <View style={{}}>
+          <Text>Test</Text>
+        </View>
+      </Modal>
     );
   };
 
@@ -62,7 +92,6 @@ export default function ItemCards({
         const sellerId = item.sellerId;
         const itemId = item.itemId;
         const status = item.status;
-
         const img = item['images'][0];
         return (
           <View key={`item-${index}`}>
@@ -75,14 +104,20 @@ export default function ItemCards({
                   itemId,
                 })
               }>
-              <Image
-                source={typeof img === 'number' ? img : {uri: img}}
-                resizeMode={'contain'}
-                style={{
-                  width: 35,
-                  height: 35,
-                }}
-              />
+              <View
+                style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                <Image
+                  source={typeof img === 'number' ? img : {uri: img}}
+                  resizeMode={'contain'}
+                  style={{
+                    width: 35,
+                    height: 35,
+                  }}
+                />
+                {renderUserItemOptionsBtn()}
+                {renderBtnModal()}
+              </View>
+
               <View>
                 <Text>{item.title}</Text>
                 <Text>
@@ -132,11 +167,11 @@ export default function ItemCards({
                   onPress={() =>
                     dispatch({
                       type: actions.ITEM_STATUS_CHANGED,
+                      // payload: {
                       sellerId,
                       itemId,
-                      payload: {
-                        status: status === 'Reserved' ? 'Active' : 'Reserved',
-                      },
+                      status: status === 'Reserved' ? 'Active' : 'Reserved',
+                      // },
                     })
                   }>
                   <Text>
@@ -150,11 +185,11 @@ export default function ItemCards({
                   onPress={() =>
                     dispatch({
                       type: actions.ITEM_STATUS_CHANGED,
+                      // payload: {
                       sellerId,
                       itemId,
-                      payload: {
-                        status: 'Sold',
-                      },
+                      status: 'Sold',
+                      // },
                     })
                   }>
                   <Text>Change to SOLD</Text>
@@ -183,11 +218,11 @@ export default function ItemCards({
                 onPress={() => {
                   dispatch({
                     type: actions.FAVOURITE_REMOVED,
+                    // payload: {
                     userId,
-                    payload: {
-                      sellerId,
-                      itemId,
-                    },
+                    sellerId,
+                    itemId,
+                    // },
                   });
                 }}>
                 <Icon name={'heart'} size={30} color={COLORS.primary} />

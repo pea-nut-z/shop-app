@@ -1,5 +1,11 @@
 import React, {useEffect, useMemo, useState} from 'react';
-import {View, StyleSheet, Text, TouchableWithoutFeedback} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  SafeAreaView,
+} from 'react-native';
 import {ItemCards} from '../../../components';
 import {furtherFilterListings} from '../../../store/selectors';
 import {useSelector} from 'react-redux';
@@ -7,19 +13,19 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {SIZES, COLORS} from '../../../constants';
 import {useIsFocused} from '@react-navigation/native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 export default function ForSale({
   userId,
   navigation,
   submittedSearchString,
-  toggleSearchHistory,
   hideSearchHistory,
+  toggleFilterScreen,
+  hideSoldItems,
+  toggleHideSoldItemsBtn,
   filters,
 }) {
-  const [hideSoldItems, setHideSoldItems] = useState(false);
   const focused = useIsFocused();
-  filters = {...filters, hideSoldItems}; // add one more to filters
-
   const getItems = useMemo(furtherFilterListings, []);
   const items = useSelector((state) => {
     if (focused && submittedSearchString) {
@@ -36,10 +42,20 @@ export default function ForSale({
     }
   });
 
-  const renderMoreFiltersBtn = () => {
+  const renderFilterBtn = () => {
+    let isFilterUsed = Object.values(filters);
+    isFilterUsed = isFilterUsed.some(
+      (value) =>
+        value !== undefined &&
+        value !== false &&
+        value !== true &&
+        value?.length !== 0 &&
+        value,
+    );
+
     return (
       <TouchableOpacity
-        onPress={() => navigation.navigate('Filters')}
+        onPress={() => toggleFilterScreen()}
         style={{
           flexDirection: 'row',
           alignItems: 'center',
@@ -48,7 +64,11 @@ export default function ForSale({
           paddingHorizontal: SIZES.padding * 2,
           backgroundColor: 'yellow',
         }}>
-        <Icon name={'funnel-outline'} size={20} />
+        <Icon
+          name={'funnel-outline'}
+          size={20}
+          color={isFilterUsed ? COLORS.primary : null}
+        />
         <Text>Filter</Text>
       </TouchableOpacity>
     );
@@ -56,7 +76,7 @@ export default function ForSale({
   const renderHideSoldItemsBtn = () => {
     return (
       <TouchableOpacity
-        onPress={() => setHideSoldItems(!hideSoldItems)}
+        onPress={() => toggleHideSoldItemsBtn()}
         style={{
           flexDirection: 'row',
           alignItems: 'center',
@@ -93,7 +113,7 @@ export default function ForSale({
   };
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{backgroundColor: 'pink', flex: 1}}>
       <View
         style={{
           flexDirection: 'row',
@@ -101,21 +121,21 @@ export default function ForSale({
           backgroundColor: 'green',
           justifyContent: 'space-between',
         }}>
-        {renderMoreFiltersBtn()}
+        {renderFilterBtn()}
         {renderHideSoldItemsBtn()}
       </View>
       <View>{renderNoResultsMsg()}</View>
-      <View>
-        {items ? (
-          <View>
+      <TouchableWithoutFeedback
+        style={{flex: 1}}
+        onPress={() => hideSearchHistory()}>
+        <KeyboardAwareScrollView
+          style={{paddingBottom: 130, flex: 1}}
+          enableOnAndroid>
+          {items && (
             <ItemCards userId={userId} items={items} navigation={navigation} />
-          </View>
-        ) : (
-          <TouchableWithoutFeedback onPress={() => hideSearchHistory()}>
-            <View style={{height: SIZES.height, backgroundColor: 'pink'}} />
-          </TouchableWithoutFeedback>
-        )}
-      </View>
+          )}
+        </KeyboardAwareScrollView>
+      </TouchableWithoutFeedback>
     </View>
   );
 }

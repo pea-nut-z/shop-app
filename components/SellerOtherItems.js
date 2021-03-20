@@ -1,27 +1,8 @@
 import React, {useMemo} from 'react';
-
-import {
-  SafeAreaView,
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Animated,
-  Image,
-  FlatList,
-} from 'react-native';
-
-import {
-  FONTS,
-  SIZES,
-  categoryOptions,
-  itemStatusOptions,
-  icons,
-  COLORS,
-} from '../constants';
-
+import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import {filterMemberItems} from '../store/selectors';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
+import {FONTS, SIZES, COLORS} from '../constants';
 
 export default function SellerOtherItems({sellerId, itemId, navigation}) {
   const getOtherItems = useMemo(filterMemberItems, []);
@@ -54,7 +35,6 @@ export default function SellerOtherItems({sellerId, itemId, navigation}) {
               style={{
                 width: SIZES.width / 2 - SIZES.padding * 2,
                 height: SIZES.width / 2,
-                backgroundColor: 'yellow',
                 justifyContent: 'center',
               }}>
               <View style={{alignItems: 'center'}}>

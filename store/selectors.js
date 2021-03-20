@@ -96,10 +96,27 @@ export const furtherFilterListings = (
     (_, __, ___, restrictions) => restrictions,
     (_, __, ___, ____, feeds) => feeds,
     (_, __, ___, ____, _____, initialFilter) => initialFilter,
-    (_, __, ___, ____, _____, value) => value,
-    (_, __, ___, ____, _____, ______, furtherFilters) => furtherFilters,
-    (items, __, ___, ____, _____, ______, value, furtherFilters) => {
+    (_, __, ___, ____, _____, ______, value) => value,
+    (_, __, ___, ____, _____, ______, _______, furtherFilters) =>
+      furtherFilters,
+    (
+      items,
+      listings,
+      members,
+      restrictions,
+      feeds,
+      initialFilter,
+      value,
+      furtherFilters,
+    ) => {
+      // console.log({items});
+      // console.log({listings});
+      // console.log({members});
+      // console.log({restrictions});
+      // console.log({feeds});
       // console.log({initialFilter});
+      // console.log({value});
+      // console.log({furtherFilters});
       if (items.length === 0) return;
       const {
         hideSoldItems,
@@ -195,6 +212,8 @@ export const filterMembers = (state) =>
   );
 
 // INDIVIDUAL MEMBER - ITEMS
+export const selectItemViewNums = createSelector((item) => item.views);
+
 export const selectMemberAllItems = () =>
   createSelector(
     (state, memberId) => state.listings[memberId],
@@ -220,13 +239,7 @@ export const filterMemberItems = (state, memberId) =>
     (items, memberId, itemId, filter) => {
       switch (filter) {
         case 'four-other-items':
-          return items
-            .filter(
-              (item) =>
-                (item.itemId !== itemId && item.status === 'Active') ||
-                (item.itemId !== itemId && item.status === 'Reserved'),
-            )
-            .slice(0, 4);
+          return items.filter((item) => item.itemId !== itemId).slice(0, 4);
         case 'active':
           return items.filter((item) => item.status === 'Active');
         case 'sold':

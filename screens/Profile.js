@@ -35,8 +35,6 @@ export default function Profile({route, navigation}) {
     }
   });
 
-  console.log({blockList});
-
   const atCurrentUserProfile = sellerId === userId ? true : false;
   const itemTabs = atCurrentUserProfile ? 'userItemsTabs' : 'sellerItemsTabs';
   const sellerIsBlocked = blockList.includes(sellerId) ? true : false;
@@ -61,7 +59,7 @@ export default function Profile({route, navigation}) {
     dispatch({
       type: actions.BLOCK_REMOVED,
       userId,
-      payload: {sellerId},
+      sellerId,
     });
   };
 
@@ -70,7 +68,7 @@ export default function Profile({route, navigation}) {
     dispatch({
       type: actions.HIDE_REMOVED,
       userId,
-      payload: {sellerId},
+      sellerId,
     });
   };
 
@@ -96,9 +94,9 @@ export default function Profile({route, navigation}) {
                 dispatch({
                   type: actions.BLOCK_ADDED,
                   userId,
-                  payload: {
-                    sellerId,
-                  },
+                  // payload: {
+                  sellerId,
+                  // },
                 });
               }}
               style={{
@@ -153,7 +151,7 @@ export default function Profile({route, navigation}) {
                 dispatch({
                   type: actions.HIDE_ADDED,
                   userId,
-                  payload: {sellerId},
+                  sellerId,
                 });
               }}
               style={{

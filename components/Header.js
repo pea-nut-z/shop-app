@@ -22,20 +22,31 @@ export default function Header({
   hidePopoutMenu,
   submitSearchString,
   showSearchHistory,
+  searchString,
+  getSearchString,
+  toggleFilterScreen,
   useImgStyle,
   useBackBtn,
   useSearchBar,
   useRightBtns,
   useSearchHistory,
 }) {
-  const [searchString, setSearchString] = useState('');
+  // const [searchString, setSearchString] = useState('');
+
   const [recentSearches, setRecentSearches] = useState(['test', '2']);
+  const [warning, setWarning] = useState(false);
 
   const renderBackBtn = () => {
     return (
       <TouchableOpacity
         style={styles.backBtn}
-        onPress={() => navigation.goBack()}>
+        onPress={() => {
+          if (toggleFilterScreen) {
+            toggleFilterScreen();
+          } else {
+            navigation.goBack();
+          }
+        }}>
         <Icon
           name="arrow-back-outline"
           size={25}
@@ -58,11 +69,18 @@ export default function Header({
 
         <TextInput
           value={searchString}
-          onFocus={() => showSearchHistory()}
-          onChangeText={(text) => setSearchString(text)}
+          onFocus={() => {
+            showSearchHistory();
+            setWarning(false);
+          }}
+          onChangeText={(text) => getSearchString(text)}
           onSubmitEditing={() => {
-            submitSearchString(searchString);
-            setRecentSearches([searchString, ...recentSearches]);
+            if (searchString.trim()) {
+              submitSearchString(searchString);
+              setRecentSearches([searchString, ...recentSearches]);
+            } else {
+              setWarning(true);
+            }
           }}
           underlineColorAndroid="transparent"
           clearButtonMode="always"
@@ -118,7 +136,7 @@ export default function Header({
                     height: 50,
                   }}
                   onPress={() => {
-                    setSearchString(item);
+                    getSearchString(item);
                     submitSearchString(item);
                   }}>
                   <View style={{flexDirection: 'row'}}>
@@ -207,6 +225,21 @@ export default function Header({
 
             {/* SEARCH INPUT  */}
             {useSearchBar && renderSearchBar()}
+            {warning && (
+              <View
+                style={{
+                  position: 'absolute',
+                  top: SIZES.height * 0.5,
+                  height: 50,
+                  width: 300,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  borderRadius: 10,
+                  backgroundColor: COLORS.darkgray,
+                }}>
+                <Text style={{color: COLORS.white}}>Search field is empty</Text>
+              </View>
+            )}
 
             {/* TITLE */}
             {title && (

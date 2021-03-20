@@ -36,9 +36,9 @@ export default function CustomizeFeed({route, navigation}) {
                     ? actions.FEED_REMOVED
                     : actions.FEED_ADDED,
                   userId,
-                  payload: {
-                    feed: option.name,
-                  },
+                  // payload: {
+                  feed: option.name,
+                  // },
                 });
               }}>
               <Icon

@@ -23,12 +23,17 @@ export default function Sold({userId, sellerId, atUserItemsTabs, navigation}) {
     getSoldItems(state, memberId, undefined, 'sold'),
   );
 
-  console.log('ran sold');
+  // console.log('ran sold');
 
   return (
     <View>
       {soldItems.length === 0 && <Text>No sold items</Text>}
-      <ItemCards userId={userId} items={soldItems} navigation={navigation} />
+      <ItemCards
+        userId={userId}
+        items={soldItems}
+        navigation={navigation}
+        atUserSoldItemsScreen={true}
+      />
     </View>
   );
 }

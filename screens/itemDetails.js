@@ -1,27 +1,22 @@
-import React, {useState, useMemo} from 'react';
+import React, {useState, useMemo, useEffect} from 'react';
 import {
   SafeAreaView,
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
-  Animated,
-  Image,
-  FlatList,
 } from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import DropDownPicker from 'react-native-dropdown-picker';
-
+import {useDispatch, useSelector} from 'react-redux';
+import Icon from 'react-native-vector-icons/Ionicons';
 import {
   Header,
-  BackButton,
   ImageScrollView,
-  ScrollViewDots,
   MemberInfo,
   MemberRating,
   SellerOtherItems,
 } from '../components';
-
 import {
   FONTS,
   SIZES,
@@ -29,24 +24,20 @@ import {
   itemStatusOptions,
   COLORS,
 } from '../constants';
-import {timeSince, restructSellerItemsObj} from '../helper';
-import {useDispatch, useSelector} from 'react-redux';
-import Icon from 'react-native-vector-icons/Ionicons';
+import {timeSince} from '../helper';
 import * as actions from '../store/actionTypes';
 import {selectMemberAllItems} from '../store/selectors';
-import {createSelector} from 'reselect';
-import Tooltip from 'rn-tooltip';
 
 export default function itemDetails({route, navigation}) {
   const {userId, sellerId, itemId} = route.params;
-
-  const dispatch = useDispatch();
 
   // SELLER INFO
   const seller = useSelector((state) => state.members[sellerId]);
 
   // CURRENT ITEM INFO
-  const item = useSelector((state) => state.listings[sellerId][itemId]);
+  const item = useSelector((state) => {
+    return state.listings[sellerId][itemId];
+  });
 
   const itemImages = item.images;
   const useImgStyle = typeof item.images[0] === 'number' ? false : true;
@@ -61,7 +52,15 @@ export default function itemDetails({route, navigation}) {
     getSellerAllItems(state, sellerId),
   );
 
-  const [itemStatus, setItemStatus] = useState(item.status);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch({
+      type: actions.ITEM_VIEW_INCREMENTED,
+      sellerId,
+      itemId,
+    });
+  }, []);
 
   return (
     <View style={{flex: 1}}>
@@ -82,9 +81,8 @@ export default function itemDetails({route, navigation}) {
         />
       </View>
       <KeyboardAwareScrollView
-        extraHeight={0}
         enableOnAndroid
-        style={{flex: 1}}>
+        showsVerticalScrollIndicator={false}>
         {/* HEADER ADJESTMENT */}
         {useImgStyle && <ImageScrollView images={itemImages} />}
         {!useImgStyle && <View style={{height: 105}} />}
@@ -104,22 +102,36 @@ export default function itemDetails({route, navigation}) {
             picture={seller.displayPic}
             name={seller.username}
             location={seller.location}
+            atItemDetails={true}
           />
 
           <MemberRating
             rating={seller.rating}
             explanation={true}
             numOfReviews={seller.numOfReviews}
+            atItemDetails={true}
           />
         </TouchableOpacity>
+
+        {/* BORDER */}
+        <View
+          style={{alignItems: 'center', paddingHorizontal: SIZES.padding * 2}}>
+          <View
+            style={{
+              height: 1,
+              width: '100%',
+              backgroundColor: COLORS.secondary,
+            }}
+          />
+        </View>
 
         {/* RENDER ITEM INFO */}
         {/* RENDER STATUS DROPDOWN ONLY TO SELLER */}
         <View
           style={{
-            // minHeight: SIZES.height * 0.21,
-            flex: 2,
-            backgroundColor: 'green',
+            minHeight: SIZES.height * 0.21,
+            paddingVertical: SIZES.padding,
+            paddingHorizontal: SIZES.padding * 2,
           }}>
           {userId === sellerId && (
             <DropDownPicker
@@ -130,56 +142,100 @@ export default function itemDetails({route, navigation}) {
                 margin: SIZES.padding * 2,
               }}
               placeholder={item.status}
-              onChangeItem={(item) => setItemStatus(item.value)}
+              onChangeItem={(item) => {
+                // setItemStatus(item.value);
+                dispatch({
+                  type: actions.ITEM_STATUS_CHANGED,
+                  sellerId,
+                  itemId,
+                  status: item.value,
+                });
+              }}
               dropDownMaxHeight={itemStatusOptions.length * SIZES.height}
-              // style={{
-              //   height: 4,
-              // }}
               labelStyle={{
                 ...FONTS.body5,
               }}
               itemStyle={{
                 justifyContent: 'flex-start',
                 paddingHorizontal: SIZES.padding,
-                //   height: '50%',
               }}
             />
           )}
 
-          <Text>{item.title}</Text>
-          <Text>
+          <Text style={{paddingVertical: SIZES.padding, ...FONTS.h4}}>
+            {item.title}
+          </Text>
+          <Text
+            style={{
+              paddingBottom: SIZES.padding,
+              color: COLORS.secondary,
+              ...FONTS.body4,
+            }}>
             {item.category} • {timeSince(item.date)}
           </Text>
-          <Text>{item.description}</Text>
-          <Text>
-            {item.chats} chats • {item.favorites} favourites • {item.views}{' '}
+          <Text style={{paddingVertical: SIZES.padding, ...FONTS.body4}}>
+            {item.description}
+          </Text>
+          <Text
+            style={{
+              paddingVertical: SIZES.padding,
+              color: COLORS.secondary,
+              ...FONTS.body4,
+            }}>
+            {item.chats} chats • {item.favourites} favourites • {item.views}{' '}
             views
           </Text>
         </View>
 
-        {/* REPORT THIS POST  */}
+        {/* BORDER */}
         <View
-          style={{
-            flex: 1,
-            backgroundColor: 'yellow',
-          }}>
-          <Text>Report Seller</Text>
+          style={{alignItems: 'center', paddingHorizontal: SIZES.padding * 2}}>
+          <View
+            style={{
+              height: 1,
+              width: '100%',
+              backgroundColor: COLORS.secondary,
+            }}
+          />
+        </View>
+
+        {/* REPORT THIS POST  */}
+        {sellerId === userId && (
+          <TouchableOpacity
+            style={{
+              height: 60,
+              justifyContent: 'center',
+              paddingHorizontal: SIZES.padding * 2,
+            }}>
+            <Text style={{...FONTS.h4}}>Report this post</Text>
+          </TouchableOpacity>
+        )}
+
+        {/* BORDER */}
+        <View
+          style={{alignItems: 'center', paddingHorizontal: SIZES.padding * 2}}>
+          <View
+            style={{
+              height: 1,
+              width: '100%',
+              backgroundColor: COLORS.secondary,
+            }}
+          />
         </View>
 
         {/* OTHER ITEMS FROM SELLER */}
         {sellerAllItems.length !== 1 && (
-          <View
-            style={{
-              // height: SIZES.height * 0.6,
-              backgroundColor: 'pink',
-            }}>
+          <View>
             <View
               style={{
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 paddingHorizontal: SIZES.padding * 2,
+                paddingVertical: SIZES.padding,
               }}>
-              <Text>Other items by {seller.username}</Text>
+              <Text style={{...FONTS.h4}}>
+                Other items by {seller.username}
+              </Text>
 
               {/* SEE ALL ITEMS BUTTON */}
               <TouchableOpacity
@@ -189,7 +245,9 @@ export default function itemDetails({route, navigation}) {
                     sellerId,
                   });
                 }}>
-                <Text>See all</Text>
+                <Text style={{color: COLORS.darkgray, ...FONTS.body4}}>
+                  See all
+                </Text>
               </TouchableOpacity>
             </View>
             {/* FOUR OTHER ITEMS */}
@@ -200,52 +258,69 @@ export default function itemDetails({route, navigation}) {
             />
           </View>
         )}
-
-        <SafeAreaView />
       </KeyboardAwareScrollView>
+
       {/* FOOTER BUTTON */}
       <View
         style={{
           flexDirection: 'row',
-          height: SIZES.height * 0.05,
-          // width: '100%',
+          justifyContent: 'space-between',
+          paddingHorizontal: SIZES.padding * 2,
+          paddingVertical: SIZES.padding,
         }}>
-        <TouchableOpacity
-          onPress={() => {
-            dispatch({
-              type: isFav ? actions.FAVOURITE_REMOVED : actions.FAVOURITE_ADDED,
-              userId,
-              payload: {
-                sellerId,
-                itemId,
-              },
-            });
-          }}>
-          <Icon
-            name={isFav ? 'heart' : 'heart-outline'}
-            size={30}
-            color={isFav ? COLORS.primary : null}
-          />
-        </TouchableOpacity>
+        <View style={{flexDirection: 'row'}}>
+          <View>
+            <TouchableOpacity
+              style={{
+                paddingRight: SIZES.padding * 2,
+                borderRightWidth: 1,
+                borderRightColor: COLORS.secondary,
+              }}
+              onPress={() => {
+                dispatch({
+                  type: isFav
+                    ? actions.FAVOURITE_REMOVED
+                    : actions.FAVOURITE_ADDED,
+                  userId,
+                  sellerId,
+                  itemId,
+                });
+              }}>
+              <Icon
+                name={isFav ? 'heart' : 'heart-outline'}
+                size={30}
+                color={isFav ? COLORS.primary : null}
+              />
+            </TouchableOpacity>
+          </View>
+
+          <View style={{paddingHorizontal: SIZES.padding * 2}}>
+            <Text style={{...FONTS.body4}}>$ {item.price}</Text>
+            {item.negotiable ? (
+              <TouchableOpacity>
+                <Text style={{color: COLORS.primary, ...FONTS.body4}}>
+                  Make Offer
+                </Text>
+              </TouchableOpacity>
+            ) : (
+              <Text style={{...FONTS.body4}}>Non-negotiable</Text>
+            )}
+          </View>
+        </View>
 
         <View>
-          <Text>$ {item.price}</Text>
-          {item.negotiable ? (
-            <TouchableOpacity>
-              <Text style={{color: COLORS.primary}}>Make Offer</Text>
-            </TouchableOpacity>
-          ) : (
-            <Text>Non-negotiable</Text>
-          )}
+          <TouchableOpacity
+            style={{
+              borderRadius: 5,
+              justifyContent: 'center',
+              alignItems: 'center',
+              backgroundColor: COLORS.primary,
+              height: 40,
+              width: 70,
+            }}>
+            <Text style={{color: COLORS.white, ...FONTS.body4}}>Chat</Text>
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity
-          style={{
-            borderColor: 'black',
-            borderWidth: 1,
-            backgroundColor: COLORS.primary,
-          }}>
-          <Text style={{color: COLORS.white}}>Chat</Text>
-        </TouchableOpacity>
       </View>
       <SafeAreaView />
     </View>

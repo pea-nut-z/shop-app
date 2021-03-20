@@ -17,7 +17,18 @@ import {
   COLORS,
 } from '../constants';
 
-export default function MemberInfo({picture, name, location, id}) {
+export default function MemberInfo({
+  picture,
+  name,
+  location,
+  id,
+  atItemDetails,
+}) {
+  const styleVariables = atItemDetails ? styles.itemDetails : styles.profile;
+  const textVariables = atItemDetails
+    ? styles.itemDetailsText
+    : styles.profileText;
+
   return (
     <View
       style={{
@@ -27,23 +38,17 @@ export default function MemberInfo({picture, name, location, id}) {
         <Image
           source={{uri: picture}}
           resizeMode={'contain'}
-          style={{
-            width: 110,
-            height: 110,
-            borderWidth: 1,
-            borderColor: COLORS.secondary,
-            borderRadius: 100,
-          }}
+          style={styleVariables}
         />
       ) : (
         <Icon
           name={'person-circle-outline'}
-          size={110}
+          size={styleVariables.height}
           color={COLORS.secondary}
         />
       )}
 
-      <Text style={styles.boldText}>
+      <Text style={textVariables}>
         {name} • {location}
         {id && ` • #${id}`}
       </Text>
@@ -52,12 +57,26 @@ export default function MemberInfo({picture, name, location, id}) {
 }
 
 const styles = StyleSheet.create({
-  boldText: {
+  profileText: {
     ...FONTS.h4,
     textAlign: 'center',
   },
-  regularText: {
-    ...FONTS.body3,
+  profile: {
+    width: 110,
+    height: 110,
+    borderWidth: 1,
+    borderColor: COLORS.secondary,
+    borderRadius: 100,
+  },
+  itemDetailsText: {
+    ...FONTS.body4,
     textAlign: 'center',
+  },
+  itemDetails: {
+    width: 60,
+    height: 60,
+    borderWidth: 1,
+    borderColor: COLORS.secondary,
+    borderRadius: 50,
   },
 });

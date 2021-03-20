@@ -13,7 +13,7 @@ import Sold from './item-status-tabs/Sold';
 import Hidden from './item-status-tabs/Hidden';
 import ForSale from './header/search/ForSale';
 import User from './header/search/User';
-import Filters from './header/search/Filters';
+// import Filters from './header/search/Filters';
 import CustomizeFeed from './header/CustomizeFeed';
 import Activity from './header/notifications/Activity';
 import SearchAlerts from './header/notifications/SearchAlerts';
@@ -41,7 +41,7 @@ export {
   Hidden,
   ForSale,
   User,
-  Filters,
+  // Filters,
   CustomizeFeed,
   Activity,
   SearchAlerts,

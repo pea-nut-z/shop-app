@@ -6,22 +6,26 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import CurrencyInput from 'react-native-currency-input';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
-export default function Filters({navigation}) {
-  const [categories, setCategories] = useState([]);
-  const [sort, setSort] = useState();
-  const [minPrice, setMinPrice] = useState();
-  const [maxPrice, setMaxPrice] = useState();
-
-  const clearFields = () => {
-    setCategories([]);
-    setSort(null);
-    setMinPrice(null);
-    setMaxPrice(null);
-  };
-
+export default function Filters({
+  categories,
+  addCategoryToFilter,
+  removeCategoryFromFilter,
+  sort,
+  addSortToFilter,
+  minPrice,
+  addMinPriceToFilter,
+  maxPrice,
+  addMaxPriceToFilter,
+  clearFilterFields,
+  toggleFilterScreen,
+}) {
   return (
     <View style={{flex: 1}}>
-      <Header navigation={navigation} useBackBtn={true} title={'Filter'} />
+      <Header
+        useBackBtn={true}
+        toggleFilterScreen={toggleFilterScreen}
+        title={'Filter'}
+      />
 
       {/* CATEGORIES */}
       <KeyboardAwareScrollView>
@@ -32,27 +36,26 @@ export default function Filters({navigation}) {
           }}>
           <Text>Categories</Text>
           {categoryOptions.map((option, index) => {
+            const {name} = option;
             return (
               <TouchableOpacity
                 key={`option-${index}`}
                 onPress={() =>
-                  categories.includes(option.name)
-                    ? setCategories([
-                        ...categories.filter((name) => name !== option.name),
-                      ])
-                    : setCategories([...categories, option.name])
+                  categories.includes(name)
+                    ? removeCategoryFromFilter(name)
+                    : addCategoryToFilter(name)
                 }
                 style={{flexDirection: 'row'}}>
                 <Icon
                   name="checkmark-circle-outline"
                   size={25}
                   color={
-                    categories.includes(option.name)
+                    categories.includes(name)
                       ? COLORS.primary
                       : COLORS.secondary
                   }
                 />
-                <Text>{option.name}</Text>
+                <Text>{name}</Text>
               </TouchableOpacity>
             );
           })}
@@ -63,8 +66,9 @@ export default function Filters({navigation}) {
           <Text>Sort</Text>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <TouchableOpacity
-              onPress={() =>
-                sort === 'Relevance' ? setSort(sort) : setSort('Relevance')
+              onPress={
+                () => addSortToFilter('Relevance')
+                // sort === 'Relevance' ? setSort(sort) : setSort('Relevance')
               }
               style={{flexDirection: 'row', alignItems: 'center'}}>
               <Icon
@@ -76,8 +80,9 @@ export default function Filters({navigation}) {
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={() =>
-                sort === 'Most recent' ? setSort(sort) : setSort('Most recent')
+              onPress={
+                () => addSortToFilter('Most recent')
+                // sort === 'Most recent' ? setSort(sort) : setSort('Most recent')
               }
               style={{flexDirection: 'row', alignItems: 'center'}}>
               <Icon
@@ -103,7 +108,7 @@ export default function Filters({navigation}) {
             }}>
             <CurrencyInput
               value={minPrice}
-              onChangeValue={setMinPrice}
+              onChangeValue={(value) => addMinPriceToFilter(value)}
               // defaultValue={price}
               // unit="$  "
               delimiter=""
@@ -124,7 +129,7 @@ export default function Filters({navigation}) {
             <Text>~</Text>
             <CurrencyInput
               value={maxPrice}
-              onChangeValue={setMaxPrice}
+              onChangeValue={(value) => addMaxPriceToFilter(value)}
               // defaultValue={price}
               // unit="$  "
               delimiter=""
@@ -149,7 +154,7 @@ export default function Filters({navigation}) {
       </KeyboardAwareScrollView>
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
         <TouchableOpacity
-          onPress={() => clearFields()}
+          onPress={() => clearFilterFields()}
           style={{
             width: SIZES.width / 2,
             height: 65,
@@ -161,14 +166,7 @@ export default function Filters({navigation}) {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate('searchTabs', {
-              filters: {
-                categories,
-                sort,
-                minPrice,
-                maxPrice,
-              },
-            });
+            toggleFilterScreen();
           }}
           style={{
             width: SIZES.width / 2,

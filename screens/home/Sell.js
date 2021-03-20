@@ -112,17 +112,17 @@ export default function Sell({route, navigation}) {
 
     dispatch({
       type: actions.ITEM_ADDED,
+      // payload: {
       sellerId: userId,
       itemId: ++itemId,
-      payload: {
-        images: imgPath,
-        title,
-        price,
-        free,
-        negotiable,
-        category,
-        description,
-      },
+      images: imgPath,
+      title,
+      price,
+      free,
+      negotiable,
+      category,
+      description,
+      // },
     });
 
     navigation.navigate('itemDetails', {

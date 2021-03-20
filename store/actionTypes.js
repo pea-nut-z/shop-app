@@ -3,8 +3,10 @@ export const USERNAME_CHANGED = 'username-changed';
 export const USER_DISPLAYPIC_CHANGED = 'displayPic-changed';
 
 export const ITEM_ADDED = 'item-added';
-export const ITEM_STATUS_CHANGED = 'status-changed';
+export const ITEM_STATUS_CHANGED = 'item-status-changed';
+export const ITEM_VIEW_INCREMENTED = 'item-view-incremented';
 
+export const FIRST_FAVOURITE_ADDED = 'first-favourite-added';
 export const FAVOURITE_ADDED = 'favourite-added';
 export const FAVOURITE_REMOVED = 'favourite-removed';
 

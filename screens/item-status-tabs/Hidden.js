@@ -19,7 +19,7 @@ export default function Hidden({userId, navigation}) {
   const hiddenItems = useSelector((state) =>
     getHiddenItems(state, userId, undefined, 'hidden'),
   );
-  console.log('ran hidden');
+  // console.log('ran hidden');
 
   return (
     <View>

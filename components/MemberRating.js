@@ -13,7 +13,17 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {icons, COLORS, SIZES, FONTS} from '../constants';
 import Tooltip from 'rn-tooltip';
 
-export default function MemberRating({rating, explanation, numOfReviews}) {
+export default function MemberRating({
+  rating,
+  explanation,
+  numOfReviews,
+  atItemDetails,
+}) {
+  const styleVariables = atItemDetails ? styles.itemDetails : styles.profile;
+  const textVariables = atItemDetails
+    ? styles.itemDetailsText
+    : styles.profileText;
+
   const emojiName =
     rating <= 2 ? icons.unamused : rating >= 4 ? icons.excited : icons.happy;
 
@@ -26,7 +36,7 @@ export default function MemberRating({rating, explanation, numOfReviews}) {
         justifyContent: 'center',
       }}>
       {/* <NUM OF REVIEWS */}
-      <Text style={styles.boldText}>
+      <Text style={textVariables}>
         {numOfReviews} Review{numOfReviews > 1 ? 's' : null}
       </Text>
 
@@ -45,29 +55,21 @@ export default function MemberRating({rating, explanation, numOfReviews}) {
               <Icon
                 key={`star-${index}`}
                 name={'star'}
-                size={30}
+                size={styleVariables.height}
                 color={COLORS.primary}
               />
             ) : (
               <Icon
                 key={`star-${index}`}
                 name={'star-outline'}
-                size={30}
+                size={styleVariables.height}
                 color={COLORS.primary}
               />
             );
           })}
         </View>
         {/*  EMOJI */}
-        <Image
-          source={emojiName}
-          resizeMode="contain"
-          style={{
-            width: 35,
-            height: 35,
-            marginLeft: SIZES.padding / 2,
-          }}
-        />
+        <Image source={emojiName} resizeMode="contain" style={styleVariables} />
       </View>
 
       {/* TOOLTIP */}
@@ -97,7 +99,22 @@ export default function MemberRating({rating, explanation, numOfReviews}) {
 }
 
 const styles = StyleSheet.create({
-  boldText: {
+  profileText: {
     ...FONTS.h4,
+    textAlign: 'center',
+  },
+  profile: {
+    width: 35,
+    height: 35,
+    marginLeft: SIZES.padding / 2,
+  },
+  itemDetailsText: {
+    ...FONTS.body4,
+    textAlign: 'center',
+  },
+  itemDetails: {
+    width: 25,
+    height: 25,
+    marginLeft: SIZES.padding / 2,
   },
 });

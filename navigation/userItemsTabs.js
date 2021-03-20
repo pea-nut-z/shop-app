@@ -37,7 +37,13 @@ export default function userItemsTabs({route, navigation}) {
         />
         <MaterialTopTabs.Screen
           name="Hidden"
-          children={() => <Hidden userId={userId} navigation={navigation} />}
+          children={() => (
+            <Hidden
+              userId={userId}
+              navigation={navigation}
+              atUserItemsTabs={true}
+            />
+          )}
         />
       </MaterialTopTabs.Navigator>
     </>

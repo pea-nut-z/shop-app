@@ -21,8 +21,8 @@ const members = {
   222: {
     username: 'User2',
     location: 'Ottawa',
-    displayPic: 'https://i.ytimg.com/vi/H8X7FHrq278/maxresdefault.jpg',
-    // displayPic: 'N/A',
+    // displayPic: 'https://i.ytimg.com/vi/H8X7FHrq278/maxresdefault.jpg',
+    displayPic: 'N/A',
     joined: dateWithoutTime(),
     rating: 2,
     numOfReviews: 10,
@@ -41,12 +41,12 @@ const members = {
 const listings = {
   111: {
     1: {
-      status: 'Active',
+      status: 'Hidden',
       date: new Date(
         'Thu Feb 04 2021 20:36:28 GMT-0500 (Eastern Standard Time',
       ).toString(),
       chats: 0,
-      favorites: 0,
+      favourites: 0,
       views: 0,
       images: [11],
       title: 'user1 , item1',
@@ -62,7 +62,7 @@ const listings = {
         'Thu Feb 04 2021 20:36:28 GMT-0500 (Eastern Standard Time',
       ).toString(),
       chats: 0,
-      favorites: 0,
+      favourites: 0,
       views: 0,
       images: [11],
       title: "user1's product",
@@ -81,7 +81,7 @@ const listings = {
       ).toString(),
 
       chats: 0,
-      favorites: 0,
+      favourites: 0,
       views: 0,
       images: [
         'https://i.ytimg.com/vi/H8X7FHrq278/maxresdefault.jpg',
@@ -100,7 +100,7 @@ const listings = {
         'Thu Jan 26 2021 20:36:28 GMT-0500 (Eastern Standard Time',
       ).toString(),
       chats: 0,
-      favorites: 0,
+      favourites: 0,
       views: 0,
       images: [11],
       title: "women's basketball",
@@ -116,7 +116,7 @@ const listings = {
         'Thu Feb 04 2021 20:36:28 GMT-0500 (Eastern Standard Time',
       ).toString(),
       chats: 0,
-      favorites: 0,
+      favourites: 0,
       views: 0,
       images: [
         'https://cdn.vox-cdn.com/thumbor/YKOpdn84C7mLzUD_QNDI9ICvMcU=/0x0:1024x555/1200x800/filters:focal(431x197:593x359)/cdn.vox-cdn.com/uploads/chorus_image/image/64145891/Switch_SuperMarioMaker2_char_artwork_copy.0.jpg',
@@ -135,7 +135,7 @@ const listings = {
         'Thu Jun 04 2019 20:36:28 GMT-0500 (Eastern Standard Time',
       ).toString(),
       chats: 0,
-      favorites: 0,
+      favourites: 0,
       views: 0,
       images: [
         'https://cdn.vox-cdn.com/thumbor/YKOpdn84C7mLzUD_QNDI9ICvMcU=/0x0:1024x555/1200x800/filters:focal(431x197:593x359)/cdn.vox-cdn.com/uploads/chorus_image/image/64145891/Switch_SuperMarioMaker2_char_artwork_copy.0.jpg',
@@ -154,7 +154,7 @@ const listings = {
         'Thu Mar 01 2021 20:36:28 GMT-0500 (Eastern Standard Time',
       ).toString(),
       chats: 0,
-      favorites: 0,
+      favourites: 0,
       views: 0,
       images: [
         'https://cdn.vox-cdn.com/thumbor/YKOpdn84C7mLzUD_QNDI9ICvMcU=/0x0:1024x555/1200x800/filters:focal(431x197:593x359)/cdn.vox-cdn.com/uploads/chorus_image/image/64145891/Switch_SuperMarioMaker2_char_artwork_copy.0.jpg',
@@ -163,7 +163,7 @@ const listings = {
       title: 'bye',
       price: 40,
       free: true,
-      negotiable: true,
+      negotiable: false,
       category: 'Baby & kids',
       description:
         'Fdsfiphsdpifhjspdifhspdifhsdipfohsdpfihsdfpisdhfspidfhspdifhspdifhspdifhspdifhspdifhdspifhspd’fihspdfihsdp’fhspdfhspdfhspdfhspdfhspdfhspdfhspdifhs’pdfhsdpfhsdpfshdpfhs THE END',
@@ -177,7 +177,7 @@ const listings = {
       ).toString(),
 
       chats: 0,
-      favorites: 0,
+      favourites: 0,
       views: 0,
       images: [
         'https://i.ytimg.com/vi/H8X7FHrq278/maxresdefault.jpg',
@@ -191,15 +191,15 @@ const listings = {
       description: "it's a hat",
     },
     2: {
-      status: 'Active',
+      status: 'Sold',
       date: new Date(
         'Thu Jan 26 2021 20:36:28 GMT-0500 (Eastern Standard Time',
       ).toString(),
       chats: 0,
-      favorites: 0,
+      favourites: 0,
       views: 0,
       images: [11],
-      title: 'Dress',
+      title: 'hat',
       price: 10,
       free: true,
       negotiable: true,
@@ -268,6 +268,8 @@ const restrictions = {
 };
 
 const usersReducer = (state = members, action) => {
+  const {userId, username, image} = action;
+
   switch (action.type) {
     case actions.USER_ADDED:
       // display pic is 'N/A'
@@ -275,17 +277,17 @@ const usersReducer = (state = members, action) => {
     case actions.USERNAME_CHANGED:
       return {
         ...state,
-        [action.userId]: {
-          ...state[action.userId],
-          username: action.payload.username,
+        [userId]: {
+          ...state[userId],
+          username: username,
         },
       };
     case actions.USER_DISPLAYPIC_CHANGED:
       return {
         ...state,
-        [action.userId]: {
-          ...state[action.userId],
-          displayPic: action.payload.image,
+        [userId]: {
+          ...state[userId],
+          displayPic: image,
         },
       };
     // case actions.DISPLAYPIC_DELETED:
@@ -302,36 +304,84 @@ const usersReducer = (state = members, action) => {
 };
 
 const listingsReducer = (state = listings, action) => {
+  // console.log('action', action.type);
+  const {
+    userId,
+    sellerId,
+    itemId,
+    images,
+    title,
+    price,
+    free,
+    negotiable,
+    category,
+    description,
+    status,
+  } = action;
+
   switch (action.type) {
     case actions.ITEM_ADDED:
       return {
         ...state,
-        [action.sellerId]: {
-          ...state[action.sellerId],
-          [action.itemId]: {
+        [sellerId]: {
+          ...state[sellerId],
+          [itemId]: {
             status: 'Active',
             date: new Date().toString(),
             chats: 0,
-            favorites: 0,
+            favourites: 0,
             views: 0,
-            images: action.payload.images,
-            title: action.payload.title,
-            price: action.payload.price,
-            free: action.payload.free,
-            negotiable: action.payload.negotiable,
-            category: action.payload.category,
-            description: action.payload.description,
+            images: images,
+            title: title,
+            price: price,
+            free: free,
+            negotiable: negotiable,
+            category: category,
+            description: description,
           },
         },
       };
     case actions.ITEM_STATUS_CHANGED:
       return {
         ...state,
-        [action.sellerId]: {
-          ...state[action.sellerId],
-          [action.itemId]: {
-            ...state[action.sellerId][action.itemId],
-            status: action.payload.status,
+        [sellerId]: {
+          ...state[sellerId],
+          [itemId]: {
+            ...state[sellerId][itemId],
+            status: status,
+          },
+        },
+      };
+    case actions.FAVOURITE_ADDED:
+      return {
+        ...state,
+        [sellerId]: {
+          ...state[sellerId],
+          [itemId]: {
+            ...state[sellerId][itemId],
+            favourites: ++state[sellerId][itemId]['favourites'],
+          },
+        },
+      };
+    case actions.FAVOURITE_REMOVED:
+      return {
+        ...state,
+        [sellerId]: {
+          ...state[sellerId],
+          [itemId]: {
+            ...state[sellerId][itemId],
+            favourites: --state[sellerId][itemId]['favourites'],
+          },
+        },
+      };
+    case actions.ITEM_VIEW_INCREMENTED:
+      return {
+        ...state,
+        [sellerId]: {
+          ...state[sellerId],
+          [itemId]: {
+            ...state[sellerId][itemId],
+            views: ++state[sellerId][itemId]['views'],
           },
         },
       };
@@ -341,22 +391,22 @@ const listingsReducer = (state = listings, action) => {
 };
 
 const favouritesReducer = (state = favourites, action) => {
+  const {userId, sellerId, itemId} = action;
+
   switch (action.type) {
     case actions.FAVOURITE_ADDED:
       return {
         ...state,
-        [action.userId]: state[action.userId].concat({
-          sellerId: action.payload.sellerId,
-          itemId: action.payload.itemId,
+        [userId]: state[userId].concat({
+          sellerId: sellerId,
+          itemId: itemId,
         }),
       };
 
     case actions.FAVOURITE_REMOVED:
       return {
         ...state,
-        [action.userId]: state[action.userId].filter(
-          (item) => item.itemId !== action.payload.itemId,
-        ),
+        [userId]: state[userId].filter((item) => item.itemId !== itemId),
       };
     default:
       return state;
@@ -381,18 +431,17 @@ const feedsReducer = (state = feeds, action) => {
     'Other',
     'Wanted',
   ];
+  const {userId, feed} = action;
   switch (action.type) {
     case actions.FEED_ADDED:
       return {
         ...state,
-        [action.userId]: [...state[action.userId], action.payload.feed],
+        [userId]: [...state[userId], feed],
       };
     case actions.FEED_REMOVED:
       return {
         ...state,
-        [action.userId]: state[action.userId].filter(
-          (item) => item !== action.payload.feed,
-        ),
+        [userId]: state[userId].filter((item) => item !== feed),
       };
     default:
       return state;
@@ -400,57 +449,50 @@ const feedsReducer = (state = feeds, action) => {
 };
 
 const restrictionsReducer = (state = restrictions, action) => {
+  const {userId, sellerId} = action;
+
   switch (action.type) {
     case actions.BLOCK_ADDED:
       return {
         ...state,
-        [action.userId]: {
-          ...state[action.userId],
-          block: [...state[action.userId]['block'], action.payload.sellerId],
+        [userId]: {
+          ...state[userId],
+          block: [...state[userId]['block'], sellerId],
         },
 
-        [action.payload.sellerId]: {
-          ...state[action.payload.sellerId],
-          blockedBy: [
-            ...state[action.payload.sellerId]['blockedBy'],
-            action.userId,
-          ],
+        [sellerId]: {
+          ...state[sellerId],
+          blockedBy: [...state[sellerId]['blockedBy'], userId],
         },
       };
 
     case actions.BLOCK_REMOVED:
       return {
         ...state,
-        [action.userId]: {
-          ...state[action.userId],
-          block: state[action.userId]['block'].filter(
-            (id) => id !== action.payload.sellerId,
-          ),
+        [userId]: {
+          ...state[userId],
+          block: state[userId]['block'].filter((id) => id !== sellerId),
         },
-        [action.payload.sellerId]: {
-          ...state[action.payload.sellerId],
-          blockedBy: state[action.payload.sellerId]['blockedBy'].filter(
-            (id) => id !== action.userId,
-          ),
+        [sellerId]: {
+          ...state[sellerId],
+          blockedBy: state[sellerId]['blockedBy'].filter((id) => id !== userId),
         },
       };
 
     case actions.HIDE_ADDED:
       return {
         ...state,
-        [action.userId]: {
-          ...state[action.userId],
-          hide: [...state[action.userId]['hide'], action.payload.sellerId],
+        [userId]: {
+          ...state[userId],
+          hide: [...state[userId]['hide'], sellerId],
         },
       };
     case actions.HIDE_REMOVED:
       return {
         ...state,
-        [action.userId]: {
-          ...state[action.userId],
-          hide: state[action.userId]['hide'].filter(
-            (id) => id !== action.payload.sellerId,
-          ),
+        [userId]: {
+          ...state[userId],
+          hide: state[userId]['hide'].filter((id) => id !== sellerId),
         },
       };
 
