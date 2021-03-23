@@ -11,7 +11,7 @@ import {furtherFilterListings} from '../../../store/selectors';
 import {useSelector} from 'react-redux';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {SIZES, COLORS} from '../../../constants';
+import {SIZES, COLORS, FONTS} from '../../../constants';
 import {useIsFocused} from '@react-navigation/native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
@@ -43,67 +43,69 @@ export default function ForSale({
   });
 
   const renderFilterBtn = () => {
-    let isFilterUsed = Object.values(filters);
-    isFilterUsed = isFilterUsed.some(
-      (value) =>
-        value !== undefined &&
-        value !== false &&
-        value !== true &&
-        value?.length !== 0 &&
-        value,
-    );
+    if (focused && submittedSearchString && items) {
+      let isFilterUsed = Object.values(filters);
+      isFilterUsed = isFilterUsed.some(
+        (value) =>
+          value !== undefined &&
+          value !== false &&
+          value !== true &&
+          value?.length !== 0 &&
+          value,
+      );
 
-    return (
-      <TouchableOpacity
-        onPress={() => toggleFilterScreen()}
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'center',
-          height: 35,
-          paddingHorizontal: SIZES.padding * 2,
-          backgroundColor: 'yellow',
-        }}>
-        <Icon
-          name={'funnel-outline'}
-          size={20}
-          color={isFilterUsed ? COLORS.primary : null}
-        />
-        <Text>Filter</Text>
-      </TouchableOpacity>
-    );
+      return (
+        <TouchableOpacity
+          onPress={() => toggleFilterScreen()}
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: 35,
+            paddingHorizontal: SIZES.padding * 2,
+          }}>
+          <Icon
+            name={'funnel-outline'}
+            size={20}
+            color={isFilterUsed ? COLORS.primary : null}
+          />
+          <Text>Filter</Text>
+        </TouchableOpacity>
+      );
+    }
   };
   const renderHideSoldItemsBtn = () => {
-    return (
-      <TouchableOpacity
-        onPress={() => toggleHideSoldItemsBtn()}
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          height: 35,
-          paddingHorizontal: SIZES.padding * 2,
-          // backgroundColor: 'red',
-        }}>
-        <Icon
-          name="checkmark-circle-outline"
-          size={25}
-          color={hideSoldItems ? COLORS.primary : COLORS.secondary}
-        />
-        <Text>Hide sold items</Text>
-      </TouchableOpacity>
-    );
+    if (focused && submittedSearchString && items) {
+      return (
+        <TouchableOpacity
+          onPress={() => toggleHideSoldItemsBtn()}
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            height: 35,
+            paddingHorizontal: SIZES.padding * 2,
+          }}>
+          <Icon
+            name="checkmark-circle-outline"
+            size={25}
+            color={hideSoldItems ? COLORS.primary : COLORS.secondary}
+          />
+          <Text>Hide sold items</Text>
+        </TouchableOpacity>
+      );
+    }
   };
 
   const renderNoResultsMsg = () => {
     if (focused && submittedSearchString && !items) {
       return (
-        <View>
-          <Text>No results</Text>
-          <View style={{backgroundColor: COLORS.secondary}}>
-            <Text>Tips</Text>
-            <Text>
+        <View style={{alignItems: 'center'}}>
+          <Text style={styles.boldText}>No results</Text>
+          <View style={styles.noResultContainer}>
+            <Text style={styles.boldText}>Tips</Text>
+            <Text style={styles.regularText}>
               •Make sure your keyword was entered correctly.{'\n'}
-              •Search in more general terms, e.g. bag instead of red bag.{'\n'}
+              •Search in more general terms, e.g. red bag > bag.{'\n'}
               •Add search alerts and get notified of new listings.
             </Text>
           </View>
@@ -113,29 +115,50 @@ export default function ForSale({
   };
 
   return (
-    <View style={{backgroundColor: 'pink', flex: 1}}>
+    <View style={{flex: 1}}>
       <View
         style={{
           flexDirection: 'row',
           alignItems: 'center',
-          backgroundColor: 'green',
           justifyContent: 'space-between',
         }}>
         {renderFilterBtn()}
         {renderHideSoldItemsBtn()}
       </View>
-      <View>{renderNoResultsMsg()}</View>
-      <TouchableWithoutFeedback
-        style={{flex: 1}}
-        onPress={() => hideSearchHistory()}>
+      {renderNoResultsMsg()}
+      <TouchableWithoutFeedback onPress={() => hideSearchHistory()}>
         <KeyboardAwareScrollView
-          style={{paddingBottom: 130, flex: 1}}
-          enableOnAndroid>
-          {items && (
-            <ItemCards userId={userId} items={items} navigation={navigation} />
-          )}
+          enableOnAndroid
+          showsVerticalScrollIndicator={false}>
+          <View style={{paddingBottom: 30}}>
+            {items && (
+              <ItemCards
+                userId={userId}
+                items={items}
+                navigation={navigation}
+              />
+            )}
+          </View>
         </KeyboardAwareScrollView>
       </TouchableWithoutFeedback>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  boldText: {
+    ...FONTS.h4,
+    paddingVertical: SIZES.padding,
+  },
+  regularText: {
+    ...FONTS.body4,
+    paddingVertical: SIZES.padding,
+  },
+  noResultContainer: {
+    borderWidth: 1,
+    borderRadius: 5,
+    borderColor: COLORS.secondary,
+    paddingHorizontal: SIZES.padding * 2,
+    paddingVertical: SIZES.padding,
+  },
+});

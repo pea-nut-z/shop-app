@@ -9,19 +9,24 @@ import {
   Button,
   TouchableWithoutFeedback,
 } from 'react-native';
+import {ModalAlert} from '../components';
 import {SIZES, FONTS, COLORS} from '../constants';
 import {BackButton, ImageScrollView, HeaderButton} from './index';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {useDispatch} from 'react-redux';
+import * as actions from '../store/actionTypes';
 
 export default function Header({
   userId,
   navigation,
   title,
+  saveDraft,
   showPopoutMenu,
   hidePopoutMenu,
   submitSearchString,
   showSearchHistory,
+  clearFilterFields,
   searchString,
   getSearchString,
   toggleFilterScreen,
@@ -31,18 +36,23 @@ export default function Header({
   useRightBtns,
   useSearchHistory,
 }) {
-  // const [searchString, setSearchString] = useState('');
+  const [recentSearches, setRecentSearches] = useState(['baseball', 'fashion']);
+  const [searchFieldAlert, setSearchFieldAlert] = useState(false);
+  const [backBtnAlert, setBackBtnAlert] = useState(false);
 
-  const [recentSearches, setRecentSearches] = useState(['test', '2']);
-  const [warning, setWarning] = useState(false);
+  const dispatch = useDispatch();
 
   const renderBackBtn = () => {
     return (
       <TouchableOpacity
         style={styles.backBtn}
         onPress={() => {
-          if (toggleFilterScreen) {
+          if (title === 'Filter') {
             toggleFilterScreen();
+          } else if (title === 'Edit Post') {
+            setBackBtnAlert(true);
+          } else if (title === 'Post For Sale') {
+            saveDraft();
           } else {
             navigation.goBack();
           }
@@ -54,6 +64,21 @@ export default function Header({
         />
       </TouchableOpacity>
     );
+  };
+
+  const closeModal = () => {
+    setBackBtnAlert(false);
+    setSearchFieldAlert(false);
+  };
+
+  const onClickOption = (actions) => {
+    closeModal();
+    switch (actions) {
+      case 'yes':
+        navigation.goBack();
+      default:
+        return;
+    }
   };
 
   const renderSearchBar = () => {
@@ -71,7 +96,7 @@ export default function Header({
           value={searchString}
           onFocus={() => {
             showSearchHistory();
-            setWarning(false);
+            setSearchFieldAlert(false);
           }}
           onChangeText={(text) => getSearchString(text)}
           onSubmitEditing={() => {
@@ -79,8 +104,9 @@ export default function Header({
               submitSearchString(searchString);
               setRecentSearches([searchString, ...recentSearches]);
             } else {
-              setWarning(true);
+              setSearchFieldAlert(true);
             }
+            clearFilterFields();
           }}
           underlineColorAndroid="transparent"
           clearButtonMode="always"
@@ -99,14 +125,7 @@ export default function Header({
   const renderRecentSearches = () => {
     if (recentSearches.length !== 0 && !searchString) {
       return (
-        <View
-          style={{
-            width: '100%',
-            position: 'absolute',
-            top: 109,
-            backgroundColor: 'red',
-            paddingHorizontal: SIZES.padding * 2,
-          }}>
+        <View style={styles.searchBoxContainer}>
           <View
             style={{
               flexDirection: 'row',
@@ -114,14 +133,21 @@ export default function Header({
               alignItems: 'center',
               height: 40,
             }}>
-            <Text>RECENT SEARCHES</Text>
+            <Text style={styles.regularText}>Recent searches</Text>
             <TouchableOpacity
               style={{
                 width: 80,
-                backgroundColor: 'green',
               }}
               onPress={() => setRecentSearches([])}>
-              <Text style={{textAlign: 'center'}}>Delete All</Text>
+              <Text
+                style={{
+                  textAlign: 'center',
+                  textAlignVertical: 'center',
+                  color: COLORS.darkgray,
+                  ...FONTS.body4,
+                }}>
+                Delete All
+              </Text>
             </TouchableOpacity>
           </View>
           <KeyboardAwareScrollView enableOnAndroid style={{maxHeight: 400}}>
@@ -129,28 +155,13 @@ export default function Header({
               return (
                 <TouchableOpacity
                   key={`item-${index}`}
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    height: 50,
-                  }}
+                  style={styles.searchContainer}
                   onPress={() => {
                     getSearchString(item);
                     submitSearchString(item);
                   }}>
                   <View style={{flexDirection: 'row'}}>
-                    <View
-                      style={{
-                        // backgroundColor: 'pink',
-                        height: 30,
-                        width: 30,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        borderRadius: 20,
-                        borderWidth: 1,
-                        borderColor: COLORS.secondary,
-                      }}>
+                    <View style={styles.searchIcon}>
                       <Icon name={'pricetag-outline'} size={20} />
                     </View>
                     <View
@@ -158,7 +169,7 @@ export default function Header({
                         justifyContent: 'center',
                         marginLeft: SIZES.padding,
                       }}>
-                      <Text>{item}</Text>
+                      <Text style={styles.regularText}>{item}</Text>
                     </View>
                   </View>
                   <View>
@@ -221,31 +232,31 @@ export default function Header({
               alignItems: 'center',
             }}>
             {/* BACK BUTTON */}
+
             {useBackBtn && renderBackBtn()}
+            <ModalAlert
+              visibleVariable={backBtnAlert}
+              closeModal={closeModal}
+              onClickOption={onClickOption}
+              message={'Quit editing post?'}
+              options={['No', 'Yes']}
+              actions={['no', 'yes']}
+            />
 
             {/* SEARCH INPUT  */}
             {useSearchBar && renderSearchBar()}
-            {warning && (
-              <View
-                style={{
-                  position: 'absolute',
-                  top: SIZES.height * 0.5,
-                  height: 50,
-                  width: 300,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  borderRadius: 10,
-                  backgroundColor: COLORS.darkgray,
-                }}>
-                <Text style={{color: COLORS.white}}>Search field is empty</Text>
-              </View>
-            )}
+            <ModalAlert
+              visibleVariable={searchFieldAlert}
+              closeModal={closeModal}
+              onClickOption={onClickOption}
+              message={'Search field is empty'}
+            />
 
             {/* TITLE */}
             {title && (
               <Text
                 style={{
-                  ...styles.title,
+                  ...styles.regularText,
                   marginLeft: navigation ? SIZES.padding : 0,
                 }}>
                 {title}
@@ -262,6 +273,9 @@ export default function Header({
 }
 
 const styles = StyleSheet.create({
+  regularText: {
+    ...FONTS.body4,
+  },
   headerWithoutImg: {
     paddingVertical: SIZES.padding,
     paddingHorizontal: SIZES.padding * 2,
@@ -289,12 +303,32 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   backBtnWithImg: {
-    shadowOffset: {width: 3, height: 3},
+    shadowOffset: {width: 5, height: 5},
     shadowColor: COLORS.darkgray,
-    shadowOpacity: 1.0,
-    color: COLORS.white,
+    shadowOpacity: 2.0,
+    color: COLORS.black,
   },
-  title: {
-    ...FONTS.h3,
+  searchBoxContainer: {
+    width: '100%',
+    position: 'absolute',
+    top: 109,
+    backgroundColor: COLORS.white,
+    paddingHorizontal: SIZES.padding * 2,
+  },
+  searchContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    height: 50,
+  },
+  searchIcon: {
+    height: 30,
+    width: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: COLORS.secondary,
+    marginRight: SIZES.padding,
   },
 });

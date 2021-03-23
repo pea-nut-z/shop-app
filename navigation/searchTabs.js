@@ -105,6 +105,7 @@ export default function searchTabs({route, navigation}) {
               navigation={navigation}
               submitSearchString={submitSearchString}
               showSearchHistory={showSearchHistory}
+              clearFilterFields={clearFilterFields}
               searchString={searchString}
               getSearchString={getSearchString}
               useBackBtn={true}

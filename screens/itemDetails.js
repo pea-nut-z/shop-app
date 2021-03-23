@@ -16,6 +16,7 @@ import {
   MemberInfo,
   MemberRating,
   SellerOtherItems,
+  Border,
 } from '../components';
 import {
   FONTS,
@@ -113,17 +114,7 @@ export default function itemDetails({route, navigation}) {
           />
         </TouchableOpacity>
 
-        {/* BORDER */}
-        <View
-          style={{alignItems: 'center', paddingHorizontal: SIZES.padding * 2}}>
-          <View
-            style={{
-              height: 1,
-              width: '100%',
-              backgroundColor: COLORS.secondary,
-            }}
-          />
-        </View>
+        <Border />
 
         {/* RENDER ITEM INFO */}
         {/* RENDER STATUS DROPDOWN ONLY TO SELLER */}
@@ -187,17 +178,7 @@ export default function itemDetails({route, navigation}) {
           </Text>
         </View>
 
-        {/* BORDER */}
-        <View
-          style={{alignItems: 'center', paddingHorizontal: SIZES.padding * 2}}>
-          <View
-            style={{
-              height: 1,
-              width: '100%',
-              backgroundColor: COLORS.secondary,
-            }}
-          />
-        </View>
+        <Border />
 
         {/* REPORT THIS POST  */}
         {sellerId === userId && (
@@ -211,17 +192,7 @@ export default function itemDetails({route, navigation}) {
           </TouchableOpacity>
         )}
 
-        {/* BORDER */}
-        <View
-          style={{alignItems: 'center', paddingHorizontal: SIZES.padding * 2}}>
-          <View
-            style={{
-              height: 1,
-              width: '100%',
-              backgroundColor: COLORS.secondary,
-            }}
-          />
-        </View>
+        <Border />
 
         {/* OTHER ITEMS FROM SELLER */}
         {sellerAllItems.length !== 1 && (

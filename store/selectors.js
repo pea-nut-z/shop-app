@@ -18,6 +18,7 @@ export const selectListings = () =>
         if (restriction.block.includes(sellerId)) continue;
         if (restriction.hide.includes(sellerId)) continue;
         for (let itemId in listings[sellerId]) {
+          if (!listings[sellerId][itemId]['status']) continue; // SKIP DRAFTS
           itemId = parseInt(itemId);
           const item = {
             sellerId,
@@ -203,7 +204,6 @@ export const filterMembers = (state) =>
     (members, filter, value) => {
       const filteredMembers = members.filter((member) => {
         const string = value.trim();
-        // console.log({string});
         const regex = new RegExp(string, 'i');
         return member.memberId.match(regex) || member.username.match(regex);
       });
@@ -222,6 +222,7 @@ export const selectMemberAllItems = () =>
       const arr = [];
       for (const key in items) {
         const itemId = parseInt(key);
+        if (!items[key]['status']) continue; // SKIPS ALL DRAFTS
         const item = {...items[key], itemId, sellerId: memberId};
         arr.push(item);
       }

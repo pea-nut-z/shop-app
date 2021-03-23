@@ -9,12 +9,12 @@ import {
   StyleSheet,
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
-import {Header, MemberInfo, MemberRating} from '../components';
+import {Header, MemberInfo, MemberRating, ModalAlert} from '../components';
 import {SIZES, COLORS, FONTS} from '../constants';
 import Tooltip from 'rn-tooltip';
 import Icon from 'react-native-vector-icons/Ionicons';
-import Modal from 'react-native-modal';
 import * as actions from '../store/actionTypes';
+import {set} from 'react-native-reanimated';
 
 export default function Profile({route, navigation}) {
   const {sellerId, userId} = route.params;
@@ -38,11 +38,12 @@ export default function Profile({route, navigation}) {
   const atCurrentUserProfile = sellerId === userId ? true : false;
   const itemTabs = atCurrentUserProfile ? 'userItemsTabs' : 'sellerItemsTabs';
   const sellerIsBlocked = blockList.includes(sellerId) ? true : false;
-  // const sellerIsBlocked = blockList.includes(sellerId) ? true : false;
 
   const [popupMenu, setPopupMenu] = useState(false);
-  const [blockConfirmation, setBlockConfirmation] = useState(false);
-  const [hideConfirmation, setHideConfirmation] = useState(false);
+  const [blockAlert, setBlockAlert] = useState(false);
+  const [hideAlert, setHideAlert] = useState(false);
+  const [unblockMsg, setUnblockMsg] = useState(false);
+  const [unhideMsg, setUnhideMsg] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -54,117 +55,54 @@ export default function Profile({route, navigation}) {
     setPopupMenu(false);
   };
 
-  const showUnblockedMsg = () => {
-    console.warn(`${seller.username} was unblocked`);
-    dispatch({
-      type: actions.BLOCK_REMOVED,
-      userId,
-      sellerId,
-    });
+  const closeAlertModal = () => {
+    setBlockAlert(false);
+    setHideAlert(false);
   };
 
-  const showUnhideMsg = () => {
-    console.warn(`${seller.username}'s posts have been unhidden`);
-    dispatch({
-      type: actions.HIDE_REMOVED,
-      userId,
-      sellerId,
-    });
+  const closeMsgModal = () => {
+    setUnblockMsg(false);
+    setUnhideMsg(false);
   };
+  const onClickOption = (option) => {
+    if (option === 'Report') navigation.navigate('Report', {sellerId, userId});
+    if (option === 'Block') setBlockAlert(true);
+    if (option === 'Unblock') {
+      setUnblockMsg(true);
+      dispatch({
+        type: actions.BLOCK_REMOVED,
+        userId,
+        sellerId,
+      });
+    }
+    if (option === 'Hide this seller') setHideAlert(true);
+    if (option === "Unhide this seller's posts") {
+      setUnhideMsg(true);
+      dispatch({
+        type: actions.HIDE_REMOVED,
+        userId,
+        sellerId,
+      });
+    }
 
-  const renderBlockConfirmation = () => {
-    return (
-      <Modal
-        style={{alignItems: 'center'}}
-        isVisible={blockConfirmation}
-        onBackdropPress={() => setBlockConfirmation(false)}>
-        <View
-          style={{
-            ...styles.confirmationContainer,
-          }}>
-          <Text style={styles.confirmationText}>
-            Are you sure you want to block {seller.username}? Their posts won't
-            be visible to you and they won't be able to chat with you.
-          </Text>
-          <View>
-            <TouchableOpacity
-              onPress={() => {
-                console.warn('User blocked.');
-                setBlockConfirmation(false);
-                dispatch({
-                  type: actions.BLOCK_ADDED,
-                  userId,
-                  // payload: {
-                  sellerId,
-                  // },
-                });
-              }}
-              style={{
-                ...styles.confirmationBtn,
-                backgroundColor: COLORS.primary,
-              }}>
-              <Text>BLOCK</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => setBlockConfirmation(false)}
-              style={{
-                ...styles.confirmationBtn,
-                borderColor: COLORS.secondary,
-                borderWidth: 1,
-              }}>
-              <Text>CANCEL</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
-    );
-  };
-
-  const renderHideConfirmation = () => {
-    return (
-      <Modal
-        style={{alignItems: 'center'}}
-        isVisible={hideConfirmation}
-        onBackdropPress={() => setHideConfirmation(false)}>
-        <View
-          style={{
-            ...styles.confirmationContainer,
-          }}>
-          <Text style={styles.confirmationText}>
-            Hide {seller.username} and all of {seller.username}'s post ?
-          </Text>
-          <View>
-            <TouchableOpacity
-              onPress={() => setHideConfirmation(false)}
-              style={{
-                ...styles.confirmationBtn,
-                backgroundColor: COLORS.primary,
-              }}>
-              <Text>CANCEL</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                setHideConfirmation(false);
-                console.warn(
-                  `${seller.username}'s posts will no longer be visible you`,
-                );
-                dispatch({
-                  type: actions.HIDE_ADDED,
-                  userId,
-                  sellerId,
-                });
-              }}
-              style={{
-                ...styles.confirmationBtn,
-                borderColor: COLORS.secondary,
-                borderWidth: 1,
-              }}>
-              <Text>YES, HIDE</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
-    );
+    // CONFIRMATION
+    if (option === 'block-confirmed') {
+      closeAlertModal();
+      dispatch({
+        type: actions.BLOCK_ADDED,
+        userId,
+        sellerId,
+      });
+    }
+    if (option === 'hide-confirmed') {
+      closeAlertModal();
+      dispatch({
+        type: actions.HIDE_ADDED,
+        userId,
+        sellerId,
+      });
+    }
+    if (option === 'cancel') closeAlertModal();
   };
 
   const renderPopoutMenu = () => {
@@ -204,14 +142,7 @@ export default function Profile({route, navigation}) {
                   ...styles.popupMenuOption,
                 }}
                 onPress={() => {
-                  if (option === 'Report')
-                    navigation.navigate('Report', {sellerId, userId});
-                  if (option === 'Block') {
-                    setBlockConfirmation(true);
-                  }
-                  if (option === 'Unblock') showUnblockedMsg();
-                  if (option === 'Hide this seller') setHideConfirmation(true);
-                  if (option === "Unhide this seller's posts") showUnhideMsg();
+                  onClickOption(option);
                   hidePopoutMenu(false);
                 }}
                 style={{
@@ -268,21 +199,49 @@ export default function Profile({route, navigation}) {
         useBackBtn={true}
         useRightBtns={['ellipsis-vertical-circle-outline']}
       />
-      <View>
-        {sellerIsBlocked && (
-          <View
-            style={{
-              backgroundColor: 'red',
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: 30,
-            }}>
-            <Text style={{color: COLORS.white}}>This user is blocked</Text>
-          </View>
-        )}
-      </View>
-      <View>{renderBlockConfirmation()}</View>
-      <View>{renderHideConfirmation()}</View>
+
+      {sellerIsBlocked && (
+        <View
+          style={{
+            backgroundColor: 'red',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: 30,
+          }}>
+          <Text style={{color: COLORS.white}}>This user is blocked</Text>
+        </View>
+      )}
+
+      <ModalAlert
+        visibleVariable={blockAlert}
+        closeModal={closeAlertModal}
+        onClickOption={onClickOption}
+        message={`Are you sure you want to block ${seller.username}? Their posts won't be visible to you and they won't be able to chat with you.`}
+        options={['CANCEL', 'BLOCK']}
+        actions={['cancel', 'block-confirmed']}
+      />
+      <ModalAlert
+        visibleVariable={hideAlert}
+        closeModal={closeAlertModal}
+        onClickOption={onClickOption}
+        message={`Hide ${seller.username} and all of ${seller.username}'s post ?
+        `}
+        options={['CANCEL', 'YES, HIDE']}
+        actions={['cancel', 'hide-confirmed']}
+      />
+      <ModalAlert
+        visibleVariable={unblockMsg}
+        closeModal={closeMsgModal}
+        onClickOption={onClickOption}
+        message={`${seller.username} was unblocked`}
+      />
+      <ModalAlert
+        visibleVariable={unhideMsg}
+        closeModal={closeMsgModal}
+        onClickOption={onClickOption}
+        message={`${seller.username}'s posts have been unhidden`}
+      />
+
       <View
         style={{
           position: 'absolute',

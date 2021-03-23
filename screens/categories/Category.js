@@ -38,11 +38,7 @@ export default function Category({route, navigation}) {
   );
 
   return (
-    <View
-      style={{
-        flex: 1,
-      }}>
-      {/* HEADER */}
+    <View style={{flex: 1}}>
       <Header
         navigation={navigation}
         title={selectedCategory}
@@ -50,9 +46,15 @@ export default function Category({route, navigation}) {
         useRightBtns={['search-outline', 'notifications-outline']}
       />
 
-      <KeyboardAwareScrollView extraHeight={0} enableOnAndroid>
+      <KeyboardAwareScrollView
+        contentContainerStyle={
+          itemsByCategory.length === 0 ? styles.noItemsContainer : null
+        }
+        enableOnAndroid>
         {itemsByCategory.length === 0 ? (
-          <Text>Oops, no listings under this category.</Text>
+          <Text style={{color: COLORS.secondary, ...FONTS.body2}}>
+            Oops, no listings under this category.
+          </Text>
         ) : (
           <ItemCards
             userId={userId}
@@ -64,3 +66,11 @@ export default function Category({route, navigation}) {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  noItemsContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});

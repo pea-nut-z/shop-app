@@ -1,7 +1,14 @@
 import React, {useState} from 'react';
-import {View, Text, Image, TouchableOpacity, SafeAreaView} from 'react-native';
-import {Header} from '../../../components';
-import {COLORS, categoryOptions, SIZES} from '../../../constants';
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  SafeAreaView,
+  StyleSheet,
+} from 'react-native';
+import {Border, Header} from '../../../components';
+import {COLORS, categoryOptions, SIZES, FONTS} from '../../../constants';
 import Icon from 'react-native-vector-icons/Ionicons';
 import CurrencyInput from 'react-native-currency-input';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -29,12 +36,8 @@ export default function Filters({
 
       {/* CATEGORIES */}
       <KeyboardAwareScrollView>
-        <View
-          style={{
-            height: SIZES.height * 0.45,
-            //   backgroundColor: 'red'
-          }}>
-          <Text>Categories</Text>
+        <Text style={styles.subheader}>Categories</Text>
+        <View style={styles.categoriesContainer}>
           {categoryOptions.map((option, index) => {
             const {name} = option;
             return (
@@ -45,7 +48,7 @@ export default function Filters({
                     ? removeCategoryFromFilter(name)
                     : addCategoryToFilter(name)
                 }
-                style={{flexDirection: 'row'}}>
+                style={styles.categories}>
                 <Icon
                   name="checkmark-circle-outline"
                   size={25}
@@ -55,126 +58,107 @@ export default function Filters({
                       : COLORS.secondary
                   }
                 />
-                <Text>{name}</Text>
+                <Text style={styles.regularText}>
+                  {name.includes('Games') ? 'Games, hobbies...' : name}
+                </Text>
               </TouchableOpacity>
             );
           })}
         </View>
 
+        <Border />
+
         {/* SORT */}
-        <View>
-          <Text>Sort</Text>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <View style={{flex: 1}}>
+          <Text style={styles.subheader}>Sort</Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'flex-start',
+              width: '100%',
+              paddingHorizontal: SIZES.padding * 2,
+              paddingVertical: SIZES.padding,
+            }}>
             <TouchableOpacity
-              onPress={
-                () => addSortToFilter('Relevance')
-                // sort === 'Relevance' ? setSort(sort) : setSort('Relevance')
-              }
-              style={{flexDirection: 'row', alignItems: 'center'}}>
+              onPress={() => addSortToFilter('Relevance')}
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                width: '50%',
+              }}>
               <Icon
                 name={sort === 'Relevance' ? 'ellipse' : 'ellipse-outline'}
                 size={25}
                 color={sort === 'Relevance' ? COLORS.primary : null}
               />
-              <Text>Relevance</Text>
+              <Text style={styles.regularText}>Relevance</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={
-                () => addSortToFilter('Most recent')
-                // sort === 'Most recent' ? setSort(sort) : setSort('Most recent')
-              }
-              style={{flexDirection: 'row', alignItems: 'center'}}>
+              onPress={() => addSortToFilter('Most recent')}
+              style={{
+                width: '50%',
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
               <Icon
                 name={sort === 'Most recent' ? 'ellipse' : 'ellipse-outline'}
                 size={25}
                 color={sort === 'Most recent' ? COLORS.primary : null}
               />
-              <Text>Most recent</Text>
+              <Text style={styles.regularText}>Most recent</Text>
             </TouchableOpacity>
           </View>
         </View>
 
+        <Border />
+
         {/* Price */}
-        <View>
-          <Text>Price</Text>
-          <View
-            style={{
-              backgroundColor: 'green',
-              flexDirection: 'row',
-              paddingHorizontal: SIZES.padding * 2,
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}>
+        <View style={{flex: 1}}>
+          <Text style={styles.subheader}>Price</Text>
+          <View style={styles.priceContainer}>
             <CurrencyInput
               value={minPrice}
               onChangeValue={(value) => addMinPriceToFilter(value)}
-              // defaultValue={price}
-              // unit="$  "
               delimiter=""
               separator=""
               precision={0}
               maxValue={9999999}
               ignoreNegative={true}
               placeholder="0"
-              // placeholderTextColor={
-              //   free ? COLORS.primary : price ? COLORS.black : COLORS.secondary
-              // }
-              style={{
-                backgroundColor: 'red',
-                width: SIZES.width / 2 - SIZES.padding * 8,
-                height: 40,
-              }}
+              style={styles.price}
             />
             <Text>~</Text>
             <CurrencyInput
               value={maxPrice}
               onChangeValue={(value) => addMaxPriceToFilter(value)}
-              // defaultValue={price}
-              // unit="$  "
               delimiter=""
               separator=""
               precision={0}
               maxValue={9999999}
               ignoreNegative={true}
               placeholder="No limit"
-              // placeholderTextColor={
-              //   free ? COLORS.primary : price ? COLORS.black : COLORS.secondary
-              // }
-              style={{
-                backgroundColor: 'red',
-                width: SIZES.width / 2 - SIZES.padding * 8,
-                height: 40,
-              }}
+              style={styles.price}
             />
           </View>
         </View>
+
+        <Border />
 
         {/* SEARCH RANGE */}
       </KeyboardAwareScrollView>
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
         <TouchableOpacity
           onPress={() => clearFilterFields()}
-          style={{
-            width: SIZES.width / 2,
-            height: 65,
-            backgroundColor: COLORS.secondary,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
+          style={styles.clearBtn}>
           <Text>Clear fields</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
             toggleFilterScreen();
           }}
-          style={{
-            width: SIZES.width / 2,
-            height: 65,
-            backgroundColor: COLORS.primary,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
+          style={styles.applyBtn}>
           <Text style={{color: COLORS.white}}>Apply filter</Text>
         </TouchableOpacity>
       </View>
@@ -182,3 +166,58 @@ export default function Filters({
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  subheader: {
+    paddingVertical: SIZES.padding,
+    paddingHorizontal: SIZES.padding * 2,
+    ...FONTS.h4,
+  },
+  regularText: {
+    paddingLeft: SIZES.padding,
+    ...FONTS.body4,
+  },
+  categoriesContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'flex-start',
+    width: '100%',
+    paddingHorizontal: SIZES.padding * 2,
+  },
+  categories: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    height: 40,
+    width: '50%',
+  },
+  priceContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    paddingHorizontal: SIZES.padding * 2,
+    paddingVertical: SIZES.padding,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  price: {
+    borderWidth: 1,
+    borderRadius: 5,
+    width: SIZES.width / 2 - SIZES.padding * 8,
+    height: 40,
+    paddingHorizontal: SIZES.padding * 2,
+  },
+  clearBtn: {
+    width: SIZES.width / 2,
+    height: 65,
+    backgroundColor: COLORS.secondary,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  applyBtn: {
+    width: SIZES.width / 2,
+    height: 65,
+    backgroundColor: COLORS.primary,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});

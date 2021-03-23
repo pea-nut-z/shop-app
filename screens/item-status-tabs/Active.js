@@ -1,17 +1,10 @@
 import React, {useMemo} from 'react';
-import {
-  SafeAreaView,
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Animated,
-  Image,
-  FlatList,
-} from 'react-native';
+import {View, Text} from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {useSelector} from 'react-redux';
 import {ItemCards} from '../../components';
-import {useDispatch, useSelector} from 'react-redux';
 import {filterMemberItems} from '../../store/selectors';
+import {COLORS, FONTS} from '../../constants';
 
 export default function Active({
   userId,
@@ -28,17 +21,37 @@ export default function Active({
     getActiveItems(state, memberId, undefined, 'active-and-reserved'),
   );
 
-  // console.log('ran active');
-
   return (
-    <View>
-      {activeAndReservedItems.length === 0 && <Text>No active items</Text>}
-      <ItemCards
-        userId={userId}
-        items={activeAndReservedItems}
-        navigation={navigation}
-        atUserActiveItemsScreen={atUserItemsTabs}
-      />
+    <View style={{flex: 1}}>
+      {activeAndReservedItems.length === 0 ? (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Text
+            style={{
+              color: COLORS.secondary,
+              ...FONTS.body2,
+            }}>
+            No active items
+          </Text>
+        </View>
+      ) : (
+        <KeyboardAwareScrollView
+          enableOnAndroid
+          showsVerticalScrollIndicator={false}>
+          <View style={{paddingBottom: 50}}>
+            <ItemCards
+              userId={userId}
+              items={activeAndReservedItems}
+              navigation={navigation}
+              atUserActiveItemsScreen={atUserItemsTabs}
+            />
+          </View>
+        </KeyboardAwareScrollView>
+      )}
     </View>
   );
 }

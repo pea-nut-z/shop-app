@@ -7,6 +7,9 @@ import MemberRating from './MemberRating';
 import SellerOtherItems from './SellerOtherItems';
 import ItemCards from './ItemCards';
 import MemberInfo from './MemberInfo';
+import ModalMenu from './ModalMenu';
+import ModalAlert from './ModalAlert';
+import Border from './Border';
 
 export {
   CircleButton,
@@ -18,4 +21,7 @@ export {
   SellerOtherItems,
   ItemCards,
   MemberInfo,
+  ModalMenu,
+  ModalAlert,
+  Border,
 };

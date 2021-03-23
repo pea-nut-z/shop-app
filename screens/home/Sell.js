@@ -5,7 +5,6 @@ import {
   StyleSheet,
   TouchableOpacity,
   TextInput,
-  Image,
   Text,
   Alert,
   FlatList,
@@ -27,19 +26,32 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ImagePicker from 'react-native-image-crop-picker';
 import * as actions from '../../store/actionTypes';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 export default function Sell({route, navigation}) {
-  const {userId} = route.params;
-  const [numOfImg, setNumOfImg] = useState(0);
-  const [images, setImages] = useState([]);
-  const [title, setTitle] = useState('');
-  const [price, setPrice] = useState();
-  const [free, setFree] = useState(false);
-  const [negotiable, setNegotiable] = useState(true);
-  const [category, setCategory] = useState('Categories');
-  const [description, setDescription] = useState('');
+  const {userId, existingItemId, continueDraft} = route.params;
+
+  const existingItem = useSelector(
+    (state) => state['listings'][userId][existingItemId],
+  );
+
   const maxNumOfImg = 10;
+  const [numOfImg, setNumOfImg] = useState(existingItem?.images.length || 0);
+  const [images, setImages] = useState(existingItem?.images || []);
+  const [title, setTitle] = useState(existingItem?.title || '');
+  const [price, setPrice] = useState(existingItem?.price || '');
+  const [free, setFree] = useState(existingItem?.free || false);
+  const [negotiable, setNegotiable] = useState(
+    existingItem?.negotiable || true,
+  );
+  const [category, setCategory] = useState(existingItem?.category);
+  const [description, setDescription] = useState(
+    existingItem?.description || '',
+  );
+
+  let newItemId = 100;
+  let itemId = existingItemId ? existingItemId : ++newItemId;
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -65,9 +77,7 @@ export default function Sell({route, navigation}) {
     return (
       <View style={styles.imgContainer}>
         <ImageBackground
-          source={{
-            uri: item,
-          }}
+          source={typeof item === 'number' ? item : {uri: item}}
           style={styles.img}></ImageBackground>
         <TouchableOpacity
           onPress={() => deleteImg(item)}
@@ -99,31 +109,52 @@ export default function Sell({route, navigation}) {
     // }
     // else {
 
-    let itemId = 5;
     let imgPath;
-
     if (images.length === 0) {
       categoryOptions.find((obj) => {
-        if (obj.name === category) imgPath = [obj.icon];
+        if (obj.name === category) {
+          imgPath = [obj.icon];
+        }
       });
     } else {
       imgPath = images;
     }
 
-    dispatch({
-      type: actions.ITEM_ADDED,
-      // payload: {
-      sellerId: userId,
-      itemId: ++itemId,
-      images: imgPath,
-      title,
-      price,
-      free,
-      negotiable,
-      category,
-      description,
-      // },
-    });
+    console.log({imgPath});
+
+    if (continueDraft || !existingItem) {
+      dispatch({
+        type: actions.ITEM_ADDED,
+        sellerId: userId,
+        itemId,
+        payload: {
+          images: imgPath,
+          title,
+          price,
+          free,
+          negotiable,
+          category,
+          description,
+        },
+      });
+    }
+
+    if (!continueDraft && existingItem) {
+      dispatch({
+        type: actions.ITEM_EDITED,
+        sellerId: userId,
+        itemId,
+        payload: {
+          images: imgPath,
+          title,
+          price,
+          free,
+          negotiable,
+          category,
+          description,
+        },
+      });
+    }
 
     navigation.navigate('itemDetails', {
       userId,
@@ -132,12 +163,67 @@ export default function Sell({route, navigation}) {
     });
   };
 
+  const saveDraft = () => {
+    const fields = {
+      images,
+      title,
+      price,
+      category,
+      description,
+    };
+    const notBlank = (value) =>
+      value !== '' && value?.length !== 0 && value !== undefined;
+
+    let postIsNotBlank = Object.values(fields);
+    postIsNotBlank = postIsNotBlank.some(notBlank);
+
+    if (postIsNotBlank) {
+      let imgPath;
+      if (images.length === 0 && category) {
+        categoryOptions.find((obj) => {
+          if (obj.name === category) imgPath = [obj.icon];
+        });
+      } else {
+        imgPath = images;
+      }
+
+      dispatch({
+        type: actions.ITEM_EDITED,
+        sellerId: userId,
+        itemId,
+        payload: {
+          images: imgPath,
+          title,
+          price,
+          free,
+          negotiable,
+          category,
+          description,
+        },
+      });
+
+      dispatch({
+        type: actions.DRAFT_ADDED,
+        userId,
+        itemId,
+      });
+    }
+    navigation.goBack();
+  };
+
   return (
     <>
       <View>
         <Header
           navigation={navigation}
-          title={'Post For Sale'}
+          title={
+            continueDraft
+              ? 'Post For Sale'
+              : existingItem
+              ? 'Edit Post'
+              : 'Post For Sale'
+          }
+          saveDraft={saveDraft}
           useBackBtn={true}
         />
         {/* DONE BUTTON */}
@@ -174,30 +260,37 @@ export default function Sell({route, navigation}) {
           {/* TITLE */}
           <TextInput
             maxLength={64}
+            defaultValue={title}
             onChangeText={setTitle}
             placeholder="Title"
             style={{...styles.container, ...styles.regularHeight}}
           />
           {/* PRICE */}
-          <CurrencyInput
-            value={price}
-            onChangeValue={setPrice}
-            // defaultValue={price}
-            unit="$  "
-            delimiter=","
-            separator="."
-            precision={2}
-            maxValue={9999999.99}
-            ignoreNegative={true}
-            placeholder="$ Enter price"
-            placeholderTextColor={
-              free ? COLORS.primary : price ? COLORS.black : COLORS.secondary
-            }
-            style={{
-              ...styles.container,
-              ...styles.regularHeight,
-            }}
-          />
+          {free ? (
+            <View
+              style={{
+                ...styles.regularHeight,
+              }}
+            />
+          ) : (
+            <CurrencyInput
+              value={price}
+              onChangeValue={setPrice}
+              // defaultValue={price}
+              unit="$  "
+              delimiter=","
+              separator="."
+              precision={2}
+              maxValue={9999999.99}
+              ignoreNegative={true}
+              placeholder="$ Enter price"
+              placeholderTextColor={COLORS.secondary}
+              style={{
+                ...styles.container,
+                ...styles.regularHeight,
+              }}
+            />
+          )}
           {/* FREE LABEL */}
           {free && (
             <TouchableOpacity
@@ -229,6 +322,7 @@ export default function Sell({route, navigation}) {
           </TouchableOpacity>
           {/* CATEGORIES */}
           <DropDownPicker
+            defaultValue={existingItem && category}
             items={categoryDropDown}
             placeholder="Categories"
             onChangeItem={(item) => setCategory(item.value)}
@@ -253,6 +347,7 @@ export default function Sell({route, navigation}) {
                 ...styles.container,
                 ...styles.textareaContainer,
               }}
+              defaultValue={description}
               onChangeText={setDescription}
               maxLength={600}
               placeholder={'Describe your item in as much detail as you can.'}
@@ -316,16 +411,16 @@ const styles = StyleSheet.create({
   },
   freeLabel: {
     height: 30,
-    width: 80,
+    width: 100,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 15,
     borderWidth: 1,
     borderColor: COLORS.primary,
     position: 'absolute',
-    top: SIZES.height * 0.332,
-    marginLeft: SIZES.padding * 3.45,
-    backgroundColor: COLORS.lightGray3,
+    top: SIZES.height * 0.215,
+    marginLeft: SIZES.padding * 2.1,
+    backgroundColor: COLORS.white,
   },
   checkMarkContainer: {
     flexDirection: 'row',

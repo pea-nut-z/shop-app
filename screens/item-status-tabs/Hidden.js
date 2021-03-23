@@ -1,17 +1,10 @@
 import React, {useEffect, useMemo} from 'react';
-import {
-  SafeAreaView,
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Animated,
-  Image,
-  FlatList,
-} from 'react-native';
+import {View, Text} from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {useSelector} from 'react-redux';
 import {ItemCards} from '../../components';
-import {useDispatch, useSelector} from 'react-redux';
 import {filterMemberItems} from '../../store/selectors';
+import {COLORS, FONTS} from '../../constants';
 
 export default function Hidden({userId, navigation}) {
   // USER'S LISTINGS
@@ -19,17 +12,38 @@ export default function Hidden({userId, navigation}) {
   const hiddenItems = useSelector((state) =>
     getHiddenItems(state, userId, undefined, 'hidden'),
   );
-  // console.log('ran hidden');
 
   return (
-    <View>
-      {hiddenItems.length === 0 && <Text>No hidden items</Text>}
-      <ItemCards
-        userId={userId}
-        items={hiddenItems}
-        navigation={navigation}
-        atUserHiddenItemsScreen={true}
-      />
+    <View style={{flex: 1}}>
+      {hiddenItems.length === 0 ? (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Text
+            style={{
+              color: COLORS.secondary,
+              ...FONTS.body2,
+            }}>
+            No hidden items
+          </Text>
+        </View>
+      ) : (
+        <KeyboardAwareScrollView
+          enableOnAndroid
+          showsVerticalScrollIndicator={false}>
+          <View style={{paddingBottom: 50}}>
+            <ItemCards
+              userId={userId}
+              items={hiddenItems}
+              navigation={navigation}
+              atUserHiddenItemsScreen={true}
+            />
+          </View>
+        </KeyboardAwareScrollView>
+      )}
     </View>
   );
 }

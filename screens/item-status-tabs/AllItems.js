@@ -1,18 +1,10 @@
 import React, {useMemo} from 'react';
-import {
-  SafeAreaView,
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Animated,
-  Image,
-  FlatList,
-} from 'react-native';
+import {View, Text} from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {useSelector} from 'react-redux';
 import {ItemCards} from '../../components';
-import {useDispatch, useSelector} from 'react-redux';
-
 import {selectMemberAllItems} from '../../store/selectors';
+import {COLORS, FONTS} from '../../constants';
 
 export default function AllItems({
   userId,
@@ -29,12 +21,29 @@ export default function AllItems({
   );
 
   return (
-    <View>
-      <ItemCards
-        userId={userId}
-        items={memberAllItems}
-        navigation={navigation}
-      />
+    <View style={{flex: 1}}>
+      {memberAllItems.length === 0 ? (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Text>No active listings</Text>
+        </View>
+      ) : (
+        <KeyboardAwareScrollView
+          enableOnAndroid
+          showsVerticalScrollIndicator={false}>
+          <View style={{paddingBottom: 50}}>
+            <ItemCards
+              userId={userId}
+              items={memberAllItems}
+              navigation={navigation}
+            />
+          </View>
+        </KeyboardAwareScrollView>
+      )}
     </View>
   );
 }

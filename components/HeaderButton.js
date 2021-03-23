@@ -38,7 +38,7 @@ export default function HeaderButton({
           const keyword = name.split('-')[0];
           keyword === 'ellipsis' ? showPopoutMenu() : navigateTo(keyword);
         }}
-        style={{paddingLeft: 25, paddingVertical: 3, backgroundColor: 'red'}}>
+        style={{paddingLeft: 25, paddingVertical: 3}}>
         <Icon name={name} size={25} />
       </TouchableOpacity>
     </View>

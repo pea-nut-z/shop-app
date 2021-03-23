@@ -1,17 +1,10 @@
 import React, {useMemo} from 'react';
-import {
-  SafeAreaView,
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Animated,
-  Image,
-  FlatList,
-} from 'react-native';
+import {View, Text} from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {useSelector} from 'react-redux';
 import {filterMemberItems} from '../../store/selectors';
-import {useDispatch, useSelector} from 'react-redux';
 import {ItemCards} from '../../components';
+import {COLORS, FONTS} from '../../constants';
 
 export default function Sold({userId, sellerId, atUserItemsTabs, navigation}) {
   // CHECK CURRENT SCREEN
@@ -23,17 +16,37 @@ export default function Sold({userId, sellerId, atUserItemsTabs, navigation}) {
     getSoldItems(state, memberId, undefined, 'sold'),
   );
 
-  // console.log('ran sold');
-
   return (
-    <View>
-      {soldItems.length === 0 && <Text>No sold items</Text>}
-      <ItemCards
-        userId={userId}
-        items={soldItems}
-        navigation={navigation}
-        atUserSoldItemsScreen={true}
-      />
+    <View style={{flex: 1}}>
+      {soldItems.length === 0 ? (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Text
+            style={{
+              color: COLORS.secondary,
+              ...FONTS.body2,
+            }}>
+            No sold items
+          </Text>
+        </View>
+      ) : (
+        <KeyboardAwareScrollView
+          enableOnAndroid
+          showsVerticalScrollIndicator={false}>
+          <View style={{paddingBottom: 50}}>
+            <ItemCards
+              userId={userId}
+              items={soldItems}
+              navigation={navigation}
+              atUserSoldItemsScreen={atUserItemsTabs}
+            />
+          </View>
+        </KeyboardAwareScrollView>
+      )}
     </View>
   );
 }

@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React, {useMemo, useState} from 'react';
 import {
   SafeAreaView,
   View,
@@ -8,24 +8,20 @@ import {
   Image,
   FlatList,
 } from 'react-native';
-import {
-  COLORS,
-  icons,
-  // images,
-  SIZES,
-  FONTS,
-} from '../../constants';
-import {Header, HeaderButton, SellButton, ItemCards} from '../../components';
-
 import {useDispatch, useSelector} from 'react-redux';
 import {createSelector} from 'reselect';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {COLORS, icons, SIZES, FONTS} from '../../constants';
+import {Header, HeaderButton, ItemCards, ModalAlert} from '../../components';
+import * as actions from '../../store/actionTypes';
 
 import {selectListings, filterListings} from '../../store/selectors';
 
 export default function Home({navigation}) {
   // MOCK USER
   const userId = 111;
+
+  const [draftAlert, setDraftAlert] = useState(false);
 
   const getActiveListings = useMemo(filterListings, []);
   const activeListings = useSelector((state) =>
@@ -38,9 +34,46 @@ export default function Home({navigation}) {
       'feed',
     ),
   );
+  const draftItemId = useSelector((state) => state['drafts'][userId]);
+  const useritems = useSelector((state) => state['listings'][userId]);
+
+  const draft = useSelector((state) => state['drafts']);
+  console.log({draft});
+  console.log({useritems});
+
+  const dispatch = useDispatch();
+
+  const closeModal = () => {
+    setDraftAlert(false);
+  };
+
+  const onClickOption = (option) => {
+    if (option === 'yes') {
+      navigation.navigate('Sell', {
+        userId,
+        existingItemId: draftItemId,
+        continueDraft: true,
+      });
+    }
+    if (option === 'no') {
+      dispatch({
+        type: actions.DRAFT_DELETED,
+        userId,
+      });
+      dispatch({
+        type: actions.ITEM_DELETED,
+        sellerId: userId,
+        itemId: draftItemId,
+      });
+      navigation.navigate('Sell', {
+        userId,
+      });
+    }
+    closeModal();
+  };
 
   return (
-    <View style={styles.container}>
+    <View>
       <Header
         userId={userId}
         navigation={navigation}
@@ -51,24 +84,42 @@ export default function Home({navigation}) {
           'notifications-outline',
         ]}
       />
-      <KeyboardAwareScrollView extraHeight={0} enableOnAndroid>
-        <ItemCards
-          userId={userId}
-          items={activeListings}
-          navigation={navigation}
-        />
 
-        {/* SELL BUTTON */}
-        <View>
-          <TouchableOpacity
-            style={styles.sellBtn}
-            onPress={() =>
-              navigation.navigate('Sell', {
-                userId,
-              })
-            }>
-            <Text style={styles.btnText}>+ Sell</Text>
-          </TouchableOpacity>
+      {/* SELL BUTTON */}
+      <TouchableOpacity
+        style={styles.sellBtn}
+        onPress={() => {
+          if (draftItemId) {
+            setDraftAlert(true);
+          } else {
+            navigation.navigate('Sell', {
+              userId,
+            });
+          }
+        }}>
+        <Text style={styles.btnText}>+ Sell</Text>
+      </TouchableOpacity>
+      <KeyboardAwareScrollView
+        showsVerticalScrollIndicator={false}
+        enableOnAndroid>
+        <View
+          style={{
+            paddingBottom: 130,
+          }}>
+          <ItemCards
+            userId={userId}
+            items={activeListings}
+            navigation={navigation}
+          />
+
+          <ModalAlert
+            visibleVariable={draftAlert}
+            closeModal={closeModal}
+            onClickOption={onClickOption}
+            message={'You have a saved draft. Continue writing?'}
+            options={['YES', 'NO']}
+            actions={['yes', 'no']}
+          />
         </View>
       </KeyboardAwareScrollView>
     </View>
@@ -76,10 +127,7 @@ export default function Home({navigation}) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    // flex: 1,
-    // backgroundColor: COLORS.lightGray3,
-  },
+  container: {},
   shadow: {
     shadowColor: '#000',
     shadowOffset: {
@@ -89,8 +137,9 @@ const styles = StyleSheet.create({
   },
   sellBtn: {
     position: 'absolute',
-    bottom: SIZES.height * 0.08,
-    right: SIZES.width * 0.04,
+    zIndex: 1,
+    bottom: SIZES.height * 0.2,
+    right: SIZES.padding * 2,
     height: 50,
     width: 100,
     justifyContent: 'center',
