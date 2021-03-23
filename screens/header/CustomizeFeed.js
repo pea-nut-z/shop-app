@@ -1,58 +1,110 @@
-import React from 'react';
-import {View, Text, TouchableOpacity, SafeAreaView} from 'react-native';
-import {categoryOptions, COLORS} from '../../constants';
+import React, {useState} from 'react';
+import {View, Text, TouchableOpacity} from 'react-native';
+import {categoryOptions, COLORS, FONTS, SIZES} from '../../constants';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {useSelector, useDispatch} from 'react-redux';
 import * as actions from '../../store/actionTypes';
-import {Header} from '../../components';
+import {Header, ModalAlert} from '../../components';
 
 export default function CustomizeFeed({route, navigation}) {
   const {userId} = route.params;
-  // const [feeds, setFeeds] = useState([])
+
+  const [alert, setAlert] = useState(false);
 
   const feed = useSelector((state) => state.feeds[userId]);
   const dispatch = useDispatch();
 
+  const closeModal = () => {
+    setAlert(false);
+  };
+
   return (
-    <View>
+    <View style={{flex: 1}}>
       <Header
         navigation={navigation}
         useBackBtn={true}
         title={'Customize feed'}
       />
-      <Text>
-        Personalized your feed.{'\n'}
-        Choose the categories you want to see on the Home feed.
-      </Text>
-      <Text>At leadt one category must be chosen</Text>
-      <View>
-        {categoryOptions.map((option, index) => {
-          return (
-            <TouchableOpacity
-              key={`option-${index}`}
-              onPress={() => {
-                dispatch({
-                  type: feed.includes(option.name)
-                    ? actions.FEED_REMOVED
-                    : actions.FEED_ADDED,
-                  userId,
-                  // payload: {
-                  feed: option.name,
-                  // },
-                });
-              }}>
-              <Icon
-                name="checkmark-circle-outline"
-                size={25}
-                color={
-                  feed.includes(option.name) ? COLORS.primary : COLORS.secondary
-                }
-              />
-              <Text>{option.name}</Text>
-            </TouchableOpacity>
-          );
-        })}
+      <View
+        style={{
+          paddingHorizontal: SIZES.padding * 2,
+          paddingVertical: SIZES.padding,
+          flex: 1,
+        }}>
+        <Text
+          style={{
+            textAlign: 'center',
+            ...FONTS.body3,
+            fontWeight: 'bold',
+            paddingVertical: SIZES.padding,
+          }}>
+          Personalized your feed.{'\n'}
+          Choose the categories you want to see on the Home feed.
+        </Text>
+        <Text
+          style={{
+            ...FONTS.body4,
+            textAlign: 'center',
+            paddingVertical: SIZES.padding,
+          }}>
+          At least one category must be chosen
+        </Text>
+        <View
+          style={{
+            width: '100%',
+            flexDirection: 'row',
+            flex: 1,
+            flexWrap: 'wrap',
+          }}>
+          {categoryOptions.map((option, index) => {
+            return (
+              <TouchableOpacity
+                key={`option-${index}`}
+                onPress={() => {
+                  if (feed.includes(option.name) && feed.length === 1) {
+                    setAlert(true);
+                  } else {
+                    dispatch({
+                      type: feed.includes(option.name)
+                        ? actions.FEED_REMOVED
+                        : actions.FEED_ADDED,
+                      userId,
+                      feed: option.name,
+                    });
+                  }
+                }}
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  paddingVertical: SIZES.padding,
+                  width: '50%',
+                  height: 60,
+                }}>
+                <Icon
+                  name="checkmark-circle-outline"
+                  size={25}
+                  color={
+                    feed.includes(option.name)
+                      ? COLORS.primary
+                      : COLORS.secondary
+                  }
+                />
+                <Text style={{marginLeft: SIZES.padding}}>
+                  {option.name.includes('Games')
+                    ? `Games,hobbies & ${'\n'}crafts`
+                    : option.name}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
       </View>
+      <ModalAlert
+        visibleVariable={alert}
+        closeModal={closeModal}
+        // onClickOption={onClickOption}
+        message={'You must select at least one category'}
+      />
     </View>
   );
 }

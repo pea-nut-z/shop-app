@@ -75,10 +75,7 @@ export default function itemDetails({route, navigation}) {
           navigation={navigation}
           useImgStyle={useImgStyle}
           useBackBtn={true}
-          useRightBtns={[
-            'share-social-outline',
-            // 'ellipsis-vertical-circle-outline',
-          ]}
+          useRightBtns={['share-social-outline']}
         />
       </View>
       <KeyboardAwareScrollView

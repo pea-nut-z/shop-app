@@ -145,17 +145,14 @@ export const furtherFilterListings = (
       if (sort === 'Relevance') {
         let searchWords = value.split(' ');
         items = items.map((item) => {
-          // console.log('item', item);
           let score = 0;
           searchWords.forEach((word) => {
             const exp = '\\b' + word + '\\b';
             const regex = new RegExp(exp, 'i');
-            // console.log('word', word);
             item.category.match(regex) && ++score;
             item.description.match(regex) && ++score;
             item.title.match(regex) && ++score;
           });
-          // console.log({score});
           return {...item, score};
         });
         return items.sort((a, b) => a.score < b.score);

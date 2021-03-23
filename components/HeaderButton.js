@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
-import {View, Image, TouchableOpacity, Text} from 'react-native';
+import {View, TouchableOpacity, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {COLORS, SIZES} from '../constants';
+import {COLORS} from '../constants';
 
 export default function HeaderButton({
   userId,
@@ -23,10 +23,6 @@ export default function HeaderButton({
         return navigation.navigate('notificationsTabs', {
           userId,
         });
-      // case 'edit':
-      //   return navigation.navigate('EditProfile', {
-      //     userId,
-      //   });
       default:
         return;
     }
@@ -38,9 +34,28 @@ export default function HeaderButton({
           const keyword = name.split('-')[0];
           keyword === 'ellipsis' ? showPopoutMenu() : navigateTo(keyword);
         }}
-        style={{paddingLeft: 25, paddingVertical: 3}}>
-        <Icon name={name} size={25} />
+        style={styles.btn}>
+        <Icon
+          name={name}
+          size={25}
+          style={name.includes('social') ? styles.shareBtn : null}
+        />
       </TouchableOpacity>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  btn: {
+    paddingLeft: 25,
+    paddingVertical: 3,
+  },
+  shareBtn: {
+    shadowOffset: {width: 5, height: 5},
+    shadowColor: COLORS.darkgray,
+    shadowOpacity: 2.0,
+    color: COLORS.black,
+    paddingLeft: 25,
+    paddingVertical: 3,
+  },
+});

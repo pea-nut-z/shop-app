@@ -14,7 +14,6 @@ import {SIZES, COLORS, FONTS} from '../constants';
 import Tooltip from 'rn-tooltip';
 import Icon from 'react-native-vector-icons/Ionicons';
 import * as actions from '../store/actionTypes';
-import {set} from 'react-native-reanimated';
 
 export default function Profile({route, navigation}) {
   const {sellerId, userId} = route.params;

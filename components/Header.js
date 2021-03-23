@@ -256,7 +256,7 @@ export default function Header({
             {title && (
               <Text
                 style={{
-                  ...styles.regularText,
+                  ...styles.boldText,
                   marginLeft: navigation ? SIZES.padding : 0,
                 }}>
                 {title}
@@ -275,6 +275,9 @@ export default function Header({
 const styles = StyleSheet.create({
   regularText: {
     ...FONTS.body4,
+  },
+  boldText: {
+    ...FONTS.h4,
   },
   headerWithoutImg: {
     paddingVertical: SIZES.padding,

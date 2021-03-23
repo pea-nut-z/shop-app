@@ -18,7 +18,7 @@ import {
   categoryOptions,
   categoryDropDown,
 } from '../../constants';
-import {Header} from '../../components';
+import {Header, ModalAlert} from '../../components';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import CurrencyInput from 'react-native-currency-input';
 import Textarea from 'react-native-textarea';
@@ -49,6 +49,9 @@ export default function Sell({route, navigation}) {
     existingItem?.description || '',
   );
 
+  const [alert, setAlert] = useState(false);
+  const [alertMsg, setAlertMsg] = useState('');
+
   let newItemId = 100;
   let itemId = existingItemId ? existingItemId : ++newItemId;
 
@@ -60,6 +63,10 @@ export default function Sell({route, navigation}) {
       setPrice(null);
     }
   }, [price]);
+
+  const closeModal = () => {
+    setAlert(false);
+  };
 
   const choosePhotoFromLibrary = () => {
     ImagePicker.openPicker({
@@ -97,70 +104,72 @@ export default function Sell({route, navigation}) {
   };
 
   const onDone = () => {
-    // if (!title) {
-    //   Alert.alert('Enter a title');
-    // } else if (category === 'Categories') {
-    //   Alert.alert('Select a category');
-    // } else if (!description) {
-    //   Alert.alert('Enter a description');
-    // }
-    // else if (description.length < 20) {
-    //   Alert.alert('Tell us a bit more for description - minimum 20 characters');
-    // }
-    // else {
-
-    let imgPath;
-    if (images.length === 0) {
-      categoryOptions.find((obj) => {
-        if (obj.name === category) {
-          imgPath = [obj.icon];
-        }
-      });
+    if (!title) {
+      setAlertMsg('Enter a title');
+      setAlert(true);
+    } else if (category === 'Categories') {
+      setAlertMsg('Select a category');
+      setAlert(true);
+    } else if (!description) {
+      setAlertMsg('Enter a description');
+      setAlert(true);
+    } else if (description.length < 20) {
+      setAlertMsg('Tell us a bit more for description - minimum 20 characters');
+      setAlert(true);
     } else {
-      imgPath = images;
-    }
+      let imgPath;
+      if (images.length === 0) {
+        categoryOptions.find((obj) => {
+          if (obj.name === category) {
+            imgPath = [obj.icon];
+          }
+        });
+      } else {
+        imgPath = images;
+      }
 
-    console.log({imgPath});
+      console.log({imgPath});
 
-    if (continueDraft || !existingItem) {
-      dispatch({
-        type: actions.ITEM_ADDED,
+      if (continueDraft || !existingItem) {
+        dispatch({
+          type: actions.ITEM_ADDED,
+          sellerId: userId,
+          itemId,
+          payload: {
+            images: imgPath,
+            title,
+            price,
+            free,
+            negotiable,
+            category,
+            description,
+          },
+        });
+      }
+
+      if (!continueDraft && existingItem) {
+        dispatch({
+          type: actions.ITEM_EDITED,
+          sellerId: userId,
+          itemId,
+          payload: {
+            images: imgPath,
+            title,
+            price,
+            free,
+            negotiable,
+            category,
+            description,
+          },
+        });
+      }
+
+      navigation.navigate('itemDetails', {
+        userId,
         sellerId: userId,
         itemId,
-        payload: {
-          images: imgPath,
-          title,
-          price,
-          free,
-          negotiable,
-          category,
-          description,
-        },
       });
     }
-
-    if (!continueDraft && existingItem) {
-      dispatch({
-        type: actions.ITEM_EDITED,
-        sellerId: userId,
-        itemId,
-        payload: {
-          images: imgPath,
-          title,
-          price,
-          free,
-          negotiable,
-          category,
-          description,
-        },
-      });
-    }
-
-    navigation.navigate('itemDetails', {
-      userId,
-      sellerId: userId,
-      itemId,
-    });
   };
 
   const saveDraft = () => {
@@ -212,152 +221,155 @@ export default function Sell({route, navigation}) {
   };
 
   return (
-    <>
-      <View>
-        <Header
-          navigation={navigation}
-          title={
-            continueDraft
-              ? 'Post For Sale'
-              : existingItem
-              ? 'Edit Post'
-              : 'Post For Sale'
-          }
-          saveDraft={saveDraft}
-          useBackBtn={true}
-        />
-        {/* DONE BUTTON */}
-        <TouchableOpacity onPress={onDone} style={styles.doneBtn}>
-          <Text style={{...FONTS.body2}}>Done</Text>
-        </TouchableOpacity>
-        {/* PICTURE UPLOAD */}
-        <KeyboardAwareScrollView extraHeight={100} enableOnAndroid>
-          <View
-            style={{
-              ...styles.container,
-              ...styles.uploadImgContainer,
-            }}>
-            <TouchableOpacity
-              onPress={() => {
-                numOfImg < maxNumOfImg
-                  ? choosePhotoFromLibrary()
-                  : Alert.alert('Choose up to 10 images');
-              }}
-              style={styles.uploadImgBtn}>
-              <Icon name="camera" size={25} color={COLORS.secondary} />
-              <Text>
-                {numOfImg} / {maxNumOfImg}
-              </Text>
-            </TouchableOpacity>
-            <FlatList
-              data={images}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              keyExtractor={(img, index) => `img-${index}`}
-              renderItem={renderImage}
-            />
-          </View>
-          {/* TITLE */}
-          <TextInput
-            maxLength={64}
-            defaultValue={title}
-            onChangeText={setTitle}
-            placeholder="Title"
-            style={{...styles.container, ...styles.regularHeight}}
-          />
-          {/* PRICE */}
-          {free ? (
-            <View
-              style={{
-                ...styles.regularHeight,
-              }}
-            />
-          ) : (
-            <CurrencyInput
-              value={price}
-              onChangeValue={setPrice}
-              // defaultValue={price}
-              unit="$  "
-              delimiter=","
-              separator="."
-              precision={2}
-              maxValue={9999999.99}
-              ignoreNegative={true}
-              placeholder="$ Enter price"
-              placeholderTextColor={COLORS.secondary}
-              style={{
-                ...styles.container,
-                ...styles.regularHeight,
-              }}
-            />
-          )}
-          {/* FREE LABEL */}
-          {free && (
-            <TouchableOpacity
-              onPress={() => {
-                setFree(false);
-              }}
-              style={styles.freeLabel}>
-              <Text style={{color: COLORS.primary}}>Free X</Text>
-            </TouchableOpacity>
-          )}
-          {/* NEGOTIABLE */}
+    <View>
+      <Header
+        navigation={navigation}
+        title={
+          continueDraft
+            ? 'Post For Sale'
+            : existingItem
+            ? 'Edit Post'
+            : 'Post For Sale'
+        }
+        saveDraft={saveDraft}
+        useBackBtn={true}
+      />
+      {/* DONE BUTTON */}
+      <TouchableOpacity onPress={onDone} style={styles.doneBtn}>
+        <Text style={{...FONTS.body2}}>Done</Text>
+      </TouchableOpacity>
+      {/* PICTURE UPLOAD */}
+      <KeyboardAwareScrollView extraHeight={100} enableOnAndroid>
+        <View
+          style={{
+            ...styles.container,
+            ...styles.uploadImgContainer,
+          }}>
           <TouchableOpacity
-            style={styles.checkMarkContainer}
             onPress={() => {
-              setNegotiable(!negotiable);
-            }}>
-            <Icon
-              name="checkmark-circle-outline"
-              size={25}
-              color={negotiable ? COLORS.primary : COLORS.secondary}
-            />
-            <Text
-              style={{
-                ...FONTS.body3,
-                color: negotiable ? COLORS.black : COLORS.secondary,
-              }}>
-              Negotiable
+              numOfImg < maxNumOfImg
+                ? choosePhotoFromLibrary()
+                : Alert.alert('Choose up to 10 images');
+            }}
+            style={styles.uploadImgBtn}>
+            <Icon name="camera" size={25} color={COLORS.secondary} />
+            <Text>
+              {numOfImg} / {maxNumOfImg}
             </Text>
           </TouchableOpacity>
-          {/* CATEGORIES */}
-          <DropDownPicker
-            defaultValue={existingItem && category}
-            items={categoryDropDown}
-            placeholder="Categories"
-            onChangeItem={(item) => setCategory(item.value)}
-            dropDownMaxHeight={categoryDropDown.length * SIZES.height}
+          <FlatList
+            data={images}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            keyExtractor={(img, index) => `img-${index}`}
+            renderItem={renderImage}
+          />
+        </View>
+        {/* TITLE */}
+        <TextInput
+          maxLength={64}
+          defaultValue={title}
+          onChangeText={setTitle}
+          placeholder="Title"
+          style={{...styles.container, ...styles.regularHeight}}
+        />
+        {/* PRICE */}
+        {free ? (
+          <View
             style={{
-              ...styles.container,
-              ...styles.dropDown,
               ...styles.regularHeight,
             }}
-            labelStyle={{
-              ...FONTS.body3,
-            }}
-            itemStyle={{
-              justifyContent: 'flex-start',
-              paddingHorizontal: SIZES.padding * 2,
+          />
+        ) : (
+          <CurrencyInput
+            value={price}
+            onChangeValue={setPrice}
+            // defaultValue={price}
+            unit="$  "
+            delimiter=","
+            separator="."
+            precision={2}
+            maxValue={9999999.99}
+            ignoreNegative={true}
+            placeholder="$ Enter price"
+            placeholderTextColor={COLORS.secondary}
+            style={{
+              ...styles.container,
+              ...styles.regularHeight,
             }}
           />
-          {/* DESCRIPTION */}
-          <View style={{height: 450}}>
-            <Textarea
-              containerStyle={{
-                ...styles.container,
-                ...styles.textareaContainer,
-              }}
-              defaultValue={description}
-              onChangeText={setDescription}
-              maxLength={600}
-              placeholder={'Describe your item in as much detail as you can.'}
-              underlineColorAndroid={'transparent'}
-              style={styles.textarea}
-            />
-          </View>
-        </KeyboardAwareScrollView>
-      </View>
-    </>
+        )}
+        {/* FREE LABEL */}
+        {free && (
+          <TouchableOpacity
+            onPress={() => {
+              setFree(false);
+            }}
+            style={styles.freeLabel}>
+            <Text style={{color: COLORS.primary}}>Free X</Text>
+          </TouchableOpacity>
+        )}
+        {/* NEGOTIABLE */}
+        <TouchableOpacity
+          style={styles.checkMarkContainer}
+          onPress={() => {
+            setNegotiable(!negotiable);
+          }}>
+          <Icon
+            name="checkmark-circle-outline"
+            size={25}
+            color={negotiable ? COLORS.primary : COLORS.secondary}
+          />
+          <Text
+            style={{
+              ...FONTS.body3,
+              color: negotiable ? COLORS.black : COLORS.secondary,
+            }}>
+            Negotiable
+          </Text>
+        </TouchableOpacity>
+        {/* CATEGORIES */}
+        <DropDownPicker
+          defaultValue={existingItem && category}
+          items={categoryDropDown}
+          placeholder="Categories"
+          onChangeItem={(item) => setCategory(item.value)}
+          dropDownMaxHeight={categoryDropDown.length * SIZES.height}
+          style={{
+            ...styles.container,
+            ...styles.dropDown,
+            ...styles.regularHeight,
+          }}
+          labelStyle={{
+            ...FONTS.body3,
+          }}
+          itemStyle={{
+            justifyContent: 'flex-start',
+            paddingHorizontal: SIZES.padding * 2,
+          }}
+        />
+        {/* DESCRIPTION */}
+        <View style={{height: 450}}>
+          <Textarea
+            containerStyle={{
+              ...styles.container,
+              ...styles.textareaContainer,
+            }}
+            defaultValue={description}
+            onChangeText={setDescription}
+            maxLength={600}
+            placeholder={'Describe your item in as much detail as you can.'}
+            underlineColorAndroid={'transparent'}
+            style={styles.textarea}
+          />
+        </View>
+      </KeyboardAwareScrollView>
+      <ModalAlert
+        visibleVariable={alert}
+        closeModal={closeModal}
+        message={alertMsg}
+      />
+    </View>
   );
 }
 

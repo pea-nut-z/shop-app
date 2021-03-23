@@ -42,7 +42,7 @@ export default function Active({
         <KeyboardAwareScrollView
           enableOnAndroid
           showsVerticalScrollIndicator={false}>
-          <View style={{paddingBottom: 50}}>
+          <View style={{flex: 1, paddingBottom: 50}}>
             <ItemCards
               userId={userId}
               items={activeAndReservedItems}

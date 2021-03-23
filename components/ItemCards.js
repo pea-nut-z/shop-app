@@ -265,6 +265,38 @@ export default function ItemCards({
               <View>
                 {renderOptionBtn()}
                 {renderOptionModal(itemId)}
+
+                {/* IF ON USER FAVOURITES SCREEN */}
+                {atUserFavouritesScreen && (
+                  <View
+                    style={{
+                      height: '100%',
+                      justifyContent: 'space-between',
+                    }}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        dispatch({
+                          type: actions.FAVOURITE_REMOVED,
+                          userId,
+                          sellerId,
+                          itemId,
+                        });
+                      }}>
+                      <Icon name={'heart'} size={30} color={COLORS.primary} />
+                    </TouchableOpacity>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                      }}>
+                      <Icon
+                        name={'heart-outline'}
+                        size={15}
+                        color={COLORS.darkgray}
+                      />
+                      <Text> {item.favourites}</Text>
+                    </View>
+                  </View>
+                )}
               </View>
             </TouchableOpacity>
 
@@ -348,21 +380,6 @@ export default function ItemCards({
                 <Text style={{...FONTS.body4, fontWeight: 'bold'}}>
                   Leave review
                 </Text>
-              </TouchableOpacity>
-            )}
-
-            {/* IF ON USER FAVOURITES SCREEN */}
-            {atUserFavouritesScreen && (
-              <TouchableOpacity
-                onPress={() => {
-                  dispatch({
-                    type: actions.FAVOURITE_REMOVED,
-                    userId,
-                    sellerId,
-                    itemId,
-                  });
-                }}>
-                <Icon name={'heart'} size={30} color={COLORS.primary} />
               </TouchableOpacity>
             )}
           </View>

@@ -39,17 +39,13 @@ export default function EditProfile({route, navigation}) {
             dispatch({
               type: actions.USER_DISPLAYPIC_CHANGED,
               userId,
-              // payload: {
               image: displayPic,
-              // },
             });
           username !== currentName &&
             dispatch({
               type: actions.USERNAME_CHANGED,
               userId,
-              // payload: {
               username,
-              // },
             });
           navigation.goBack();
         }}

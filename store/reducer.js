@@ -311,11 +311,11 @@ const favourites = {
   111: [
     {
       sellerId: 222,
-      itemId: 1,
+      itemId: 3,
     },
     {
       sellerId: 222,
-      itemId: 2,
+      itemId: 4,
     },
   ],
   222: [
@@ -366,7 +366,7 @@ const restrictions = {
 };
 
 const drafts = {
-  222: 1,
+  222: 3,
 };
 
 const usersReducer = (state = members, action) => {
